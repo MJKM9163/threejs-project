@@ -28,6 +28,50 @@ const SpinningMesh = ({ position, args, color }) => {
 
 //mesh.material.needsUpdate = true
 
+//------
+// const Camera = () => {
+//   const camera = useRef()
+//   const box = useRef()
+//   mesh.position = box;
+//   console.log(mesh)
+//   window.addEventListener("mouseover", (event) => {
+//       cursor.x = event.clientX / sizes.width - 0.5
+//       cursor.y = event.clientY / sizes.height - 0.5
+//   });
+//   console.log(camera)
+
+//   useFrame((state) => {
+//       if(camera.current && mesh.position.current) {
+//           camera.current.position.x = Math.sin(cursor.x * Math.PI* 2)* 2;
+//           camera.current.position.y = cursor.y * 3;
+//           camera.current.position.z = Math.cos(cursor.x * Math.PI* 2)* 2
+
+//           camera.current.lookAt(mesh.position.current.position);
+//       }
+//   });
+//   console.log(camera.current.position.x)
+//   return(
+//       <perspectiveCamera
+//           ref={camera}
+//           fov={75}
+//           aspect={sizes.eidth/sizes.height}
+//           mear={0.1}
+//           far={100}
+//       >
+//           <mesh
+//               name='box'
+//               castShadow
+//               ref={box}
+//               position={[0, 5, 0]}
+//               >
+//               <boxGeometry attach='geometry' args={[3, 2, 1]} />
+//               <meshStandardMaterial color={'orange'} />
+//           </mesh>
+//       </perspectiveCamera>
+//   )
+// };
+//-----
+
 const Test = () => {
   return (
     <>
