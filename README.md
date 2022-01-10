@@ -1,1 +1,1 @@
-# Getting Started with Create React App
+# 자꾸 까먹는 readme

@@ -1,6 +1,5 @@
 import React from "react";
 import { useBox } from "@react-three/cannon";
-//import { BoxBufferGeometry } from "three";
 import * as textures from '../textures';
 
 export const Cube = ({ position, type, ...props }) => {
@@ -9,13 +8,13 @@ export const Cube = ({ position, type, ...props }) => {
         position,
         ...props,
     }));
-    function Cubea(props) {
+    function Cubea() {
         
-        const [ref] = useBox(() => ({ mass: 1, type: 'Dynamic', position: [1.5, 7, 0], ...props }));
+        const [ref] = useBox(() => ({ mass: 1, type: 'Dynamic', position: [1, 7, 0], args:[1,1,1] }));
 
         return (
           <mesh castShadow ref={ref}>
-            <boxGeometry />
+            <boxGeometry args={[1,1,1]} />
             <meshStandardMaterial  color={"aqua"}/>
           </mesh>
         )
