@@ -4,13 +4,14 @@ import * as textures from '../textures';
 
 export const Cube = ({ position, type, ...props }) => {
     const [ref] = useBox(() => ({
+        mass: 1,
         type: 'Static',
         position,
         ...props,
     }));
     function Cubea() {
         
-        const [ref] = useBox(() => ({ mass: 1, type: 'Dynamic', position: [1, 7, 0], args:[1,1,1] }));
+        const [ref] = useBox(() => ({ mass: 1, type: 'Static', position: [0, 7, 0], args:[1,1,1] }));
 
         return (
           <mesh castShadow ref={ref}>
