@@ -7,24 +7,26 @@ import { Ground } from './components/Ground';
 import { Cube } from './components/Cube';
 import { Player } from './components/Player';
 import Model from './Scene';
+import { Stest } from './Stest';
 
 
 const Model2 = () => {
   //const gltf = useGLTF('/tree_of_life/scene.gltf', true);
-  const gltf = useGLTF('/tree_of_life/scene.gltf')
-  // const { nodes, materials, scene } = useGLTF('/tree_of_life/scene.gltf')
+  //const gltf = useGLTF('/tree_of_life/scene.gltf')
+  const { nodes, materials, scene } = useGLTF('/tree_of_life/scene.gltf')
   const [ref] = useConvexPolyhedron(() => ({
     mass: 1,
-    rotation:[0, 0, 0],
-    position:[4, 10, -4],
+    rotation:[-Math.PI / 1, 0, 0],
+    position:[0, 20, 0],
     // args:[3,3,3],
-    type: 'Static',
+    type: 'Dynamic',
   }));
-  gltf.scene.position.set(0,20,10)
-  console.log(gltf.scene)
+  // gltf.scene.position.set(0,20,10)
+  // console.log(gltf.scene)
   return (
-      <primitive ref={ref} object={gltf.scene} dispose={null}>
-      {/* <group position={[0.24, 0.0, 3.58]} rotation={[0, 0, 0]} scale={[0.14, 0.14, 0.14]}>
+    <>
+      {/* <primitive ref={ref} object={gltf.scene} dispose={null}> */}
+      <group ref={ref} position={[0, 0, 0]} rotation={[0, 0, 0]} scale={[0.14, 0.14, 0.14]}>
         <mesh geometry={nodes.Object_2.geometry} material={nodes.Object_2.material} />
         <mesh geometry={nodes.Object_3.geometry} material={nodes.Object_3.material} />
         <mesh geometry={nodes.Object_4.geometry} material={nodes.Object_4.material} />
@@ -39,8 +41,9 @@ const Model2 = () => {
         <mesh geometry={nodes.Object_13.geometry} material={nodes.Object_13.material} />
         <mesh geometry={nodes.Object_14.geometry} material={nodes.Object_14.material} />
         <mesh geometry={nodes.Object_15.geometry} material={nodes.Object_15.material} />
-      </group> */}
-      </primitive>
+      </group>
+      {/* </primitive> */}
+    </>
   )
 }
 
@@ -48,20 +51,22 @@ const Model2 = () => {
 function App() {
 
   return (
-    <Canvas shadows colorManagement sRGB camera={{position: [10, 10, 30], fov: 60}}>
+    <Canvas shadows colorManagement sRGB camera={{position: [10, 10, 10], fov: 60}}>
       <Sky sunPosition={[100, 100, 100]} />
       <ambientLight intensity={0.25} />
       <directionalLight castShadow intensity={0.7} position={[30, 50, 30]} />
       <Physics gravity={[0, -30, 0]} step={1 / 60}>
         <Debug scale={1} color="black">
-        <Ground position={[0, -0.05, 0]} />
         <Suspense fallback={null}>
           {/* <Model2 /> */}
-          <Model />
+          <Stest />
+          {/* <Model /> */}
+
         </Suspense>
         <Cube position={[0, 5, 0]} type="wood"/>
         <Player position={[0, 10, 15]} />
         </Debug>
+        <Ground position={[0, -0.05, 0]} />
       </Physics>
       <OrbitControls />
     </Canvas>
