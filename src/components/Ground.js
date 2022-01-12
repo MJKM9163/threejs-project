@@ -12,9 +12,9 @@ export const Ground = (props) => {
     texture.repeat.set(100, 100);
     return (
         <>
-            <Roads>
+            {/* <Roads>
 
-            </Roads>
+            </Roads> */}
             <mesh ref={ref} receiveShadow>
                 <planeBufferGeometry attach='geometry' args={[75, 100]} />
                 <meshStandardMaterial map={texture} attach='material' />
