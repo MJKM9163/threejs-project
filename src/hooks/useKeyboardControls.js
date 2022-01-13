@@ -33,7 +33,7 @@ export const useKeyboardControls = () => {
     });
     const setTexture = useStore((state) => state.setTexture)
 
-    // useEffect(() => {
+    useEffect(() => {
         const handleKeyDown = (e) => {
             if (actionByKey(e.code)) {
                 setMovement((state) => ({...state, [actionByKey(e.code)]: true}))
@@ -49,11 +49,11 @@ export const useKeyboardControls = () => {
         };
         document.addEventListener('keydown', handleKeyDown);
         document.addEventListener('keyup', handleKeyUp);
-        // return () => {
-        //     document.addEventListener('keydown', handleKeyDown);
-        //     document.addEventListener('keyup', handleKeyUp);
+        return () => {
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('keyup', handleKeyUp);
 
-    //     }
-    // })
+        }
+    })
     return movement;
 }
