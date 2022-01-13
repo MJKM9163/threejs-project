@@ -22,4 +22,7 @@ export const useStore = create((set) => ({
         set((state) => {
         setLocalStorage("world", state.cubes);
     }),
+    skyXYZ: [-100, 0, 100],
+    setSkyXYZ: (x, y, z) => set(() => ({skyXYZ: [x, y, z]})),
+    
 }));
