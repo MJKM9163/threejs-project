@@ -7,6 +7,10 @@ export function SetSky () {
     const num = useStore((state) => state.skyXYZ)
     return num;
 }
+export function SetLight () {
+    const light = useStore((state) => state.lightXYZ)
+    return light;
+}
 
 export function SkyCountrol (x, y, z) {
     const [clock] = React.useState(new THREE.Clock());
@@ -16,6 +20,8 @@ export function SkyCountrol (x, y, z) {
 
     const num = useStore((state) => state.skyXYZ)
     const setNum = useStore((state) => state.setSkyXYZ)
+    const light = useStore((state) => state.lightXYZ)
+    const setLight = useStore((state) => state.setLightXYZ)
 
     useFrame((state) => {
         state.ready = false;
@@ -40,7 +46,13 @@ export function SkyCountrol (x, y, z) {
             setNum(
                 (sunX ? (num[0]-0.02) : (num[0]+0.02)),
                 (sunY ? (num[1]-0.02) : (num[1]+0.02)),
-                (sunZ ? (num[2]+0.02) : (num[2]-0.02)));
+                (sunZ ? (num[2]+0.02) : (num[2]-0.02))
+            );
+            setLight(
+                (sunX ? (light[0]-0.02) : (light[0]+0.02)),
+                (sunY ? (light[1]-0.02) : (light[1]+0.02)),
+                (sunZ ? (light[2]+0.02) : (light[2]-0.02))
+            );
         }, Math.max(0, timeUntilNextFrame));
     })
     return(<></>)
