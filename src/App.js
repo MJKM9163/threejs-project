@@ -1,14 +1,39 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useRef } from 'react';
 import './App.css';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sky, Stars } from '@react-three/drei';
+import { OrbitControls, Sky, Stars, useHelper } from '@react-three/drei';
 import { Physics, Debug } from '@react-three/cannon';
 import Ground from './components/Ground';
 import { Cube } from './components/Cube';
 import { Player } from './components/Player';
-import { SetSky, SkyCountrol } from './controls/skyControl';
+import { SetSky, SetLight, SkyCountrol } from './controls/skyControl';
+import { DirectionalLightHelper } from 'three';
 
 function App() {
+  const Light = () => {
+    const ref = useRef()
+    useHelper(ref, DirectionalLightHelper, 10);
+
+    return (
+      <>
+        <ambientLight intensity={0.35} />
+        <directionalLight
+          ref={ref}
+          intensity={3}
+          position={SetLight()}
+          shadow-mapSize-width={2048}
+          shadow-mapSize-height={2048}
+          shadow-camera-far={1000}
+          shadow-camera-near={0.5}
+          shadow-camera-left={-100}
+          shadow-camera-right={100}
+          shadow-camera-top={-100}
+          shadow-camera-bottom={100}
+          castShadow
+        />
+      </>
+    )
+  }
 
   return (
     <Canvas shadows colorManagement sRGB camera={{position: [30, 20, -50], fov: 60}}>
@@ -16,15 +41,14 @@ function App() {
         {/* <SkyCountrol /> */}
         <Sky sunPosition={SetSky()} turbidity={0.5} />
       </group>
-      <ambientLight intensity={0.25} />
-      <directionalLight castShadow intensity={0.7} position={SetSky()} />
+      <Light />
       <Physics gravity={[0, -30, 0]} step={1 / 60}>
-        <Debug scale={1} color="black">
-        {/* <Suspense fallback={null}>
-        </Suspense> */}
+        <Debug>
         <Cube position={[0, 5, 0]} type="wood"/>
-        <Player position={[0, 10, 15]} />
-        <Ground position={[0, -0.03, 0]} />
+        {/* <Player position={[0, 10, 15]} /> */}
+        <Suspense fallback={null}>
+          <Ground position={[0, -0.1, 0]} />
+        </Suspense>
         </Debug>
       </Physics>
       <OrbitControls />
