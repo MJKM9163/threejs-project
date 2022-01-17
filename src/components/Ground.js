@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { usePlane } from '@react-three/cannon';
 import { TextureLoader, RepeatWrapping } from 'three';
 import grass from '../images/grass.png';
-import { StartingRoad, CurvedRoad } from './Roads/RoadIndex';
-import { BoxHouse, CylinderHouse } from './Houses/HouseIndex';
+import { StraightRoad, CurvedRoad } from './Roads/RoadIndex';
+import { BoxHouse } from './Houses/HouseIndex';
 import { WoodFences } from './Fences/FencesIndex';
 
 const Ground = (props) => {
@@ -11,101 +11,139 @@ const Ground = (props) => {
     const texture = useMemo(() => new TextureLoader().load(grass),[]);
     texture.wrapS = RepeatWrapping;
     texture.wrapT = RepeatWrapping;
-    texture.repeat.set(50, 50);
-
+    texture.repeat.set(100, 100);
+    let w_f_position_Y = 2.5;
     return (
         <>
             <group name='starting'>
-                <BoxHouse
-                    position={[-92, 1, 15]}
-                    rotation={[0, 0, 0]}
-                    args={[3, 3, 3]}
-                />
-                <CylinderHouse
-                    position={[-33, 2, -60]}
-                    rotation={[0, 0, 0]}
-                    args={[5, 15, 20, 10]}
-                />
+                <group name="House">
+                    <BoxHouse
+                        position={[-92, 1, 15]}
+                        rotation={[0, 0, 0]}
+                        args={[3, 3, 3]}
+                    />
+                    
+                </group>
                 <group name="Fences">
                     <WoodFences
-                        position={[-11, 3, -23]}
-                        rotation={[0, -Math.PI / 2, 0]}
-                        position3d={[-11, 0, -24]}
-                        rotation3d={[-Math.PI / 2, 0, -Math.PI / -2-0.1]}
+                        position={[-11, w_f_position_Y, -23]}
+                        rotation={[-Math.PI / 2, 0, Math.PI / 2]}
                         scale3d={0.005}
                     />
                     <WoodFences
-                        position={[-23, 3, -11]}
-                        rotation={[0, 0, -Math.PI / 1]}
-                        position3d={[-21.7, 0, -11]}
-                        rotation3d={[-Math.PI / 2, 0, 0-0.1]}
+                        position={[-23, w_f_position_Y, -11]}
+                        rotation={[-Math.PI / 2, 0, 0]}
                         scale3d={0.005}
                     />
                     <WoodFences
-                        position={[-11, 3, 22]}
-                        rotation={[0, -Math.PI / 2, 0]}
-                        position3d={[-11, 0, 21]}
-                        rotation3d={[-Math.PI / 2, 0, -Math.PI / -2-0.1]}
+                        position={[-11, w_f_position_Y, 22]}
+                        rotation={[-Math.PI / 2, 0, Math.PI / 2]}
                         scale3d={0.005}
                     />
                     <WoodFences
-                        position={[-23.5, 3, 11]}
-                        rotation={[0, 0, -Math.PI / 1]}
-                        position3d={[-24.5, 0, 11]}
-                        rotation3d={[-Math.PI / 2, 0, -Math.PI / 1-0.1]}
+                        position={[-23.5, w_f_position_Y, 11]}
+                        rotation={[-Math.PI / 2, 0, Math.PI / 1]}
                         scale3d={0.005}
                     />
                     <WoodFences
-                        position={[11, 3, -36]}
-                        rotation={[0, -Math.PI / 2, 0]}
-                        position3d={[11, 0, -35]}
-                        rotation3d={[-Math.PI / 2, 0, -Math.PI / 2-0.1]}
+                        position={[11, w_f_position_Y, -36]}
+                        rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
                         scale3d={0.005}
                     />
                     <WoodFences
-                        position={[11, 3, -13]}
-                        rotation={[0, -Math.PI / 2, 0]}
-                        position3d={[11, 0, -12]}
-                        rotation3d={[-Math.PI / 2, 0, -Math.PI / 2-0.1]}
+                        position={[11, w_f_position_Y, -13]}
+                        rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
                         scale3d={0.005}
                     />
                     <WoodFences
-                        position={[11, 3, 10]}
-                        rotation={[0, -Math.PI / 2, 0]}
-                        position3d={[11, 0, 11]}
-                        rotation3d={[-Math.PI / 2, 0, -Math.PI / 2-0.1]}
+                        position={[11, w_f_position_Y, 10]}
+                        rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
                         scale3d={0.005}
                     />
                     <WoodFences
-                        position={[11, 3, 33]}
-                        rotation={[0, -Math.PI / 2, 0]}
-                        position3d={[11, 0, 34]}
-                        rotation3d={[-Math.PI / 2, 0, -Math.PI / 2-0.1]}
+                        position={[11, w_f_position_Y, 33]}
+                        rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
+                        scale3d={0.005}
+                    />
+                    <WoodFences
+                        position={[11, w_f_position_Y, 56]}
+                        rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
+                        scale3d={0.005}
+                    />
+                    <WoodFences
+                        position={[11, w_f_position_Y, 79]}
+                        rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
+                        scale3d={0.005}
+                    />
+                    <WoodFences
+                        position={[11, w_f_position_Y, 102]}
+                        rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
+                        scale3d={0.005}
+                    />
+                    <WoodFences
+                        position={[-11, w_f_position_Y, 45]}
+                        rotation={[-Math.PI / 2, 0, Math.PI / 2]}
+                        scale3d={0.005}
+                    />
+                    <WoodFences
+                        position={[-11, w_f_position_Y, 68]}
+                        rotation={[-Math.PI / 2, 0, Math.PI / 2]}
+                        scale3d={0.005}
+                    />
+                    <WoodFences
+                        position={[-11, w_f_position_Y, 91]}
+                        rotation={[-Math.PI / 2, 0, Math.PI / 2]}
                         scale3d={0.005}
                     />
                 </group>
                 <group name='Roads'>
-                    <StartingRoad
-                        position={[-40, 0, 0]}
+                    <StraightRoad
+                        position={[-60, 0, 0]}
                         rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
                         args={[20, 100]}
-                        />
-                    <StartingRoad
+                    />
+                    <StraightRoad
                         position={[0, 0, 0]}
                         rotation={[-Math.PI / 2, 0, 0]}
                         args={[20, 100]}
-                        />
+                    />
+                    <StraightRoad
+                        position={[0, 0, 100]}
+                        rotation={[-Math.PI / 2, 0, 0]}
+                        args={[20, 100]}
+                    />
+                    <StraightRoad
+                        position={[-142.5, 0, 0]}
+                        rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
+                        args={[20, 65.5]}
+                    />
+                    <StraightRoad
+                        position={[-90, 0, -157.5]}
+                        rotation={[-Math.PI / 2, 0, 0]}
+                        args={[20, 35]}
+                    />
+                    <StraightRoad
+                        position={[60, 0, 140]}
+                        rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
+                        args={[20, 100]}
+                    />
+
                     <CurvedRoad
                         position={[-45, 0, -50]}
                         rotation={[-Math.PI / 2, 0, 0]}
                         args={[35, 55, 15, 1, 0, Math.PI / 2]}
                     />
+                    <CurvedRoad
+                        position={[-45, 0, -140]}
+                        rotation={[-Math.PI / 2, 0, -Math.PI / 1]}
+                        args={[35, 55, 15, 1, 0, Math.PI / 2]}
+                    />
                 </group>
+                <mesh ref={ref} receiveShadow>
+                    <planeBufferGeometry attach='geometry' args={[350, 350]} />
+                    <meshStandardMaterial map={texture} attach='material' />
+                </mesh>
             </group>
-            <mesh ref={ref} receiveShadow>
-                <planeBufferGeometry attach='geometry' args={[350, 400]} />
-                <meshStandardMaterial map={texture} attach='material' />
-            </mesh>
         </>
     );
 };
