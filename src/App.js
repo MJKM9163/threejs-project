@@ -1,13 +1,19 @@
 import React, { Suspense, useRef } from 'react';
 import './App.css';
+import styled from 'styled-components'
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sky, Stars, useHelper } from '@react-three/drei';
+import { Html, OrbitControls, Sky, Stars, useHelper } from '@react-three/drei';
 import { Physics, Debug } from '@react-three/cannon';
 import Ground from './components/Ground';
 import { Cube } from './components/Cube';
 import { Player } from './components/Player';
 import { SetSky, SetLight, SkyCountrol } from './controls/skyControl';
 import { DirectionalLightHelper } from 'three';
+
+const HtmlDiv = styled(Html)`
+  background-color: blue;
+  font-size: 30px;
+`
 
 function App() {
   const Light = () => {
@@ -36,7 +42,14 @@ function App() {
   }
 
   return (
+    <>
+    <div style={{position: 'absolute', textAlign:'center', zIndex: '2'}}>
+      dd
+    </div>
     <Canvas shadows colorManagement sRGB camera={{position: [30, 20, -50], fov: 60}}>
+      <HtmlDiv position={[5, 25, 0]}>
+        aa
+      </HtmlDiv>
       <group>
         {/* <SkyCountrol /> */}
         <Sky sunPosition={SetSky()} turbidity={0.5} />
@@ -54,6 +67,7 @@ function App() {
       <OrbitControls />
       <Stars radius={200} count={300}/>
     </Canvas>
+    </>
   );
 }
 
