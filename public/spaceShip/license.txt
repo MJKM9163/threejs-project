@@ -1,0 +1,11 @@
+Model Information:
+* title:	Soma04 spaceship low poly - exterior
+* source:	https://sketchfab.com/3d-models/soma04-spaceship-low-poly-exterior-9c4dd5eec2784b73ae2c8f39382f552e
+* author:	L_Krajewski (https://sketchfab.com/bluehamster3d)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Soma04 spaceship low poly - exterior" (https://sketchfab.com/3d-models/soma04-spaceship-low-poly-exterior-9c4dd5eec2784b73ae2c8f39382f552e) by L_Krajewski (https://sketchfab.com/bluehamster3d) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
