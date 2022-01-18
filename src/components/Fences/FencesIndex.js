@@ -4,11 +4,9 @@ import { useGLTF } from "@react-three/drei";
 
 export const WoodFences = ({position3d, rotation3d, scale3d, color, ...props}) => {
     const { nodes } = useGLTF("/old_fence/scene.gltf");
-    //console.log(nodes)
-    // nodes.Box006.rotation.set(10,20,30)
     const [ref] = useBox(() => ({
         mass: 1,
-        type: 'Dynamic',
+        type: 'Static',
         args: [23, 1, 5],
         //rotation: [-Math.PI / 2, 0, Math.PI / 2],
         ...props,
@@ -26,11 +24,6 @@ export const WoodFences = ({position3d, rotation3d, scale3d, color, ...props}) =
                     material={nodes.Box006__0.material}>
                 </mesh>
             </mesh>
-
-            {/* <mesh ref={ref}>
-                <boxGeometry args={[23, 5, 1]} />
-                <meshStandardMaterial color={color}/>
-            </mesh> */}
         </group>
     );
 };
