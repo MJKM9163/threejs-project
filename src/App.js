@@ -1,23 +1,20 @@
-import React, { Suspense, useRef } from 'react';
-import './App.css';
-import styled from 'styled-components'
-import { Canvas } from '@react-three/fiber';
-import { Html, OrbitControls, Sky, Stars, useHelper } from '@react-three/drei';
-import { Physics, Debug } from '@react-three/cannon';
-import Ground from './components/Ground';
-import { Cube } from './components/Cube';
-import { Player } from './components/Player';
-import { SetSky, SetLight, SkyCountrol } from './controls/skyControl';
-import { DirectionalLightHelper } from 'three';
-
-const HtmlDiv = styled(Html)`
-  background-color: blue;
-  font-size: 30px;
-`
+import React, { Suspense, useRef } from "react";
+import "./App.css";
+import styled from "styled-components";
+import { Canvas } from "@react-three/fiber";
+import { Html, OrbitControls, Sky, Stars, useHelper } from "@react-three/drei";
+import { Physics, Debug } from "@react-three/cannon";
+import Ground from "./components/Ground";
+import { Cube } from "./components/Cube";
+import { Player } from "./components/Player";
+import { SetSky, SetLight, SkyCountrol } from "./controls/skyControl";
+import State from "./components/state/State";
+import { DirectionalLightHelper } from "three";
+import Character from "./components/Character";
 
 function App() {
   const Light = () => {
-    const ref = useRef()
+    const ref = useRef();
     useHelper(ref, DirectionalLightHelper, 10);
 
     return (
@@ -31,42 +28,43 @@ function App() {
           shadow-mapSize-height={2048}
           shadow-camera-far={1000}
           shadow-camera-near={0.5}
-          shadow-camera-left={-100}
-          shadow-camera-right={100}
-          shadow-camera-top={-100}
-          shadow-camera-bottom={100}
+          shadow-camera-left={-300}
+          shadow-camera-right={300}
+          shadow-camera-top={-300}
+          shadow-camera-bottom={300}
           castShadow
         />
       </>
-    )
-  }
+    );
+  };
 
   return (
     <>
-    <div style={{position: 'absolute', textAlign:'center', zIndex: '2'}}>
-      dd
-    </div>
-    <Canvas shadows colorManagement sRGB camera={{position: [30, 20, -50], fov: 60}}>
-      <HtmlDiv position={[5, 25, 0]}>
-        aa
-      </HtmlDiv>
-      <group>
-        {/* <SkyCountrol /> */}
-        <Sky sunPosition={SetSky()} turbidity={0.5} />
-      </group>
-      <Light />
-      <Physics gravity={[0, -30, 0]} step={1 / 60}>
-        <Debug>
-        <Cube position={[0, 5, 0]} type="wood"/>
-        {/* <Player position={[0, 10, 15]} /> */}
-        <Suspense fallback={null}>
-          <Ground position={[0, -0.1, 0]} />
-        </Suspense>
-        </Debug>
-      </Physics>
-      <OrbitControls />
-      <Stars radius={200} count={300}/>
-    </Canvas>
+      <State />
+      <Canvas
+        shadows
+        colorManagement
+        sRGB
+        camera={{ position: [-10, 15, 18], fov: 60 }}
+      >
+        <group>
+          {/* <SkyCountrol /> */}
+          <Sky sunPosition={SetSky()} turbidity={0.5} />
+        </group>
+        <Light />
+        <Physics gravity={[0, -30, 0]} step={1 / 60}>
+          <Debug>
+            {/* <Cube position={[0, 5, 0]} type="wood" /> */}
+            {/* <Player position={[0, 10, 15]} /> */}
+            <Character />
+            <Suspense fallback={null}>
+              <Ground position={[0, -0.1, 0]} />
+            </Suspense>
+          </Debug>
+        </Physics>
+        <OrbitControls />
+        <Stars radius={200} count={300} />
+      </Canvas>
     </>
   );
 }
