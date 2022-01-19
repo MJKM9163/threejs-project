@@ -2822,7 +2822,7 @@
                     }
                 }
             ],
-            "name" : "Armature|mixamo.com|Layer0.001",
+            "name" : "Running",
             "samplers" : [
                 {
                     "input" : 13,
@@ -3835,7 +3835,7 @@
     "materials" : [
         {
             "doubleSided" : true,
-            "name" : "Alpha_Joints_MAT.002",
+            "name" : "Alpha_Joints_MAT.003",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
                     0.15355153381824493,
@@ -3849,7 +3849,7 @@
         },
         {
             "doubleSided" : true,
-            "name" : "Alpha_Body_MAT.002",
+            "name" : "Alpha_Body_MAT.003",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
                     0.09657000750303268,
@@ -3864,7 +3864,7 @@
     ],
     "meshes" : [
         {
-            "name" : "Alpha_Joints.002",
+            "name" : "Alpha_Joints.003",
             "primitives" : [
                 {
                     "attributes" : {
@@ -3880,7 +3880,7 @@
             ]
         },
         {
-            "name" : "Alpha_Surface.002",
+            "name" : "Alpha_Surface.003",
             "primitives" : [
                 {
                     "attributes" : {
