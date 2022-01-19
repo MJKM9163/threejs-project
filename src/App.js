@@ -2,7 +2,14 @@ import React, { Suspense, useRef } from "react";
 import "./App.css";
 import styled from "styled-components";
 import { Canvas } from "@react-three/fiber";
-import { Html, OrbitControls, Sky, Stars, useHelper } from "@react-three/drei";
+import {
+  Html,
+  OrbitControls,
+  PointerLockControls,
+  Sky,
+  Stars,
+  useHelper,
+} from "@react-three/drei";
 import { Physics, Debug } from "@react-three/cannon";
 import Ground from "./components/Ground";
 import { Cube } from "./components/Cube";
@@ -45,8 +52,9 @@ function App() {
         shadows
         colorManagement
         sRGB
-        camera={{ position: [-10, 15, 18], fov: 60 }}
+        camera={{ position: [0, 15, 20], fov: 60 }}
       >
+        <PointerLockControls />
         <group>
           {/* <SkyCountrol /> */}
           <Sky sunPosition={SetSky()} turbidity={0.5} />
@@ -54,7 +62,7 @@ function App() {
         <Light />
         <Physics gravity={[0, -30, 0]} step={1 / 60}>
           <Debug>
-            {/* <Cube position={[0, 5, 0]} type="wood" /> */}
+            <Cube position={[10, 5, 0]} type="wood" />
             {/* <Player position={[0, 10, 15]} /> */}
             <Character />
             <Suspense fallback={null}>
@@ -62,7 +70,7 @@ function App() {
             </Suspense>
           </Debug>
         </Physics>
-        <OrbitControls />
+        {/* <OrbitControls /> */}
         <Stars radius={200} count={300} />
       </Canvas>
     </>
