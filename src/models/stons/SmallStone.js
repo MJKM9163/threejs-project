@@ -1,19 +1,39 @@
+import { useCompoundBody } from "@react-three/cannon";
 import { useGLTF } from "@react-three/drei";
 import React, { useRef } from "react";
-
+//Cylinder
 export const SmallStone1 = ({ ...props }) => {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCompoundBody(() => ({
+    type: "Static",
+    position: [-20, -7, 7],
+    shapes: [
+      {
+        type: "Box",
+        position: [0, 10, 0],
+        rotation: [0, 0, 0],
+        args: [17, 10, 12],
+      },
+      {
+        type: "Cylinder",
+        position: [-5, 10, 5],
+        rotation: [0, 0, 0],
+        args: [5, 5, 10],
+      },
+    ],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
           <group
-            position={[-391.06, 2.82, 199.02]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, props.rotationZ ? props.rotationZ : 0]}
             scale={0.82}
           >
-            <group position={[450.22, 189.47, 10.63]}>
+            <group position={[450, 183, 20]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -29,18 +49,31 @@ export const SmallStone1 = ({ ...props }) => {
 };
 
 export const SmallStone2 = ({ ...props }) => {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCompoundBody(() => ({
+    type: "Static",
+    position: [0, 0, -100],
+    shapes: [
+      {
+        type: "Cylinder",
+        position: [-5, 7, 5],
+        rotation: [0, 0, 0],
+        args: [13, 13, 15],
+      },
+    ],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
           <group
-            position={[-301.62, 2.29, 196.59]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, props.rotationZ ? props.rotationZ : 0]}
             scale={0.82}
           >
-            <group position={[341.81, 186.52, 11.28]}>
+            <group position={[330, 172, 0]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -56,18 +89,31 @@ export const SmallStone2 = ({ ...props }) => {
 };
 
 export const SmallStone3 = ({ ...props }) => {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCompoundBody(() => ({
+    type: "Static",
+    position: [105, -2, 70],
+    shapes: [
+      {
+        type: "Cylinder",
+        position: [-5, 10, 5],
+        rotation: [0, 0, 0],
+        args: [13, 13, 20],
+      },
+    ],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
           <group
-            position={[-201.56, 2.72, 192.77]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, props.rotationZ ? props.rotationZ : 0]}
             scale={0.82}
           >
-            <group position={[220.52, 181.9, 10.75]}>
+            <group position={[245, 190, 10]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -154,60 +200,6 @@ export const SmallStone6 = ({ ...props }) => {
                 receiveShadow
                 geometry={nodes.Small_6_SMall_0.geometry}
                 material={nodes.Small_6_SMall_0.material}
-              />
-            </group>
-          </group>
-        </group>
-      </group>
-    </group>
-  );
-};
-
-export const SmallStone7 = ({ ...props }) => {
-  const group = useRef();
-  const { nodes } = useGLTF("/stonePack/scene.gltf");
-  return (
-    <group ref={group} {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, 0]}>
-        <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
-          <group
-            position={[203.73, 3.68, 197.83]}
-            rotation={[-Math.PI / 2, 0, props.rotationZ ? props.rotationZ : 0]}
-            scale={0.82}
-          >
-            <group position={[-270.73, 188.02, -1.04]}>
-              <mesh
-                castShadow
-                receiveShadow
-                geometry={nodes.Small_7_SMall_0.geometry}
-                material={nodes.Small_7_SMall_0.material}
-              />
-            </group>
-          </group>
-        </group>
-      </group>
-    </group>
-  );
-};
-
-export const SmallStone8 = ({ ...props }) => {
-  const group = useRef();
-  const { nodes } = useGLTF("/stonePack/scene.gltf");
-  return (
-    <group ref={group} {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, 0]}>
-        <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
-          <group
-            position={[288.07, 12.1, 197.09]}
-            rotation={[-Math.PI / 2, 0, props.rotationZ ? props.rotationZ : 0]}
-            scale={0.82}
-          >
-            <group position={[-372.97, 187.13, -0.61]}>
-              <mesh
-                castShadow
-                receiveShadow
-                geometry={nodes.Small_8_SMall_0.geometry}
-                material={nodes.Small_8_SMall_0.material}
               />
             </group>
           </group>

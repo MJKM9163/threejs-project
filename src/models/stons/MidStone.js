@@ -1,18 +1,29 @@
+import { useCompoundBody } from "@react-three/cannon";
 import { useGLTF } from "@react-three/drei";
 import React, { useRef } from "react";
 
 export const MidStone1 = ({ ...props }) => {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCompoundBody(() => ({
+    type: "Static",
+    position: [-90, 0, -65],
+    shapes: [
+      {
+        type: "Cylinder",
+        position: [0, 10, 0],
+        rotation: [0, 0, 0],
+        args: [16, 16, 30, 20],
+      },
+    ],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
-          <group
-            position={[-522.91, 16.25, -22.34]}
-            rotation={[-Math.PI / 2, 0, 0]}
-          >
-            <group position={[472.1, -22.34, 8.98]}>
+          <group position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <group position={[480, -15, 0]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -28,17 +39,27 @@ export const MidStone1 = ({ ...props }) => {
 };
 
 export const MidStone2 = ({ ...props }) => {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCompoundBody(() => ({
+    type: "Static",
+    position: [-90, 0, 70],
+    shapes: [
+      {
+        type: "Cylinder",
+        position: [0, 10, 0],
+        rotation: [0, 0, 0],
+        args: [22, 22, 30, 20],
+      },
+    ],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
-          <group
-            position={[-329.28, -0.2, -21.95]}
-            rotation={[-Math.PI / 2, 0, 0]}
-          >
-            <group position={[278.48, -21.95, 25.43]}>
+          <group position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <group position={[275, -10, 0]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -54,17 +75,27 @@ export const MidStone2 = ({ ...props }) => {
 };
 
 export const MidStone3 = ({ ...props }) => {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCompoundBody(() => ({
+    type: "Static",
+    position: [-100, 0, 107],
+    shapes: [
+      {
+        type: "Cylinder",
+        position: [0, 10, 0],
+        rotation: [0, 0, 0],
+        args: [22, 22, 30, 20],
+      },
+    ],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
-          <group
-            position={[-136.7, -22.18, -8.74]}
-            rotation={[-Math.PI / 2, 0, 0]}
-          >
-            <group position={[85.9, -8.74, 47.41]}>
+          <group position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <group position={[93, -9, 0]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -80,18 +111,31 @@ export const MidStone3 = ({ ...props }) => {
 };
 
 export const MidStone4 = ({ ...props }) => {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCompoundBody(() => ({
+    type: "Static",
+    position: [-100, 0, 35],
+    shapes: [
+      {
+        type: "Cylinder",
+        position: [0, 10, 0],
+        rotation: [0, 0, 0],
+        args: [18, 18, 30, 20],
+      },
+    ],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
           <group
-            position={[233.11, -22.35, -17.34]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, 0.53]}
             scale={1.12}
           >
-            <group position={[-283.91, -17.34, 47.57]}>
+            <group position={[-290, -10, 0]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -107,17 +151,27 @@ export const MidStone4 = ({ ...props }) => {
 };
 
 export const MidStone5 = ({ ...props }) => {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCompoundBody(() => ({
+    type: "Static",
+    position: [35, 0, 80],
+    shapes: [
+      {
+        type: "Cylinder",
+        position: [0, 10, 0],
+        rotation: [0, 0, 0],
+        args: [18, 18, 30, 20],
+      },
+    ],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
-          <group
-            position={[60.48, -10.14, -17.33]}
-            rotation={[-Math.PI / 2, 0, 0]}
-          >
-            <group position={[-111.29, -17.33, 35.36]}>
+          <group position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <group position={[-110, -20, 0]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -133,17 +187,27 @@ export const MidStone5 = ({ ...props }) => {
 };
 
 export const MidStone6 = ({ ...props }) => {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCompoundBody(() => ({
+    type: "Static",
+    position: [-40, 0, -33],
+    shapes: [
+      {
+        type: "Cylinder",
+        position: [0, 10, 0],
+        rotation: [0, 0, 0],
+        args: [16, 16, 30, 20],
+      },
+    ],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
-          <group
-            position={[421.37, -4.8, 2.38]}
-            rotation={[-Math.PI / 2, 0, -2.68]}
-          >
-            <group position={[-116.06, -11.36, 30.02]}>
+          <group position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, -2.68]}>
+            <group position={[-108, -15, 0]}>
               <mesh
                 castShadow
                 receiveShadow

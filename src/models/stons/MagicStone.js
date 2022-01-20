@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Html, useGLTF } from "@react-three/drei";
 import styled from "styled-components";
+import { useCylinder } from "@react-three/cannon";
 
 const HtmlDiv = styled(Html)`
   background-color: #ff006a86;
@@ -18,12 +19,19 @@ export function MagicStone1({ ...props }) {
   //   console.log(test)
   // }
   const [test, set] = useState(true);
-  const group = useRef();
 
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCylinder(() => ({
+    type: "Static",
+    position: [-21, 0, 17],
+    rotation: [0, 0, 0],
+    args: [2, 2, 5],
+  }));
+
   return (
     <group
-      ref={group}
+      ref={ref}
       {...props}
       dispose={null}
       // onPointerOver={pointerOver}
@@ -32,20 +40,14 @@ export function MagicStone1({ ...props }) {
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
           <group
-            position={[-176.5, -4.32, 313.01]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, props.rotationZ ? props.rotationZ : 0]}
             scale={0.7}
           >
-            <HtmlDiv
-              //position={[0, 0, 0]}
-              sprite
-              transform
-              distanceFactor={20}
-              occlude={test}
-            >
+            <HtmlDiv sprite transform distanceFactor={20} occlude={test}>
               {name[1]}
             </HtmlDiv>
-            <group position={[209.33, 335.28, 8.98]}>
+            <group position={[210, 340, 0]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -61,18 +63,25 @@ export function MagicStone1({ ...props }) {
 }
 
 export function MagicStone2({ ...props }) {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCylinder(() => ({
+    type: "Static",
+    position: [-115, 0, 53],
+    rotation: [0, 0, 0],
+    args: [1, 2, 5],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
           <group
-            position={[-132.54, -2.06, 314.83]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, props.rotationZ ? props.rotationZ : 0]}
             scale={0.7}
           >
-            <group position={[146.7, 337.87, 5.77]}>
+            <group position={[150, 340, 0]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -88,18 +97,25 @@ export function MagicStone2({ ...props }) {
 }
 
 export function MagicStone3({ ...props }) {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCylinder(() => ({
+    type: "Static",
+    position: [140, 0, -38],
+    rotation: [0, 0.7, 0],
+    args: [1, 2, 5],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
           <group
-            position={[-79.2, -4.98, 315.64]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, props.rotationZ ? props.rotationZ : 0]}
             scale={0.7}
           >
-            <group position={[70.7, 339.03, 9.93]}>
+            <group position={[70, 340, 0]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -115,18 +131,25 @@ export function MagicStone3({ ...props }) {
 }
 
 export function MagicStone4({ ...props }) {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCylinder(() => ({
+    type: "Static",
+    position: [-53, 1.5, -122],
+    rotation: [0, 0, 0],
+    args: [2, 2, 5],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
           <group
-            position={[-18.43, -5.91, 316.19]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, props.rotationZ ? props.rotationZ : 0]}
             scale={0.7}
           >
-            <group position={[-15.87, 339.81, 11.25]}>
+            <group position={[-20, 330, -20]}>
               <mesh
                 castShadow
                 receiveShadow
@@ -142,18 +165,25 @@ export function MagicStone4({ ...props }) {
 }
 
 export function MagicStone5({ ...props }) {
-  const group = useRef();
   const { nodes } = useGLTF("/stonePack/scene.gltf");
+
+  const [ref] = useCylinder(() => ({
+    type: "Static",
+    position: [115, 57, -62],
+    rotation: [0, 0, 0],
+    args: [2, 2, 8],
+  }));
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={ref} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
           <group
-            position={[45.6, -4.13, 316.29]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, props.rotationZ ? props.rotationZ : 0]}
             scale={0.7}
           >
-            <group position={[-107.09, 339.95, 8.71]}>
+            <group position={[-108, 340, -30]}>
               <mesh
                 castShadow
                 receiveShadow
