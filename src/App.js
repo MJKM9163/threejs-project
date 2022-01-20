@@ -1,11 +1,10 @@
 import React, { Suspense, useRef } from "react";
 import "./App.css";
-import styled from "styled-components";
 import { Canvas } from "@react-three/fiber";
 import {
   Html,
-  OrbitControls,
   PointerLockControls,
+  OrbitControls,
   Sky,
   Stars,
   useHelper,
@@ -13,11 +12,11 @@ import {
 import { Physics, Debug } from "@react-three/cannon";
 import Ground from "./components/Ground";
 import { Cube } from "./components/Cube";
-import { Player } from "./components/Player";
 import { SetSky, SetLight, SkyCountrol } from "./controls/skyControl";
 import State from "./components/state/State";
 import { DirectionalLightHelper } from "three";
 import Character from "./components/Character";
+import { Start } from "./starting/Start";
 
 function App() {
   const Light = () => {
@@ -44,34 +43,34 @@ function App() {
       </>
     );
   };
-
+  //position: [0, 0, -2] default
   return (
     <>
       <State />
       <Canvas
-        shadows
+        //shadows
         colorManagement
         sRGB
-        camera={{ position: [0, 15, 20], fov: 60 }}
+        camera={{ position: [100, 1900, 1900], fov: 60, far: 3000, near: 3 }}
       >
-        <PointerLockControls />
         <group>
           {/* <SkyCountrol /> */}
-          <Sky sunPosition={SetSky()} turbidity={0.5} />
+          <Sky sunPosition={SetSky()} distance={3000} turbidity={0.5} />
         </group>
         <Light />
         <Physics gravity={[0, -30, 0]} step={1 / 60}>
-          <Debug>
-            <Cube position={[10, 5, 0]} type="wood" />
-            {/* <Player position={[0, 10, 15]} /> */}
-            <Character />
+          <Debug scale={1}>
             <Suspense fallback={null}>
+              <Cube position={[10, 5, 0]} type="wood" />
+
+              <Character />
+              <Start />
               <Ground position={[0, -0.1, 0]} />
             </Suspense>
           </Debug>
+          <OrbitControls />
         </Physics>
-        {/* <OrbitControls /> */}
-        <Stars radius={200} count={300} />
+        {/* <Stars radius={200} count={300} /> */}
       </Canvas>
     </>
   );
