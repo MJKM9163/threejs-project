@@ -3,7 +3,6 @@ import { usePlane } from "@react-three/cannon";
 import { TextureLoader, RepeatWrapping } from "three";
 import wasteland from "../images/wasteland.jpg";
 import SpaceShip from "../models/spaceShip";
-import Rock from "../models/rock";
 import {
   MagicStone1,
   MagicStone2,
@@ -30,9 +29,8 @@ import {
   SmallStone1,
   SmallStone2,
   SmallStone3,
-  SmallStone4,
-  SmallStone5,
-  SmallStone6,
+  // SmallStone5,
+  // SmallStone6,
 } from "../models/stons/SmallStone";
 
 const Ground = (props) => {
@@ -46,8 +44,11 @@ const Ground = (props) => {
     <>
       <SpaceShip
         scale={0.1}
-        rotation={[1.2, 0.75, 0.5]}
-        position={[100, 21, 80]}
+        position={[0, -500, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        refP={[104, 23, 130]}
+        refR={[1.5, 0.82, 0]}
+        refA={[20, 30, 80]}
       />
       <group name="MagicStone">
         <MagicStone1 scale={3} rotationZ={0.6} position={[-3.5, 0, -11.5]} />
@@ -77,9 +78,8 @@ const Ground = (props) => {
           position={[180, -3, 5]}
           rotationZ={3.6}
         />
-        <SmallStone4 scale={15} position={[10, -3, -150]} rotationZ={1.6} />
-        <SmallStone5 scale={12} position={[-20, -2, 60]} rotationZ={3.7} />
-        <SmallStone6 scale={20} position={[-60, -7, -100]} rotationZ={3.7} />
+        {/* <SmallStone5 scale={12} position={[-20, -2, 60]} rotationZ={3.7} />
+        <SmallStone6 scale={20} position={[-60, -7, -100]} rotationZ={3.7} /> */}
       </group>
       <group name="starting">
         <mesh ref={ref} receiveShadow>
