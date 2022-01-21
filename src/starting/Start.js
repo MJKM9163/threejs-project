@@ -1,64 +1,75 @@
 import { useFrame } from "@react-three/fiber";
-import React, { useEffect, useRef } from "react";
-import SpaceShip from "../models/spaceShip";
+import React, { useRef, useState } from "react";
 import { useStore } from "../hooks/useStore";
-import { useCylinder } from "@react-three/cannon";
-import { useGLTF } from "@react-three/drei";
-
-function SpaceShipMove() {
-  const spaceShipMove = useStore((state) => state.spaceShipMove);
-  return spaceShipMove;
-}
+import { Camera } from "./Camera";
+import StartSpaceShip from "./StartSpaceShip";
+import { OrbitControls } from "@react-three/drei";
 
 export const Start = () => {
   const setMove = useStore((state) => state.setSpaceShipMove);
   const spaceShipMove = useStore((state) => state.spaceShipMove);
-  const setSpaceShipRotation = useStore((state) => state.setSpaceShipRotation);
-  const spaceShipRotation = useStore((state) => state.spaceShipRotation);
+  const setRender = useStore((state) => state.setSpaceShipRender);
+  const render = useStore((state) => state.spaceShipRender);
+  const setStartRender = useStore((state) => state.setStartRender);
+  const setEventCheck = useStore((state) => state.setEventChecker);
   const ref = useRef();
 
-  ref.current?.position.set(
-    spaceShipMove[0],
-    spaceShipMove[1],
-    spaceShipMove[2]
-  );
-  ref.current?.rotation.set(
-    spaceShipRotation[0],
-    spaceShipRotation[1],
-    spaceShipRotation[2]
-  );
+  const [cameraTarget, setCameraTarget] = useState([300, 1500, 1500]);
+  if (render === false) {
+    ref.current?.position.set(0, 0, 0);
+  }
+  let a = 0.28;
+  let b = 2.3;
 
-  let a = 0.25;
-  let b = 1.25;
+  useFrame(() => {
+    a += a;
+    b += b;
+    if (spaceShipMove[1] > -1480) {
+      setMove(
+        spaceShipMove[0] - a,
+        spaceShipMove[1] - b,
+        spaceShipMove[2] - (b - 0.19)
+      );
+      ref.current?.position.set(
+        spaceShipMove[0],
+        spaceShipMove[1],
+        spaceShipMove[2]
+      );
+    } else if (spaceShipMove[1] <= -1480) {
+      setRender(true);
+      setEventCheck(true);
+      setTimeout(() => {
+        setEventCheck(false);
+        setStartRender(false);
+      }, 3000);
+    }
+    if (render === true) {
+      ref.current?.position.set(
+        spaceShipMove[0],
+        spaceShipMove[1],
+        spaceShipMove[2]
+      );
+      a = 0;
+      b = 0;
+      if (cameraTarget !== [100, 0, 50]) {
+        setCameraTarget([100, 0, 50]);
+      }
+    }
 
-  let roX = 0.005;
+    console.log(ref.current?.position);
+  });
 
-  // useFrame(() => {
-  //   // console.log(a);
-
-  //   setMove(spaceShipMove[0] - a, spaceShipMove[1] - b, spaceShipMove[2] - b);
-  //   setSpaceShipRotation(
-  //     spaceShipRotation[0] - roX,
-  //     spaceShipRotation[1],
-  //     spaceShipRotation[2]
-  //   );
-  // });
-
-  console.log(ref.current?.position);
-
-  const { nodes, materials } = useGLTF("/spaceShip/scene.gltf");
-
+  //console.log(spaceShipMove[1]);
   return (
     <>
-      <group ref={ref} scale={0.1} dispose={null}>
-        <group position={[0, 0, 0]} rotation={[-Math.PI / 1 - 0.025, -0.2, -0]}>
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={nodes.Object_2.geometry}
-            material={materials.Space_ship}
-          />
-        </group>
+      <group ref={ref}>
+        <Camera />
+        <OrbitControls
+          target={cameraTarget}
+          enableZoom={false}
+          enablePan={false}
+        />
+        {render ? null : <StartSpaceShip />}
       </group>
     </>
   );
