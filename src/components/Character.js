@@ -28,12 +28,12 @@ const Character = ({ ...props }) => {
 
   const [ModelMovingBox, ModelMovingBoxApi] = useBox(() => ({
     mass: 1,
-    type: "Dynamic",
+    type: "Kinematic",
     ...props,
   }));
   const [ModelBox, ModelBoxapi] = useBox(() => ({
     mass: 1,
-    type: "Dynamic",
+    type: "Kinematic",
     args: [2, 2, 8.5],
     position: [0, 4.3, 0],
     rotation: [Math.PI / 2, 0, 0],
@@ -69,10 +69,10 @@ const Character = ({ ...props }) => {
   useFrame(() => {
     //num += 0.001;
 
-    //camera.position.set(num, 50, -20); // 이거
-    //camera.rotation.set(-2.7233, 0, -3.14159); // 이거
+    // camera.position.set(num, 50, -20); // 이거
+    // camera.rotation.set(-2.7233, 0, -3.14159); // 이거
 
-    //Camera.current?.getWorldPosition(camera.position);
+    Camera.current?.getWorldPosition(camera.position);
 
     const direction = new Vector3();
     const frontVector = new Vector3(
@@ -98,10 +98,10 @@ const Character = ({ ...props }) => {
   return (
     <>
       <group name={"Model_Moving_Box"} ref={ModelMovingBox}>
-        {/* <PointerLockControlsImpl
+        <PointerLockControlsImpl
           ref={controls}
           args={[camera, gl.domElement]}
-        /> */}
+        />
         <mesh name="Camera" ref={Camera}></mesh>
         <mesh name="Model_Box" ref={ModelBox} />
         {/* <group
