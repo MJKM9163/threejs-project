@@ -32,6 +32,7 @@ import {
   // SmallStone5,
   // SmallStone6,
 } from "../models/stons/SmallStone";
+import { useStore } from "../hooks/useStore";
 
 const Ground = (props) => {
   const [ref] = usePlane(() => ({ rotation: [-Math.PI / 2, 0, 0], ...props }));
@@ -40,16 +41,29 @@ const Ground = (props) => {
   texture.wrapT = RepeatWrapping;
   texture.repeat.set(4, 4);
 
+  const renderCheck = useStore((store) => store.spaceShipRender);
+
   return (
     <>
-      <SpaceShip
+      {renderCheck ? (
+        <SpaceShip
+          scale={0.1}
+          position={[0, -500, 0]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          refP={[104, 23, 130]}
+          refR={[1.5, 0.82, 0]}
+          refA={[20, 30, 80]}
+        />
+      ) : null}
+      {/* <SpaceShip
         scale={0.1}
         position={[0, -500, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
         refP={[104, 23, 130]}
         refR={[1.5, 0.82, 0]}
         refA={[20, 30, 80]}
-      />
+      /> */}
+
       <group name="MagicStone">
         <MagicStone1 scale={3} rotationZ={0.6} position={[-3.5, 0, -11.5]} />
         <MagicStone2 scale={3} rotationZ={-0.8} position={[-100, 0, 25]} />
