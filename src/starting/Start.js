@@ -55,8 +55,6 @@ export const Start = () => {
         setCameraTarget([100, 0, 50]);
       }
     }
-
-    console.log(ref.current?.position);
   });
 
   //console.log(spaceShipMove[1]);
