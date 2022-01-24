@@ -9,12 +9,12 @@ import { extend, useFrame, useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useKeyboardControls } from "../hooks/useKeyboardControls";
 
-extend({ PointerLockControlsImpl });
+//extend({ PointerLockControlsImpl });
 
 let num = 0;
 const SPEED = 25;
 const Character = ({ ...props }) => {
-  const [hide, setHide] = useState(true);
+  const [hide, setHide] = useState(false);
   const { camera, mouse, gl } = useThree();
   const controls = useRef();
   //console.log(mouse.x);
@@ -48,8 +48,11 @@ const Character = ({ ...props }) => {
   }));
 
   const { nodes, materials, animations } = useGLTF("Ybot/Idle.gltf");
-  const { actions } = useAnimations(animations, Model);
-
+  const walking = useGLTF("Ybot/Walking.gltf");
+  //console.log(ModelBoxapi);
+  const idle = useAnimations(animations, Model);
+  const walkingAction = useAnimations(walking.animations, Model);
+  //console.log(walkingAction);
   const { moveForward, moveBackward, moveLeft, moveRight, jump } =
     useKeyboardControls();
 
@@ -59,12 +62,63 @@ const Character = ({ ...props }) => {
     // document.addEventListener("click", () => {
     //   controls.current.lock();
     // });
+    ModelMovingBoxApi.rotation.set(0, 0, 0);
     if (hide === false) {
-      actions.Idle.play();
+      walkingAction.actions.Walking.stop();
+      if (moveForward === true) {
+        ModelMovingBoxApi.rotation.set(0, 0, 0);
+        walkingAction.actions.Walking.play();
+        idle.actions.Idle.stop();
+      } else if (moveBackward === true) {
+        ModelMovingBoxApi.rotation.set(0, -Math.PI / 1, 0);
+        walkingAction.actions.Walking.play();
+        idle.actions.Idle.stop();
+      } else if (moveLeft === true) {
+        ModelMovingBoxApi.rotation.set(0, Math.PI / 2, 0);
+        walkingAction.actions.Walking.play();
+        idle.actions.Idle.stop();
+      } else if (moveRight === true) {
+        ModelMovingBoxApi.rotation.set(0, -Math.PI / 2, 0);
+        walkingAction.actions.Walking.play();
+        idle.actions.Idle.stop();
+      } else {
+        walkingAction.actions.Walking.stop();
+        idle.actions.Idle.play();
+      }
+      if (moveForward === true && moveLeft === true) {
+        ModelMovingBoxApi.rotation.set(0, Math.PI / 6, 0);
+        walkingAction.actions.Walking.play();
+        idle.actions.Idle.stop();
+        console.log("대각선");
+      } else if (moveForward === true && moveRight === true) {
+        ModelMovingBoxApi.rotation.set(0, -Math.PI / 6, 0);
+        walkingAction.actions.Walking.play();
+        idle.actions.Idle.stop();
+      } else if (moveBackward === true && moveLeft === true) {
+        ModelMovingBoxApi.rotation.set(0, Math.PI / 1.3, 0);
+        walkingAction.actions.Walking.play();
+        idle.actions.Idle.stop();
+      } else if (moveBackward === true && moveRight === true) {
+        ModelMovingBoxApi.rotation.set(0, -Math.PI / 1.3, 0);
+        walkingAction.actions.Walking.play();
+        idle.actions.Idle.stop();
+      }
     }
     ModelBoxapi.velocity.subscribe((v) => (velocity.current = v));
     ModelMovingBoxApi.velocity.subscribe((v) => (velocity.current = v));
-  }, [Cameraapi, ModelBoxapi, ModelMovingBoxApi, velocity, actions, hide]);
+  }, [
+    Cameraapi,
+    ModelBoxapi,
+    ModelMovingBoxApi,
+    velocity,
+    hide,
+    walkingAction,
+    idle,
+    moveForward,
+    moveBackward,
+    moveLeft,
+    moveRight,
+  ]);
 
   useFrame(() => {
     //num += 0.001;
@@ -72,7 +126,7 @@ const Character = ({ ...props }) => {
     // camera.position.set(num, 50, -20); // 이거
     // camera.rotation.set(-2.7233, 0, -3.14159); // 이거
 
-    Camera.current?.getWorldPosition(camera.position);
+    //Camera.current?.getWorldPosition(camera.position);
 
     const direction = new Vector3();
     const frontVector = new Vector3(
@@ -86,6 +140,12 @@ const Character = ({ ...props }) => {
       .normalize()
       .multiplyScalar(SPEED)
       .applyEuler(camera.rotation);
+    // console.log(
+    //   direction
+    //     .subVectors(frontVector, sideVector)
+    //     .normalize()
+    //     .multiplyScalar(SPEED)
+    // );
     ModelBoxapi.velocity.set(direction.x, velocity.current[1], direction.z);
 
     ModelMovingBoxApi.velocity.set(
@@ -94,22 +154,23 @@ const Character = ({ ...props }) => {
       direction.z
     );
   });
-
+  //console.log(gl);
+  // console.log(camera);
   return (
     <>
       <group name={"Model_Moving_Box"} ref={ModelMovingBox}>
-        <PointerLockControlsImpl
+        {/* <PointerLockControlsImpl
           ref={controls}
           args={[camera, gl.domElement]}
-        />
+        /> */}
         <mesh name="Camera" ref={Camera}></mesh>
-        <mesh name="Model_Box" ref={ModelBox} />
-        {/* <group
+        {/* <mesh name="Model_Box" ref={ModelBox} /> */}
+        <group
           name="Model_Box"
           ref={ModelBox}
           dispose={null}
           scale={0.05}
-        ></group> */}
+        ></group>
         {hide ? null : (
           <group
             name="Model"
