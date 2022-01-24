@@ -54,8 +54,8 @@ function App() {
   const eventCheck = useStore((state) => state.eventChecker);
   const startCheck = useStore((state) => state.startRender);
   const render = useStore((state) => state.spaceShipRender);
-  console.log(startCheck);
-  console.log("App 컴포넌트 랜더링");
+  // console.log(startCheck);
+  // console.log("App 컴포넌트 랜더링");
 
   return (
     <>
@@ -66,7 +66,7 @@ function App() {
         colorManagement
         sRGB
         camera={{
-          position: [110, 50, -2],
+          position: [0, 50, -0.0001],
           fov: 60,
           far: 8000,
           near: 3,
@@ -83,8 +83,8 @@ function App() {
               <Cube position={[10, 5, 0]} type="wood" />
               {/* <Fire scale={10} /> */}
               <Ocean />
-              {/* <Character /> */}
-              {startCheck ? <Start /> : <Character />}
+              <Character />
+              {/* {startCheck ? <Start /> : <Character />} */}
 
               <Ground position={[0, -0.1, 0]} />
             </Suspense>
