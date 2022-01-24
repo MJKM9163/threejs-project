@@ -10,14 +10,14 @@ const HtmlDiv = styled(Html)`
 const name = ["???", "MagicStone"];
 
 export function MagicStone1({ ...props }) {
-  // const pointerOver = () => {
-  //   set(false);
-  //   console.log(test)
-  // }
-  // const pointerOut = () => {
-  //   set(true);
-  //   console.log(test)
-  // }
+  const pointerOver = () => {
+    set(false);
+    console.log(test);
+  };
+  const pointerOut = () => {
+    set(true);
+    console.log(test);
+  };
   const [test, set] = useState(true);
 
   const { nodes } = useGLTF("/stonePack/scene.gltf");
@@ -34,8 +34,8 @@ export function MagicStone1({ ...props }) {
       ref={ref}
       {...props}
       dispose={null}
-      // onPointerOver={pointerOver}
-      // onPointerOut={pointerOut}
+      onPointerOver={pointerOver}
+      onPointerOut={pointerOut}
     >
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
