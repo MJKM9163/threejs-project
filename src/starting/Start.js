@@ -43,6 +43,7 @@ export const Start = () => {
         setStartRender(false);
       }, 3000);
     }
+
     if (render === true) {
       ref.current?.position.set(
         spaceShipMove[0],
@@ -57,11 +58,10 @@ export const Start = () => {
     }
   });
 
-  //console.log(spaceShipMove[1]);
   return (
     <>
       <group ref={ref}>
-        <Camera />
+        <Camera position={[250, 1700, 1700]} />
         <OrbitControls
           target={cameraTarget}
           enableZoom={false}
