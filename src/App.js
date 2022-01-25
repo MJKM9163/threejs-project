@@ -66,14 +66,14 @@ function App() {
         colorManagement
         sRGB
         camera={{
-          position: [0, 50, -0.0001],
+          position: [0, 50, -100],
           fov: 60,
           far: 8000,
           near: 3,
         }}
       >
         <group>
-          <SkyCountrol />
+          {/* <SkyCountrol /> */}
           <Sky sunPosition={SetSky()} distance={4000} turbidity={0.5} />
         </group>
         <Light />
