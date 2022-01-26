@@ -1,6 +1,9 @@
 import React, { Suspense } from "react";
 import "./App.css";
 import { Canvas } from "@react-three/fiber";
+import { TestBox } from "./components/TestBox";
+import { Debug, Physics } from "@react-three/cannon";
+import { SpaceIndex } from "./components/space/SpaceIndex";
 
 function App() {
   return (
@@ -10,13 +13,20 @@ function App() {
         colorManagement
         sRGB
         camera={{
-          position: [0, 50, -100],
+          position: [15, 30, -50],
           fov: 60,
           far: 8000,
           near: 3,
         }}
       >
-        <Suspense></Suspense>
+        <Physics gravity={[0, 0, 0]} iterations={1} broadphase="SAP">
+          <Debug>
+            <Suspense>
+              {/* <TestBox /> */}
+              <SpaceIndex />
+            </Suspense>
+          </Debug>
+        </Physics>
       </Canvas>
     </>
   );
