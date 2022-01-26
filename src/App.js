@@ -56,7 +56,7 @@ function App() {
   const render = useStore((state) => state.spaceShipRender);
   // console.log(startCheck);
   // console.log("App 컴포넌트 랜더링");
-
+  console.log("test");
   return (
     <>
       <ChangeDiv eventCheck={eventCheck} />
