@@ -4,14 +4,13 @@ import { Canvas } from "@react-three/fiber";
 import { TestBox } from "./components/TestBox";
 import { Debug, Physics } from "@react-three/cannon";
 import { SpaceIndex } from "./components/space/SpaceIndex";
-//import { useStore } from "./hooks/useStore";
+import { PlanetInfo } from "./components/PlanetInfo";
 
 function App() {
-  // const viewName = useStore((state) => state.name);
-  // console.log(viewName);
-  console.log("app");
+  console.log("메인 랜더링 확인");
   return (
     <>
+      {/* <PlanetInfo /> */}
       <Canvas
         shadows
         colorManagement
