@@ -10,7 +10,7 @@ function App() {
   console.log("메인 랜더링 확인");
   return (
     <>
-      {/* <PlanetInfo /> */}
+      <PlanetInfo />
       <Canvas
         shadows
         colorManagement
@@ -30,7 +30,7 @@ function App() {
           </Suspense>
           {/* </Debug> */}
         </Physics>
-        <axesHelper scale={100} />
+        {/* <axesHelper scale={500} /> */}
       </Canvas>
     </>
   );
