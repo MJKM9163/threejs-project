@@ -3,7 +3,7 @@ import CameraControls from "camera-controls";
 import * as THREE from "three";
 import { Vector3 } from "three";
 import { useFrame, useThree } from "@react-three/fiber";
-import { storeApi, useStore } from "../../../hooks/useStore";
+import { useStore } from "../../../hooks/useStore";
 
 CameraControls.install({ THREE: THREE });
 //state.cameraRotationY
@@ -13,10 +13,10 @@ export const SpaceCamera = ({ pos = new Vector3(), look = new Vector3() }) => {
   let focus = useRef(useStore.getState().focus);
   let zoomCheck = useRef(useStore.getState().zoom);
   useEffect(() => {
-    storeApi.subscribe((state) => {
+    useStore.subscribe((state) => {
       focus.current = state.focus;
     });
-    storeApi.subscribe((state) => {
+    useStore.subscribe((state) => {
       zoomCheck.current = state.zoom;
     });
   });
