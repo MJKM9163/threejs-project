@@ -2,25 +2,25 @@ import { useSphere } from "@react-three/cannon";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { Vector3 } from "three";
-import { storeApi, useStore } from "../../../hooks/useStore";
+import { useStore } from "../../../hooks/useStore";
 import { OrbitLine } from "../OrbitLine";
 
 let a = 0;
 
-export const Unknown = ({ focusAndView, ...props }) => {
+export const Unknown = ({ SetUp, ...props }) => {
+  const argsSize = useRef(useStore.getState().size);
+  let orbitHide = useRef(useStore.getState().orbitHide);
+
   const unknownWorldPosition = new Vector3();
   const [unknownRef, unknownApi] = useSphere(() => ({
     mass: 1,
     type: "Static",
     position: props.position,
-    args: [27],
+    args: [argsSize.current["small"]],
   }));
 
-  const orbitHide = useRef(useStore.getState().orbitHide);
-  const hideCheck = useStore((state) => state.setOrbitHide);
-
   useEffect(() => {
-    storeApi.subscribe((state) => {
+    useStore.subscribe((state) => {
       orbitHide.current = state.orbitHide;
     });
   });
@@ -36,12 +36,18 @@ export const Unknown = ({ focusAndView, ...props }) => {
       <mesh
         ref={unknownRef}
         onClick={(e) => {
-          focusAndView(unknownWorldPosition, "unknown");
-          hideCheck(!orbitHide.current);
+          SetUp(
+            unknownWorldPosition,
+            "알 수 없음",
+            "얼음형",
+            e.object.geometry.parameters.radius
+          );
+          useStore.setState({ orbitHide: !orbitHide.current });
         }}
       >
-        <sphereGeometry args={[27]} />
+        <sphereGeometry args={[argsSize.current["small"]]} />
         <meshNormalMaterial />
+        <axesHelper scale={500} />
       </mesh>
       <OrbitLine args={[props.position[0] - 5, props.position[0] + 5, 100]} />
     </>

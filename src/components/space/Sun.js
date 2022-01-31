@@ -1,24 +1,25 @@
 import { useSphere } from "@react-three/cannon";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
-import { storeApi, useStore } from "../../hooks/useStore";
+import { useStore } from "../../hooks/useStore";
 
 let a = 0.5;
 
-export const Sun = ({ focusAndView }) => {
+export const Sun = ({ SetUp }) => {
+  const orbitHide = useRef(useStore.getState().orbitHide);
+  const argsSize = useRef(useStore.getState().size);
+  // const hideCheck = useStore.setState().orbitHide;
+
   const [sunRef, sunApi] = useSphere(() => ({
     mass: 100,
     type: "Static",
     position: [0, 0, 0],
     rotation: [0, 0, 0],
-    args: [100],
+    args: [argsSize.current["large"]],
   }));
 
-  const orbitHide = useRef(useStore.getState().orbitHide);
-  const hideCheck = useStore((state) => state.setOrbitHide);
-
   useEffect(() => {
-    storeApi.subscribe((state) => {
+    useStore.subscribe((state) => {
       orbitHide.current = state.orbitHide;
     });
   });
@@ -33,13 +34,18 @@ export const Sun = ({ focusAndView }) => {
       <mesh
         ref={sunRef}
         onClick={(e) => {
-          focusAndView(e.object.position, "sun");
-          hideCheck(!orbitHide.current);
+          SetUp(
+            e.object.position,
+            "태양",
+            "주계열성",
+            e.object.geometry.parameters.radius
+          );
+          useStore.setState({ orbitHide: !orbitHide.current });
         }}
       >
-        <sphereGeometry args={[100]} />
+        <sphereGeometry args={[argsSize.current["large"]]} />
         <meshNormalMaterial />
-        <axesHelper scale={300} />
+        <axesHelper scale={500} />
       </mesh>
     </>
   );
