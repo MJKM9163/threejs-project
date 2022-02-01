@@ -7,6 +7,7 @@ import { SpaceIndex } from "./components/space/SpaceIndex";
 import { PlanetInfo } from "./components/PlanetInfo";
 
 function App() {
+  //const zoomCheck = useRef(useStoreApi.getState().zoom);
   console.log("메인 랜더링 확인");
   return (
     <>

@@ -25,13 +25,15 @@ export const SpaceIndex = () => {
     unknownOrbitRef.current?.rotation.set(0, (unknownStarting -= 0.0005), 0);
   });
 
-  const SetUp = (focus, name, type, selectSize) => {
+  const SetUp = (focus, name, type, size) => {
     useStore.setState({ focus: focus });
     useStore.setState({ name: name });
     useStore.setState({ type: type });
     useStore.setState({ zoom: !zoomCheck.current });
-    useStore.setState({ selectSize: selectSize });
+    //useStore.setState({ zoom: true });
+    useStore.setState({ selectSize: size });
   };
+
   console.log("우주 랜더링 확인");
   return (
     <>

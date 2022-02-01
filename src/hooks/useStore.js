@@ -18,36 +18,39 @@ import { subscribeWithSelector } from "zustand/middleware";
 //   selectSize: null,
 // }));
 
-// export const useStore = create(
-//   subscribeWithSelector(() => ({
-//     name: "space",
-//     zoom: false,
-//     focus: {},
-//     orbitHide: false,
-//     size: { small: 70, middle: 180, large: 350 },
-//     selectSize: null,
-//     type: "???",
-//     explanation: "",
+export const [useStore, useStoreApi] = create(
+  subscribeWithSelector((set) => ({
+    name: "space",
+    setName: (newName) => set(() => ({ name: newName })),
+    zoom: false,
+    setZoom: () => set((state) => ({ zoom: !state.zoom })),
+    focus: {},
+    orbitHide: false,
+    size: { small: 70, middle: 180, large: 350 },
+    selectSize: null,
+    type: "???",
+    explanation: "",
 
-//     positiveEffects: ["나노 공장", "거대 식물", "아름다운 고리"],
-//     negativeEffect: ["환각 대기", "방사능", "얼음-9"],
+    positiveEffects: ["나노 공장", "거대 식물", "아름다운 고리"],
+    negativeEffect: ["환각 대기", "방사능", "얼음-9"],
 
-//     earthEffect: null,
-//   }))
-// );
+    earthEffect: null,
+    tt: null,
+  }))
+);
 
-export const useStore = create(() => ({
-  name: "space",
-  zoom: false,
-  focus: {},
-  orbitHide: false,
-  size: { small: 70, middle: 180, large: 350 },
-  selectSize: null,
-  type: "???",
-  explanation: "",
+// export const [useStore, useStoreApi] = create(() => ({
+//   name: "space",
+//   zoom: false,
+//   focus: {},
+//   orbitHide: false,
+//   size: { small: 70, middle: 180, large: 350 },
+//   selectSize: null,
+//   type: "???",
+//   explanation: "",
 
-  positiveEffects: ["나노 공장", "거대 식물", "아름다운 고리"],
-  negativeEffect: ["환각 대기", "방사능", "얼음-9"],
+//   positiveEffects: ["나노 공장", "거대 식물", "아름다운 고리"],
+//   negativeEffect: ["환각 대기", "방사능", "얼음-9"],
 
-  earthEffect: null,
-}));
+//   earthEffect: null,
+// }));

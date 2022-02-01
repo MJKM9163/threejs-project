@@ -1,21 +1,24 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { useStore } from "../hooks/useStore";
+import { useStore, useStoreApi } from "../hooks/useStore";
 
 const PlanetInfoDiv = styled.div`
   position: absolute;
   width: 100vw;
   height: 100vh;
-  z-index: ${(props) => (props.zoom ? 100 : 0)};
-  background-color: ${(props) => (props.zoom ? "#4343437b" : "gray")};
-  display: ${(props) => (props.zoom ? "block" : "none")};
+  z-index: ${(props) => (props.zoom ? "100" : "0")};
+  opacity: ${(props) => (props.zoom ? "1" : "0")};
+  /* display: ${(props) => (props.zoom ? "block" : "none")}; */
   transition: 0.5s;
   list-style-type: none;
+  .aaa {
+    background-color: yellow;
+  }
 `;
 
 const Infodiv = styled.div`
   position: fixed;
-  top: 50%;
+  top: 40%;
   left: 75%;
   transform: translate(-50%, -50%);
   width: 400px;
@@ -26,25 +29,17 @@ const Infodiv = styled.div`
     height: 100%;
     background-color: #000000c3;
     border: 1px solid #000000;
-    //background-color: #ffebb5;
-    /* border-radius: 16px;
-    box-shadow: inset 0 0 8px #000000; */
   }
 `;
 
 const InfoTextBox = styled.div`
   position: absolute;
   font-family: "Noto Sans KR", sans-serif;
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; */
   width: 95%;
   height: 95%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  //text-align: center;
   color: #d3d3d3;
   .name {
     font-size: 32px;
@@ -90,37 +85,72 @@ const InfoTextBox = styled.div`
       color: #899eff;
     }
   }
+
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+    margin-top: 20px;
+    //background-color: #e63232;
+    button {
+      width: 130px;
+      height: 60px;
+      background-color: #000000c3;
+      border: 0;
+      cursor: pointer;
+      transition: 0.5s;
+      font-size: 20px;
+      color: #d3d3d3;
+
+      :hover {
+        background-color: #383838c3;
+        color: white;
+      }
+    }
+    .start {
+      :active {
+        background-color: #339cffc3;
+        transition: 0.1s;
+      }
+    }
+
+    .cancel {
+      :active {
+        background-color: #ff3a3ac3;
+        transition: 0.1s;
+      }
+    }
+  }
 `;
 
 export const PlanetInfo = () => {
-  //const zoomCheck = useStore((state) => state.zoom);
-  const selectSize = useStore((state) => state.selectSize);
+  const zoomCheck = useStore((state) => state.zoom);
+  //const selectSize = useStore((state) => state.selectSize);
 
-  const zoomCheck = useRef(useStore.getState().zoom);
-  // const selectSize = useRef(useStore.getState().selectSize);
+  //const zoomCheck = useRef(useStore.getState().zoom);
+  const selectSize = useRef(useStore.getState().selectSize);
 
   const infoName = useRef(useStore.getState().name);
   const typeName = useRef(useStore.getState().type);
 
   const earthEffect = useRef(useStore.getState().earthEffect);
 
+  console.log(infoName);
+
   useEffect(() => {
     useStore.subscribe((state) => {
       infoName.current = state.name;
-    });
-    useStore.subscribe((state) => {
       typeName.current = state.type;
-    });
-    useStore.subscribe((state) => {
-      zoomCheck.current = state.zoom;
-    });
-    // useStore.subscribe((state) => {
-    //   selectSize.current = state.selectSize;
-    // });
-    useStore.subscribe((state) => {
       earthEffect.current = state.earthEffect;
+      //zoomCheck.current = state.zoom;
+      selectSize.current = state.selectSize;
     });
-  });
+  }, []);
+
+  console.log(selectSize);
+  console.log(selectSize);
 
   const climate = {
     지구형: "온대",
@@ -129,9 +159,8 @@ export const PlanetInfo = () => {
   };
 
   console.log("info 랜더링 됨");
-  //Hallucinated air`
   return (
-    <PlanetInfoDiv zoom={zoomCheck.current}>
+    <PlanetInfoDiv zoom={zoomCheck}>
       <Infodiv>
         <InfoTextBox>
           <div className="name">
@@ -153,9 +182,9 @@ export const PlanetInfo = () => {
             <li>
               크기: &nbsp;
               <span className="selectSize">
-                {selectSize >= 350
+                {selectSize.current >= 350
                   ? "대형"
-                  : selectSize >= 180
+                  : selectSize.current >= 180
                   ? "중형"
                   : "소형"}
               </span>
@@ -174,6 +203,18 @@ export const PlanetInfo = () => {
                   ))
                 : null}
             </div>
+          </div>
+          <div className="buttons">
+            <button className="start">개척 시작</button>
+            <button
+              className="cancel"
+              onClick={() => {
+                useStore.setState({ zoom: false });
+                useStore.setState({ orbitHide: false });
+              }}
+            >
+              돌아가기
+            </button>
           </div>
         </InfoTextBox>
         <div className="color-box" />
