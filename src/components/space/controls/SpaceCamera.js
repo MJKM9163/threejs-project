@@ -20,7 +20,6 @@ export const SpaceCamera = ({ pos = new Vector3(), look = new Vector3() }) => {
       zoomCheck.current = state.zoom;
     });
   });
-
   const camera = useThree((state) => state.camera);
   const gl = useThree((state) => state.gl);
   const controls = useMemo(() => new CameraControls(camera, gl.domElement), []);
@@ -28,11 +27,11 @@ export const SpaceCamera = ({ pos = new Vector3(), look = new Vector3() }) => {
   return useFrame((state, delta) => {
     zoomCheck.current
       ? pos.set(
-          focus.current.x + 400,
+          focus.current.x - 400,
           focus.current.y + 550,
           focus.current.z + -500
         )
-      : pos.set(1100, 2600, -4000);
+      : pos.set(1500, 4000, -7000);
     zoomCheck.current
       ? look.set(focus.current.x, focus.current.y, focus.current.z)
       : look.set(0, 0, 0);

@@ -26,7 +26,7 @@ export const [useStore, useStoreApi] = create(
     setZoom: () => set((state) => ({ zoom: !state.zoom })),
     focus: {},
     orbitHide: false,
-    size: { small: 70, middle: 180, large: 350 },
+    size: { small: 70, middle: 180, large: 550 },
     selectSize: null,
     type: "???",
     explanation: "",

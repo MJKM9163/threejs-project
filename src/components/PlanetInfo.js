@@ -126,8 +126,8 @@ const InfoTextBox = styled.div`
 `;
 
 export const PlanetInfo = () => {
-  const zoomCheck = useStore((state) => state.zoom);
   //const selectSize = useStore((state) => state.selectSize);
+  const zoomCheck = useStore((state) => state.zoom);
 
   //const zoomCheck = useRef(useStore.getState().zoom);
   const selectSize = useRef(useStore.getState().selectSize);
@@ -137,20 +137,15 @@ export const PlanetInfo = () => {
 
   const earthEffect = useRef(useStore.getState().earthEffect);
 
-  console.log(infoName);
-
   useEffect(() => {
     useStore.subscribe((state) => {
       infoName.current = state.name;
       typeName.current = state.type;
       earthEffect.current = state.earthEffect;
-      //zoomCheck.current = state.zoom;
       selectSize.current = state.selectSize;
+      //zoomCheck.current = state.zoom;
     });
   }, []);
-
-  console.log(selectSize);
-  console.log(selectSize);
 
   const climate = {
     지구형: "온대",
@@ -182,7 +177,7 @@ export const PlanetInfo = () => {
             <li>
               크기: &nbsp;
               <span className="selectSize">
-                {selectSize.current >= 350
+                {selectSize.current >= 550
                   ? "대형"
                   : selectSize.current >= 180
                   ? "중형"

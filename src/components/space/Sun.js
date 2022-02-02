@@ -1,15 +1,15 @@
 import { useSphere } from "@react-three/cannon";
+import { useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { useStore } from "../../hooks/useStore";
 
 let a = 0.5;
 
-export const Sun = ({ SetUp }) => {
-  const orbitHide = useRef(useStore.getState().orbitHide);
+export const Sun = ({ SetUp, ...props }) => {
   const argsSize = useRef(useStore.getState().size);
-  // const hideCheck = useStore.setState().orbitHide;
 
+  const { nodes, materials } = useGLTF("/sun/scene.gltf");
   const [sunRef, sunApi] = useSphere(() => ({
     mass: 100,
     type: "Static",
@@ -18,35 +18,49 @@ export const Sun = ({ SetUp }) => {
     args: [argsSize.current["large"]],
   }));
 
-  useEffect(() => {
-    useStore.subscribe((state) => {
-      orbitHide.current = state.orbitHide;
-    });
-  });
-
   useFrame(() => {
-    sunApi.rotation.set(0, (a += 0.01), 0);
+    sunApi.rotation.set(0, (a += 0.003), 0);
   });
   console.log("태양 랜더링 확인");
 
   return (
     <>
-      <mesh
+      <group
         ref={sunRef}
-        onClick={(e) => {
-          SetUp(
-            e.object.position,
-            "태양",
-            "주계열성",
-            e.object.geometry.parameters.radius
-          );
-          useStore.setState({ orbitHide: !orbitHide.current });
-        }}
+        scale={argsSize.current["large"] / 10}
+        {...props}
+        dispose={null}
       >
-        <sphereGeometry args={[argsSize.current["large"]]} />
-        <meshNormalMaterial />
-        <axesHelper scale={500} />
-      </mesh>
+        <group rotation={[-Math.PI / 2, 0, 0]}>
+          <group rotation={[Math.PI / 2, 0, 0]}>
+            <group rotation={[-Math.PI / 2, 0, 0]}>
+              <mesh
+                onClick={(e) => {
+                  SetUp(
+                    e.object.position,
+                    "태양",
+                    "주계열성",
+                    argsSize.current["large"]
+                  );
+                }}
+                geometry={nodes.UnstableStarCore_1_0.geometry}
+                material={materials.material_1}
+              />
+            </group>
+            <group
+              name="UnstableStarref"
+              rotation={[-Math.PI / 2, 0, 0]}
+              scale={1.03}
+            >
+              <mesh
+                geometry={nodes.UnstableStarref_2_0.geometry}
+                material={materials.material}
+              />
+            </group>
+          </group>
+        </group>
+        <axesHelper scale={30} />
+      </group>
     </>
   );
 };

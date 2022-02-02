@@ -1,4 +1,5 @@
 import { useSphere } from "@react-three/cannon";
+import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { Vector3 } from "three";
@@ -9,8 +10,9 @@ import { OrbitLine } from "../OrbitLine";
 let a = 0;
 
 export const Earth = ({ SetUp, ...props }) => {
+  const { nodes, materials } = useGLTF("/mainPlanet/scene.gltf");
+
   const argsSize = useRef(useStore.getState().size);
-  const orbitHide = useRef(useStore.getState().orbitHide);
 
   const earthWorldPosition = new Vector3();
   const [earthRef, earthApi] = useSphere(() => ({
@@ -19,14 +21,9 @@ export const Earth = ({ SetUp, ...props }) => {
     position: props.position,
     args: [argsSize.current["middle"]],
   }));
-  useEffect(() => {
-    useStore.subscribe((state) => {
-      orbitHide.current = state.orbitHide;
-    });
-  });
 
   useFrame(() => {
-    earthApi.rotation.set(0, (a += 0.01), 0);
+    earthApi.rotation.set(0, (a += 0.005), 0);
     earthRef.current?.getWorldPosition(earthWorldPosition);
   });
   useStore.setState({ earthEffect: EffectSelect(argsSize.current["middle"]) });
@@ -34,22 +31,28 @@ export const Earth = ({ SetUp, ...props }) => {
   console.log("earth 랜더링 확인");
   return (
     <>
-      <mesh
-        ref={earthRef}
-        onClick={(e) => {
-          SetUp(
-            earthWorldPosition,
-            "지구",
-            "지구형",
-            e.object.geometry.parameters.radius
-          );
-          useStore.setState({ orbitHide: !orbitHide.current });
-        }}
-      >
-        <sphereGeometry args={[argsSize.current["middle"]]} />
-        <meshNormalMaterial />
+      <group ref={earthRef} dispose={null}>
+        <group rotation={[-Math.PI / 2, 0, 0]} scale={1.9}>
+          <mesh
+            castShadow
+            onClick={(e) => {
+              SetUp(
+                earthWorldPosition,
+                "지구",
+                "지구형",
+                argsSize.current["middle"]
+              );
+            }}
+            geometry={nodes.mesh_0.geometry}
+            material={materials.Material__25}
+          />
+          <mesh
+            geometry={nodes.mesh_1.geometry}
+            material={materials.Material__65}
+          />
+        </group>
         <axesHelper scale={500} />
-      </mesh>
+      </group>
       <OrbitLine args={[props.position[0] - 5, props.position[0] + 5, 100]} />
     </>
   );

@@ -1,4 +1,5 @@
 import { useSphere } from "@react-three/cannon";
+import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { Vector3 } from "three";
@@ -8,8 +9,9 @@ import { OrbitLine } from "../OrbitLine";
 let a = 0;
 
 export const Unknown = ({ SetUp, ...props }) => {
+  const { nodes, materials } = useGLTF("/unknown/scene.gltf");
+
   const argsSize = useRef(useStore.getState().size);
-  let orbitHide = useRef(useStore.getState().orbitHide);
 
   const unknownWorldPosition = new Vector3();
   const [unknownRef, unknownApi] = useSphere(() => ({
@@ -19,12 +21,6 @@ export const Unknown = ({ SetUp, ...props }) => {
     args: [argsSize.current["small"]],
   }));
 
-  useEffect(() => {
-    useStore.subscribe((state) => {
-      orbitHide.current = state.orbitHide;
-    });
-  });
-
   useFrame(() => {
     unknownApi.rotation.set(0, (a += 0.01), 0);
     unknownRef.current?.getWorldPosition(unknownWorldPosition);
@@ -33,22 +29,35 @@ export const Unknown = ({ SetUp, ...props }) => {
   console.log("unknown 랜더링 확인");
   return (
     <>
-      <mesh
-        ref={unknownRef}
-        onClick={(e) => {
-          SetUp(
-            unknownWorldPosition,
-            "알 수 없음",
-            "얼음형",
-            e.object.geometry.parameters.radius
-          );
-          useStore.setState({ orbitHide: !orbitHide.current });
-        }}
-      >
-        <sphereGeometry args={[argsSize.current["small"]]} />
-        <meshNormalMaterial />
+      <group ref={unknownRef} {...props} dispose={null}>
+        <group rotation={[-Math.PI / 2, 0, 0]}>
+          <group rotation={[Math.PI / 2, 0, 0]}>
+            <group
+              rotation={[-Math.PI / 2, 0, 0]}
+              scale={[
+                argsSize.current["small"],
+                argsSize.current["small"],
+                argsSize.current["small"],
+              ]}
+            >
+              <mesh
+                receiveShadow
+                onClick={(e) => {
+                  SetUp(
+                    unknownWorldPosition,
+                    "알 수 없음",
+                    "얼음형",
+                    argsSize.current["small"]
+                  );
+                }}
+                geometry={nodes.Sphere_Material002_0.geometry}
+                material={materials["Material.002"]}
+              />
+            </group>
+          </group>
+        </group>
         <axesHelper scale={500} />
-      </mesh>
+      </group>
       <OrbitLine args={[props.position[0] - 5, props.position[0] + 5, 100]} />
     </>
   );
