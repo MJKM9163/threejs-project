@@ -4,8 +4,10 @@ import { Canvas } from "@react-three/fiber";
 import { Debug, Physics } from "@react-three/cannon";
 import { SpaceIndex } from "./components/space/SpaceIndex";
 import { PlanetInfo } from "./components/PlanetInfo";
-import { Stars, useHelper } from "@react-three/drei";
+import { Html, OrbitControls, Stars, useHelper } from "@react-three/drei";
 import { PointLightHelper } from "three";
+import { Background } from "./components/space/Background";
+import { SpaceCamera } from "./components/space/controls/SpaceCamera";
 
 const Light = () => {
   const pointLight = useRef();
@@ -30,7 +32,6 @@ const Light = () => {
 };
 
 function App() {
-  //const zoomCheck = useRef(useStoreApi.getState().zoom);
   console.log("메인 랜더링 확인");
   return (
     <>
@@ -42,7 +43,7 @@ function App() {
         camera={{
           position: [1500, 7000, -7000],
           fov: 60,
-          far: 25000,
+          far: 250000,
           near: 3,
         }}
       >
@@ -50,15 +51,18 @@ function App() {
         <Light />
         <Physics gravity={[0, 0, 0]} iterations={1} broadphase="SAP">
           {/* <Debug> */}
-          <Suspense fallback={null}>
+          <Suspense fallback={<Html>loading..</Html>}>
             {/* <Galaxy /> */}
 
             <SpaceIndex />
+            <Background />
           </Suspense>
           {/* </Debug> */}
         </Physics>
-        {/* <axesHelper scale={500} /> */}
+        <axesHelper scale={5000} />
         <Stars radius={5000} depth={5000} count={500} />
+        {/* <OrbitControls /> */}
+        <SpaceCamera />
       </Canvas>
     </>
   );

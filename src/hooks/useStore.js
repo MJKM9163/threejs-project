@@ -35,7 +35,11 @@ export const [useStore, useStoreApi] = create(
     negativeEffect: ["환각 대기", "방사능", "얼음-9"],
 
     earthEffect: null,
-    tt: null,
+
+    mouseCheck: false,
+    setMouseCheck: (check) => set(() => ({ mouseCheck: check })),
+    mouseXZ: [0, 0],
+    setMouseXZ: (x, z) => set(() => ({ mouseXZ: [x, z] })),
   }))
 );
 

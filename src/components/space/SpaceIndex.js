@@ -12,7 +12,7 @@ export const SpaceIndex = () => {
   const earthOrbitRef = useRef();
   const unknownOrbitRef = useRef();
 
-  let zoomCheck = useRef(useStore.getState().zoom);
+  const zoomCheck = useRef(useStore.getState().zoom);
   const orbitHide = useRef(useStore.getState().orbitHide);
   useEffect(() => {
     useStore.subscribe((state) => {
@@ -48,7 +48,6 @@ export const SpaceIndex = () => {
       <group ref={unknownOrbitRef}>
         <Unknown position={[3400, 0, 0]} SetUp={SetUp} />
       </group>
-      <SpaceCamera />
     </>
   );
 };
