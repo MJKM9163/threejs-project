@@ -1,13 +1,16 @@
 import { useSphere } from "@react-three/cannon";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Vector3 } from "three";
 import { EffectSelect } from "../../../hooks/EffectSelect";
+import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
 import { useStore } from "../../../hooks/useStore";
 import { OrbitLine } from "../OrbitLine";
 
 let a = 0;
+let Pname = null;
+let effects = [];
 
 export const Earth = ({ SetUp, ...props }) => {
   const { nodes, materials } = useGLTF("/mainPlanet/scene.gltf");
@@ -22,11 +25,15 @@ export const Earth = ({ SetUp, ...props }) => {
     args: [argsSize.current["middle"]],
   }));
 
+  if (Pname === null) {
+    Pname = PlanetNameSelect();
+    effects.push(EffectSelect(argsSize.current["middle"]));
+  }
+
   useFrame(() => {
     earthApi.rotation.set(0, (a += 0.005), 0);
     earthRef.current?.getWorldPosition(earthWorldPosition);
   });
-  useStore.setState({ earthEffect: EffectSelect(argsSize.current["middle"]) });
 
   console.log("earth 랜더링 확인");
   return (
@@ -38,9 +45,10 @@ export const Earth = ({ SetUp, ...props }) => {
             onClick={(e) => {
               SetUp(
                 earthWorldPosition,
-                "지구",
+                Pname,
                 "지구형",
-                argsSize.current["middle"]
+                argsSize.current["middle"],
+                ...effects
               );
             }}
             geometry={nodes.mesh_0.geometry}

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import styled from "styled-components";
-import { useStore, useStoreApi } from "../hooks/useStore";
+import { effectStore, planetStore, useStore } from "../hooks/useStore";
 
 const PlanetInfoDiv = styled.div`
   position: absolute;
@@ -60,6 +60,7 @@ const InfoTextBox = styled.div`
 
   .state {
     margin: 5px 0px 10px 0px;
+    //background-color: #e63232;
 
     .develop {
       color: #ff3b3b;
@@ -83,6 +84,9 @@ const InfoTextBox = styled.div`
 
     .positive {
       color: #899eff;
+    }
+    .negative {
+      color: #ff8989;
     }
   }
 
@@ -127,25 +131,72 @@ const InfoTextBox = styled.div`
 
 export const PlanetInfo = () => {
   //const selectSize = useStore((state) => state.selectSize);
+
+  // 여러번 랜더링 원인들  ----- ref의 값이 바로 갱신이 안되서 랜더링 하는 방법 채택
   const zoomCheck = useStore((state) => state.zoom);
+  const effects = effectStore((state) => state.effects);
+  const mainPlanet = useStore((state) => state.mainPlanet);
+
+  // -------
 
   //const zoomCheck = useRef(useStore.getState().zoom);
+
   const selectSize = useRef(useStore.getState().selectSize);
 
   const infoName = useRef(useStore.getState().name);
   const typeName = useRef(useStore.getState().type);
 
-  const earthEffect = useRef(useStore.getState().earthEffect);
+  //const mainPlanet = useRef(useStore.getState().mainPlanet);
+  const explanation = useRef(planetStore.getState().explanation);
 
   useEffect(() => {
-    useStore.subscribe((state) => {
-      infoName.current = state.name;
-      typeName.current = state.type;
-      earthEffect.current = state.earthEffect;
-      selectSize.current = state.selectSize;
-      //zoomCheck.current = state.zoom;
-    });
-  }, []);
+    useStore.subscribe(
+      (state) => (infoName.current = state.name),
+      (state) => state.name
+    );
+  }, [infoName]);
+
+  useEffect(() => {
+    useStore.subscribe(
+      (state) => (typeName.current = state.type),
+      (state) => state.type
+    );
+  }, [typeName]);
+
+  useEffect(() => {
+    useStore.subscribe(
+      (state) => (selectSize.current = state.selectSize),
+      (state) => state.selectSize
+    );
+  }, [selectSize]);
+
+  useEffect(() => {
+    planetStore.subscribe(
+      (state) => (explanation.current = state.explanation),
+      (state) => state.explanation
+    );
+  }, [explanation]);
+
+  // useEffect(() => {
+  //   useStore.subscribe(
+  //     (state) => (zoomCheck.current = state.zoom),
+  //     (state) => state.zoomCheck
+  //   );
+  // }, [zoomCheck]);
+
+  // useEffect(() => {
+  //   useStore.subscribe(
+  //     (state) => (mainPlanet.current = state.mainPlanet),
+  //     (state) => state.mainPlanet
+  //   );
+  // });
+
+  // useEffect(() => {
+  //   effectStore.subscribe(
+  //     (state) => (effects.current = state.effects),
+  //     (state) => console.log("22", state)
+  //   );
+  // });
 
   const climate = {
     지구형: "온대",
@@ -163,12 +214,9 @@ export const PlanetInfo = () => {
             &nbsp;<span className="type">{typeName.current}</span>
           </div>
           <div className="explanation">
-            설명 칸 현재까지의 연구에 따르면 약 45억 6천만 년 전에 태양계가 처음
-            만들어지기 시작했고, 45억 4천만 년 전쯤에 원시지구라고 할 수 있는
-            것이 어느 정도 생성되었으며, 45억 3천만 년 전(대략 태양계 형성 시작
-            3천만 년 후)에 원시지구는 최소지름 1만 km 정도에서 화성만 한
-            원시행성(가칭 테이아)과 충돌했다. 그리하여 달이 생겼다고 하는 것이
-            대충돌설이다. 그리고 26억 년 전에 호기성 생물이 등장.
+            {infoName.current in explanation.current
+              ? explanation.current[infoName.current]
+              : explanation.current["etc"]}
           </div>
           <div className="state">
             <li>
@@ -184,28 +232,49 @@ export const PlanetInfo = () => {
                   : "소형"}
               </span>
             </li>
-            <li>
-              기후: &nbsp;
-              <span className="climate">{climate[typeName.current]}</span>
-            </li>
+            {mainPlanet ? null : (
+              <li>
+                기후: &nbsp;
+                <span className="climate">{climate[typeName.current]}</span>
+              </li>
+            )}
           </div>
-          <div className="special">
-            특이 사항
-            <div className="positive">
-              {earthEffect.current
-                ? earthEffect.current.map((item, index) => (
-                    <li key={index}>{item}</li>
-                  ))
-                : null}
+          {mainPlanet ? null : (
+            <div className="special">
+              특이 사항
+              <div className="positive">
+                {effects
+                  ? effects[0].map((item, index) => <li key={index}>{item}</li>)
+                  : null}
+              </div>
+              <div className="negative">
+                {effects
+                  ? effects[1].map((item, index) => <li key={index}>{item}</li>)
+                  : null}
+              </div>
             </div>
-          </div>
-          <div className="buttons">
-            <button className="start">개척 시작</button>
+          )}
+          <div
+            className="buttons"
+            style={{ height: mainPlanet ? "430px" : "80px" }}
+          >
+            <button
+              className="start"
+              style={{ display: mainPlanet ? "none" : "block" }}
+            >
+              개척 시작
+            </button>
             <button
               className="cancel"
               onClick={() => {
                 useStore.setState({ zoom: false });
                 useStore.setState({ orbitHide: false });
+
+                if (mainPlanet === true) {
+                  setTimeout(() => {
+                    useStore.setState({ mainPlanet: false });
+                  }, 500);
+                }
               }}
             >
               돌아가기

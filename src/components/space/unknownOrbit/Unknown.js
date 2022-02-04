@@ -3,10 +3,14 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { Vector3 } from "three";
+import { EffectSelect } from "../../../hooks/EffectSelect";
+import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
 import { useStore } from "../../../hooks/useStore";
 import { OrbitLine } from "../OrbitLine";
 
 let a = 0;
+let Pname = null;
+let effects = [];
 
 export const Unknown = ({ SetUp, ...props }) => {
   const { nodes, materials } = useGLTF("/unknown/scene.gltf");
@@ -20,6 +24,11 @@ export const Unknown = ({ SetUp, ...props }) => {
     position: props.position,
     args: [argsSize.current["small"]],
   }));
+
+  if (Pname === null) {
+    Pname = PlanetNameSelect();
+    effects.push(EffectSelect(argsSize.current["middle"]));
+  }
 
   useFrame(() => {
     unknownApi.rotation.set(0, (a += 0.01), 0);
@@ -45,9 +54,10 @@ export const Unknown = ({ SetUp, ...props }) => {
                 onClick={(e) => {
                   SetUp(
                     unknownWorldPosition,
-                    "알 수 없음",
+                    Pname,
                     "얼음형",
-                    argsSize.current["small"]
+                    argsSize.current["small"],
+                    ...effects
                   );
                 }}
                 geometry={nodes.Sphere_Material002_0.geometry}

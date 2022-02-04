@@ -1,7 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
-import { useStore } from "../../hooks/useStore";
-import { SpaceCamera } from "./controls/SpaceCamera";
+import { effectStore, useStore } from "../../hooks/useStore";
 import { Earth } from "./earthOrbit/Earth";
 import { Sun } from "./Sun";
 import { Unknown } from "./unknownOrbit/Unknown";
@@ -15,12 +14,16 @@ export const SpaceIndex = () => {
   const zoomCheck = useRef(useStore.getState().zoom);
   const orbitHide = useRef(useStore.getState().orbitHide);
   useEffect(() => {
-    useStore.subscribe((state) => {
-      zoomCheck.current = state.zoom;
-    });
-    useStore.subscribe((state) => {
-      orbitHide.current = state.orbitHide;
-    });
+    useStore.subscribe(
+      (state) => (zoomCheck.current = state.zoom),
+      (state) => state.zoom
+    );
+  });
+  useEffect(() => {
+    useStore.subscribe(
+      (state) => (orbitHide.current = state.orbitHide),
+      (state) => state.orbitHide
+    );
   });
 
   useFrame(() => {
@@ -28,14 +31,18 @@ export const SpaceIndex = () => {
     unknownOrbitRef.current?.rotation.set(0, (unknownStarting -= 0.0005), 0);
   });
 
-  const SetUp = (focus, name, type, size) => {
-    useStore.setState({ selectSize: size });
+  const SetUp = (focus, name, type, size, effects) => {
     useStore.setState({ focus: focus });
     useStore.setState({ name: name });
     useStore.setState({ type: type });
+    useStore.setState({ selectSize: size });
     useStore.setState({ zoom: !zoomCheck.current });
     useStore.setState({ orbitHide: !orbitHide.current });
-    //useStore.setState({ zoom: true });
+    if (type === "주계열성") {
+      useStore.setState({ mainPlanet: true });
+    } else {
+      effectStore.setState({ effects: effects });
+    }
   };
 
   console.log("우주 랜더링 확인");
