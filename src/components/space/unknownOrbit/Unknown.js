@@ -27,7 +27,7 @@ export const Unknown = ({ SetUp, ...props }) => {
 
   if (Pname === null) {
     Pname = PlanetNameSelect();
-    effects.push(EffectSelect(argsSize.current["middle"]));
+    effects.push(EffectSelect(argsSize.current["small"]));
   }
 
   useFrame(() => {

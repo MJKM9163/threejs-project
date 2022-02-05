@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import styled from "styled-components";
-import { effectStore, planetStore, useStore } from "../hooks/useStore";
+import { planetStore, useStore } from "../hooks/useStore";
+import { effectStore } from "../hooks/effectStore";
 
 const PlanetInfoDiv = styled.div`
   position: absolute;

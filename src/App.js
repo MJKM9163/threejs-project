@@ -8,6 +8,7 @@ import { Html, OrbitControls, Stars, useHelper } from "@react-three/drei";
 import { PointLightHelper } from "three";
 import { Background } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
+import NanoFactory from "./effectModels/NanoFactory";
 
 const Light = () => {
   const pointLight = useRef();
@@ -53,7 +54,6 @@ function App() {
           {/* <Debug> */}
           <Suspense fallback={<Html>loading..</Html>}>
             {/* <Galaxy /> */}
-
             <SpaceIndex />
             <Background />
           </Suspense>

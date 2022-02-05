@@ -3,6 +3,7 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useRef } from "react";
 import { Vector3 } from "three";
+import { EffectModelSelect } from "../../../hooks/EffectModelSelect";
 import { EffectSelect } from "../../../hooks/EffectSelect";
 import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
 import { useStore } from "../../../hooks/useStore";
@@ -10,9 +11,11 @@ import { OrbitLine } from "../OrbitLine";
 
 let a = 0;
 let Pname = null;
-let effects = [];
+let effects;
+let effectsModels;
 
 export const Earth = ({ SetUp, ...props }) => {
+  const effectRef = useRef();
   const { nodes, materials } = useGLTF("/mainPlanet/scene.gltf");
 
   const argsSize = useRef(useStore.getState().size);
@@ -27,17 +30,26 @@ export const Earth = ({ SetUp, ...props }) => {
 
   if (Pname === null) {
     Pname = PlanetNameSelect();
-    effects.push(EffectSelect(argsSize.current["middle"]));
+    effects = EffectSelect(argsSize.current["middle"]);
   }
+  console.log(effects);
+  const effectModels = EffectModelSelect(effects[0], effects[1]);
 
   useFrame(() => {
     earthApi.rotation.set(0, (a += 0.005), 0);
     earthRef.current?.getWorldPosition(earthWorldPosition);
+    effectRef.current.rotation.set(0, a - 0.002, a - 0.003);
   });
 
   console.log("earth 랜더링 확인");
   return (
     <>
+      {/* {effectModels.map((model, index) => (
+        <group key={index} position={props.position}>
+          {model}
+        </group>
+      ))} */}
+
       <group ref={earthRef} dispose={null}>
         <group rotation={[-Math.PI / 2, 0, 0]} scale={1.9}>
           <mesh
@@ -48,7 +60,7 @@ export const Earth = ({ SetUp, ...props }) => {
                 Pname,
                 "지구형",
                 argsSize.current["middle"],
-                ...effects
+                effects
               );
             }}
             geometry={nodes.mesh_0.geometry}
@@ -58,6 +70,19 @@ export const Earth = ({ SetUp, ...props }) => {
             geometry={nodes.mesh_1.geometry}
             material={materials.Material__65}
           />
+          <group ref={effectRef}>
+            {effectModels.map((model, index) => (
+              <group
+                rotation={[Math.PI / 1, 0.3, -Math.PI / 2]}
+                position={[150, 50, 0]}
+                scale={0.5}
+                key={index}
+              >
+                {model}
+                <axesHelper scale={500} />
+              </group>
+            ))}
+          </group>
         </group>
         <axesHelper scale={500} />
       </group>

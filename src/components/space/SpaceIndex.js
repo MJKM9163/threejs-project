@@ -1,6 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
-import { effectStore, useStore } from "../../hooks/useStore";
+import { effectStore } from "../../hooks/effectStore";
+import { useStore } from "../../hooks/useStore";
 import { Earth } from "./earthOrbit/Earth";
 import { Sun } from "./Sun";
 import { Unknown } from "./unknownOrbit/Unknown";

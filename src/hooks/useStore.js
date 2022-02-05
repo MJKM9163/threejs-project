@@ -69,34 +69,3 @@ export const planetStore = create(
     },
   }))
 );
-
-export const effectStore = create(
-  subscribeWithSelector((set) => ({
-    effects: null,
-    setEffects: (check) => set(() => ({ effects: check })),
-    positiveEffects: [
-      "나노 공장",
-      "거대 식물",
-      "아름다운 고리",
-      "다양한 종",
-      "광천수",
-    ],
-    negativeEffect: ["환각 대기", "방사능", "얼음-9", "갈라진 지각"],
-  }))
-);
-
-// export const [useStore, useStoreApi] = create(() => ({
-//   name: "space",
-//   zoom: false,
-//   focus: {},
-//   orbitHide: false,
-//   size: { small: 70, middle: 180, large: 350 },
-//   selectSize: null,
-//   type: "???",
-//   explanation: "",
-
-//   positiveEffects: ["나노 공장", "거대 식물", "아름다운 고리"],
-//   negativeEffect: ["환각 대기", "방사능", "얼음-9"],
-
-//   earthEffect: null,
-// }));
