@@ -2,7 +2,7 @@ import { useSphere } from "@react-three/cannon";
 import { useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
-import { useStore } from "../../hooks/useStore";
+import { useStore } from "../../hooks/stores/useStore";
 
 let a = 0.5;
 

@@ -1,5 +1,5 @@
 import react, { useRef } from "react";
-import { effectStore } from "./effectStore";
+import { effectStore } from "./stores/effectStore";
 
 export const EffectSelect = (sizeNum) => {
   const pEffect = useRef(effectStore.getState().positiveEffects);

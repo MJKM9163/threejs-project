@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from "react";
 import { Vector3 } from "three";
 import { EffectSelect } from "../../../hooks/EffectSelect";
 import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
-import { useStore } from "../../../hooks/useStore";
+import { useStore } from "../../../hooks/stores/useStore";
 import { OrbitLine } from "../OrbitLine";
 
 let a = 0;

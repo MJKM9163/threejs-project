@@ -1,6 +1,6 @@
 import create from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
-import NanoFactory from "../effectModels/NanoFactory";
+import NanoFactory from "../../effectModels/NanoFactory";
 
 export const effectStore = create(
   subscribeWithSelector((set) => ({

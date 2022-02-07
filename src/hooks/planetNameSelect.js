@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { planetStore } from "./useStore";
+import { planetStore } from "./stores/useStore";
 
 export const PlanetNameSelect = () => {
   const planetName = useRef(planetStore.getState().planetName);

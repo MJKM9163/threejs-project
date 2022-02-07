@@ -3,7 +3,7 @@ import CameraControls from "camera-controls";
 import * as THREE from "three";
 import { Vector3 } from "three";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useStore } from "../../../hooks/useStore";
+import { useStore } from "../../../hooks/stores/useStore";
 import { KeyboardControls } from "../../../hooks/keyboardControls";
 
 CameraControls.install({ THREE: THREE });

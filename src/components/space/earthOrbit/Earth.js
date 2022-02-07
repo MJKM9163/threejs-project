@@ -3,10 +3,10 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useRef } from "react";
 import { Vector3 } from "three";
-import { EffectModelSelect } from "../../../hooks/EffectModelSelect";
+//import { EffectModelSelect } from "../../../hooks/EffectModelSelect"; 잠시 주석처리
 import { EffectSelect } from "../../../hooks/EffectSelect";
 import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
-import { useStore } from "../../../hooks/useStore";
+import { useStore } from "../../../hooks/stores/useStore";
 import { OrbitLine } from "../OrbitLine";
 
 let a = 0;
@@ -33,7 +33,7 @@ export const Earth = ({ SetUp, ...props }) => {
     effects = EffectSelect(argsSize.current["middle"]);
   }
   console.log(effects);
-  const effectModels = EffectModelSelect(effects[0], effects[1]);
+  //const effectModels = EffectModelSelect(effects[0], effects[1]); 잠시 주석처리
 
   useFrame(() => {
     earthApi.rotation.set(0, (a += 0.005), 0);
@@ -44,12 +44,6 @@ export const Earth = ({ SetUp, ...props }) => {
   console.log("earth 랜더링 확인");
   return (
     <>
-      {/* {effectModels.map((model, index) => (
-        <group key={index} position={props.position}>
-          {model}
-        </group>
-      ))} */}
-
       <group ref={earthRef} dispose={null}>
         <group rotation={[-Math.PI / 2, 0, 0]} scale={1.9}>
           <mesh
@@ -71,7 +65,7 @@ export const Earth = ({ SetUp, ...props }) => {
             material={materials.Material__65}
           />
           <group ref={effectRef}>
-            {effectModels.map((model, index) => (
+            {/* {effectModels.map((model, index) => ( 잠시 주석처리
               <group
                 rotation={[Math.PI / 1, 0.3, -Math.PI / 2]}
                 position={[150, 50, 0]}
@@ -81,7 +75,7 @@ export const Earth = ({ SetUp, ...props }) => {
                 {model}
                 <axesHelper scale={500} />
               </group>
-            ))}
+            ))} */}
           </group>
         </group>
         <axesHelper scale={500} />

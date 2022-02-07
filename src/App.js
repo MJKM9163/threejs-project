@@ -3,12 +3,12 @@ import "./App.css";
 import { Canvas } from "@react-three/fiber";
 import { Debug, Physics } from "@react-three/cannon";
 import { SpaceIndex } from "./components/space/SpaceIndex";
-import { PlanetInfo } from "./components/PlanetInfo";
-import { Html, OrbitControls, Stars, useHelper } from "@react-three/drei";
+import { Html, Stars, useHelper } from "@react-three/drei";
 import { PointLightHelper } from "three";
 import { Background } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
-import NanoFactory from "./effectModels/NanoFactory";
+import { PlanetInfo } from "./interface/PlanetInfo";
+import { ConstructionScreen } from "./interface/ConstructionScreen";
 
 const Light = () => {
   const pointLight = useRef();
@@ -37,6 +37,7 @@ function App() {
   return (
     <>
       <PlanetInfo />
+      <ConstructionScreen />
       <Canvas
         shadows
         colorManagement

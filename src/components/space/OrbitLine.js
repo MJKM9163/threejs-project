@@ -1,5 +1,5 @@
 import React from "react";
-import { useStore } from "../../hooks/useStore";
+import { useStore } from "../../hooks/stores/useStore";
 
 export const OrbitLine = ({ ...props }) => {
   const hide = useStore((state) => state.orbitHide);
