@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { screenStore } from "../hooks/stores/screenStore";
+import { useStore } from "../hooks/stores/useStore";
 
 const ConstructionContainer = styled.div`
   font-family: "Noto Sans KR", sans-serif;
@@ -146,6 +147,9 @@ const ConstructionContainer = styled.div`
         :hover {
           background-color: #ffffff3d;
         }
+        :active {
+          background-color: #ffffff8d;
+        }
 
         .image {
           position: absolute;
@@ -203,11 +207,18 @@ const Hoverimage = styled.div`
 export const ConstructionScreen = () => {
   const [hoverCheck, setHoverCheck] = useState(false);
   const allData = useRef(screenStore.getState());
+  const planetName = useRef(useStore.getState().name);
 
   useEffect(() => {
     screenStore.subscribe(
       (state) => (allData.current = state),
       (state) => state
+    );
+  });
+  useEffect(() => {
+    useStore.subscribe(
+      (state) => (planetName.current = state.name),
+      (state) => state.name
     );
   });
 
@@ -296,7 +307,7 @@ export const ConstructionScreen = () => {
         </div>
         <div className="constructionFlexBox">
           <div className="info">
-            <div className="name">행성 이름</div>
+            <div className="name">{planetName.current}</div>
             <div
               className="food"
               onMouseEnter={() => setHoverCheck(["images", "potato"])}
@@ -306,7 +317,7 @@ export const ConstructionScreen = () => {
                 src="images/resources/icons/corn.png"
                 width={25}
                 height={25}
-                alt="식량 자원"
+                alt="생산하는 식량"
               ></img>
               <span className="foodNum">50</span>
             </div>
@@ -315,7 +326,13 @@ export const ConstructionScreen = () => {
               onMouseEnter={() => setHoverCheck(["images", "gear"])}
               onMouseLeave={() => setHoverCheck(false)}
             >
-              생산력 이미지<span className="productNum">12</span>
+              <img
+                src="images/resources/icons/gear.png"
+                width={25}
+                height={25}
+                alt="행성의 생산력"
+              ></img>
+              <span className="productNum">12</span>
             </div>
             <div
               className="science"
@@ -326,7 +343,7 @@ export const ConstructionScreen = () => {
                 src="images/resources/icons/flask.png"
                 width={25}
                 height={25}
-                alt="과학 자원"
+                alt="행성의 과학"
               ></img>
               <span className="scienceNum">8</span>
             </div>
