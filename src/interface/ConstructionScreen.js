@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { imageStore } from "../hooks/stores/imageStore";
+import { screenStore } from "../hooks/stores/screenStore";
 
 const ConstructionContainer = styled.div`
   font-family: "Noto Sans KR", sans-serif;
@@ -9,7 +9,8 @@ const ConstructionContainer = styled.div`
   width: 100vw;
   height: 200px;
   z-index: 100;
-  background-color: gray;
+  background-color: #ffffff14;
+  cursor: default;
 
   .resources {
     position: absolute;
@@ -20,7 +21,6 @@ const ConstructionContainer = styled.div`
     height: 40px;
     left: 50%;
     transform: translate(-50%, -50%);
-    cursor: default;
 
     div {
       display: flex;
@@ -74,8 +74,6 @@ const ConstructionContainer = styled.div`
   .constructionFlexBox {
     position: absolute;
     display: flex;
-    //justify-content: space-between;
-    outline: 1px solid red;
     width: 90%;
     height: 100%;
     left: 50%;
@@ -83,14 +81,11 @@ const ConstructionContainer = styled.div`
 
     div {
       display: flex;
-      outline: 1px solid blue;
       flex-direction: column;
     }
 
     .info {
       width: 25%;
-      //flex-grow: 1;
-      flex-direction: column;
 
       div {
         width: 100%;
@@ -98,7 +93,6 @@ const ConstructionContainer = styled.div`
         display: flex;
         align-items: center;
         justify-content: space-between;
-        outline: 1px solid yellow;
       }
       .name {
         justify-content: center;
@@ -126,13 +120,47 @@ const ConstructionContainer = styled.div`
       }
     }
 
+    .production::-webkit-scrollbar {
+      width: 8px; /*스크롤바의 너비*/
+    }
+
+    .production::-webkit-scrollbar-thumb {
+      background-color: #424242; /*스크롤바의 색상*/
+      border-radius: 50px;
+    }
+
+    .production::-webkit-scrollbar-track {
+      background-color: rgba(0, 0, 0, 0.85); /*스크롤바 트랙 색상*/
+    }
     .production {
       width: 50%;
+      flex-direction: row;
+      flex-wrap: wrap;
+      overflow: auto;
 
       .productionInfo {
+        position: relative;
         width: 25%;
         height: 50%;
-        outline: 1px solid yellow;
+        transition: 0.2s;
+        :hover {
+          background-color: #ffffff3d;
+        }
+
+        .image {
+          position: absolute;
+          z-index: -2;
+          width: 100%;
+          height: 100%;
+        }
+        .imageName {
+          position: absolute;
+          width: 100%;
+          bottom: 0px;
+          background-color: #5353535e;
+          color: #b8b8b8;
+          height: 25px;
+        }
       }
     }
 
@@ -142,7 +170,7 @@ const ConstructionContainer = styled.div`
       div {
         width: 100%;
         height: 25%;
-        outline: 1px solid yellow;
+        border-bottom: 1px solid yellow;
       }
     }
   }
@@ -174,12 +202,12 @@ const Hoverimage = styled.div`
 
 export const ConstructionScreen = () => {
   const [hoverCheck, setHoverCheck] = useState(false);
-  const foodImage = useRef(imageStore.getState().images);
+  const allData = useRef(screenStore.getState());
 
   useEffect(() => {
-    imageStore.subscribe(
-      (state) => (foodImage.current = state.images),
-      (state) => state.images
+    screenStore.subscribe(
+      (state) => (allData.current = state),
+      (state) => state
     );
   });
 
@@ -188,23 +216,37 @@ export const ConstructionScreen = () => {
     <>
       {hoverCheck ? (
         <Hoverimage>
-          <div className="imageName">{foodImage.current[hoverCheck].name}</div>
-          <img
-            className="imageBox"
-            width={450}
-            height={250}
-            src={foodImage.current[hoverCheck].img}
-            alt={"이미지"}
-          ></img>
+          <div className="imageName">
+            {allData.current[hoverCheck[0]][hoverCheck[1]].name}
+          </div>
+          {allData.current[hoverCheck[0]][hoverCheck[1]].video ? (
+            <video
+              muted
+              loop
+              autoPlay
+              width={250}
+              height={250}
+              src="images/production/videos/planetCurtain.mp4"
+            ></video>
+          ) : (
+            <img
+              className="imageBox"
+              width={450}
+              height={250}
+              src={allData.current[hoverCheck[0]][hoverCheck[1]].img}
+              alt={"이미지"}
+            ></img>
+          )}
+
           <div className="imageScript">
-            {foodImage.current[hoverCheck].description}
+            {allData.current[hoverCheck[0]][hoverCheck[1]].description}
           </div>
         </Hoverimage>
       ) : null}
       <ConstructionContainer>
         <div className="resources">
           <div
-            onMouseEnter={() => setHoverCheck("potato")}
+            onMouseEnter={() => setHoverCheck(["images", "potato"])}
             onMouseLeave={() => setHoverCheck(false)}
           >
             <img
@@ -216,7 +258,7 @@ export const ConstructionScreen = () => {
             <span>275</span>
           </div>
           <div
-            onMouseEnter={() => setHoverCheck("titanium")}
+            onMouseEnter={() => setHoverCheck(["images", "titanium"])}
             onMouseLeave={() => setHoverCheck(false)}
           >
             <img
@@ -228,7 +270,7 @@ export const ConstructionScreen = () => {
             <span>50</span>
           </div>
           <div
-            onMouseEnter={() => setHoverCheck("orichalcon")}
+            onMouseEnter={() => setHoverCheck(["images", "orichalcon"])}
             onMouseLeave={() => setHoverCheck(false)}
           >
             <img
@@ -240,7 +282,7 @@ export const ConstructionScreen = () => {
             <span>12</span>
           </div>
           <div
-            onMouseEnter={() => setHoverCheck("science")}
+            onMouseEnter={() => setHoverCheck(["images", "science"])}
             onMouseLeave={() => setHoverCheck(false)}
           >
             <img
@@ -257,32 +299,61 @@ export const ConstructionScreen = () => {
             <div className="name">행성 이름</div>
             <div
               className="food"
-              onMouseEnter={() => setHoverCheck("potato")}
+              onMouseEnter={() => setHoverCheck(["images", "potato"])}
               onMouseLeave={() => setHoverCheck(false)}
             >
-              식량 이미지<span className="foodNum">50</span>
+              <img
+                src="images/resources/icons/corn.png"
+                width={25}
+                height={25}
+                alt="식량 자원"
+              ></img>
+              <span className="foodNum">50</span>
             </div>
             <div
               className="productivity"
-              onMouseEnter={() => setHoverCheck("gear")}
+              onMouseEnter={() => setHoverCheck(["images", "gear"])}
               onMouseLeave={() => setHoverCheck(false)}
             >
               생산력 이미지<span className="productNum">12</span>
             </div>
             <div
               className="science"
-              onMouseEnter={() => setHoverCheck("science")}
+              onMouseEnter={() => setHoverCheck(["images", "science"])}
               onMouseLeave={() => setHoverCheck(false)}
             >
-              과학 이미지<span className="scienceNum">8</span>
+              <img
+                src="images/resources/icons/flask.png"
+                width={25}
+                height={25}
+                alt="과학 자원"
+              ></img>
+              <span className="scienceNum">8</span>
             </div>
           </div>
           <div className="production">
-            <div className="productionInfo">
-              <div className="image">그림</div>
-              <div className="imageName">자기장 발생기</div>
-              <div className="needFood">100</div>
-            </div>
+            {allData.current.productionArray.map((item, index) =>
+              allData.current.production[item].research ? (
+                <div
+                  className="productionInfo"
+                  key={index}
+                  onMouseEnter={() => setHoverCheck(["production", item])}
+                  onMouseLeave={() => setHoverCheck(false)}
+                >
+                  <img
+                    className="image"
+                    src={allData.current.production[item].img}
+                    alt={"건물 이미지"}
+                  ></img>
+                  <div className="imageName">
+                    {allData.current.production[item].name}
+                  </div>
+                  {/* <div className="needMax">
+                    {allData.current.production[item].max}
+                  </div> */}
+                </div>
+              ) : null
+            )}
           </div>
           <div className="Waiting">
             <div>대기 1</div>
