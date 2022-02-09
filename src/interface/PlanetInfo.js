@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { planetStore, useStore } from "../hooks/stores/useStore";
+import { useStore } from "../hooks/stores/useStore";
+import { planetStore } from "../hooks/stores/planetStore";
 import { effectStore } from "../hooks/stores/effectStore";
 
 const PlanetInfoDiv = styled.div`
@@ -137,6 +138,7 @@ export const PlanetInfo = () => {
   const zoomCheck = useStore((state) => state.zoom);
   const effects = effectStore((state) => state.effects);
   const mainPlanet = useStore((state) => state.mainPlanet);
+  //const resources = planetStore((state) => state.planetResources);
 
   // -------
 
@@ -149,6 +151,7 @@ export const PlanetInfo = () => {
 
   //const mainPlanet = useRef(useStore.getState().mainPlanet);
   const explanation = useRef(planetStore.getState().explanation);
+  const resources = useRef(planetStore.getState().planetResources);
 
   useEffect(() => {
     useStore.subscribe(
@@ -178,12 +181,12 @@ export const PlanetInfo = () => {
     );
   }, [explanation]);
 
-  // useEffect(() => {
-  //   useStore.subscribe(
-  //     (state) => (zoomCheck.current = state.zoom),
-  //     (state) => state.zoomCheck
-  //   );
-  // }, [zoomCheck]);
+  useEffect(() => {
+    planetStore.subscribe(
+      (state) => (resources.current = state.planetResources),
+      (state) => state.planetResources
+    );
+  }, [resources]);
 
   // useEffect(() => {
   //   useStore.subscribe(
@@ -199,10 +202,11 @@ export const PlanetInfo = () => {
   //   );
   // });
 
-  const climate = {
-    지구형: "온대",
-    얼음형: "한랭",
-    주계열성: "없음",
+  const types = {
+    지구형: { climate: "온대", resources: { food: 7, gear: 5, science: 1 } },
+    얼음형: { climate: "한랭", resources: { food: 1, gear: 2, science: 5 } },
+    주계열성: { climate: "없음" },
+    "???": { climate: null },
   };
 
   console.log("info 랜더링 됨");
@@ -236,7 +240,9 @@ export const PlanetInfo = () => {
             {mainPlanet ? null : (
               <li>
                 기후: &nbsp;
-                <span className="climate">{climate[typeName.current]}</span>
+                <span className="climate">
+                  {types[typeName.current].climate}
+                </span>
               </li>
             )}
           </div>
@@ -262,6 +268,14 @@ export const PlanetInfo = () => {
             <button
               className="start"
               style={{ display: mainPlanet ? "none" : "block" }}
+              onClick={() => {
+                planetStore.setState({
+                  planetResources: {
+                    ...resources.current,
+                    [infoName.current]: types[typeName.current].resources,
+                  },
+                });
+              }}
             >
               개척 시작
             </button>

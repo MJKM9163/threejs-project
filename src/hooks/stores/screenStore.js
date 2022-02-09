@@ -36,6 +36,11 @@ export const screenStore = create(
         description: "생산력을 나타냅니다.",
       },
     },
+    // hover Check
+    hoverCheck: false,
+
+    // 대기열
+    awaitArray: [],
 
     // 건설
     productionArray: ["planetCurtain", "giantMiner"],

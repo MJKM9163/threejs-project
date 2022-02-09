@@ -8,7 +8,7 @@ import { PointLightHelper } from "three";
 import { Background } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
 import { PlanetInfo } from "./interface/PlanetInfo";
-import { ConstructionScreen } from "./interface/ConstructionScreen";
+import { ConstructionContainer } from "./interface/Construction/ConstructionContainer";
 
 const Light = () => {
   const pointLight = useRef();
@@ -37,7 +37,7 @@ function App() {
   return (
     <>
       <PlanetInfo />
-      <ConstructionScreen />
+      <ConstructionContainer />
       <Canvas
         shadows
         colorManagement
