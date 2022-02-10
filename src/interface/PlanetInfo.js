@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useStore } from "../hooks/stores/useStore";
 import { planetStore } from "../hooks/stores/planetStore";
@@ -137,7 +137,7 @@ export const PlanetInfo = () => {
   // 여러번 랜더링 원인들  ----- ref의 값이 바로 갱신이 안되서 랜더링 하는 방법 채택
   const zoomCheck = useStore((state) => state.zoom);
   const effects = effectStore((state) => state.effects);
-  const mainPlanet = useStore((state) => state.mainPlanet);
+  const mainPlanet = useStore(useCallback((state) => state.mainPlanet, []));
   //const resources = planetStore((state) => state.planetResources);
 
   // -------

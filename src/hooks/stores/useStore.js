@@ -36,5 +36,13 @@ export const useStore = create(
     setMouseCheck: (check) => set(() => ({ mouseCheck: check })),
     mouseXZ: [0, 0],
     setMouseXZ: (x, z) => set(() => ({ mouseXZ: [x, z] })),
+    tt: null,
   }))
 );
+
+// useStore.subscribe(
+//   (newValue) => {
+//     console.log(newValue.zoom);
+//   },
+//   (state) => state.tt
+// );

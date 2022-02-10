@@ -32,7 +32,7 @@ export const Earth = ({ SetUp, ...props }) => {
     Pname = PlanetNameSelect();
     effects = EffectSelect(argsSize.current["middle"]);
   }
-  console.log(effects);
+
   //const effectModels = EffectModelSelect(effects[0], effects[1]); 잠시 주석처리
 
   useFrame(() => {

@@ -1,4 +1,4 @@
-import React, { memo, useRef } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { screenStore } from "../../hooks/stores/screenStore";
 
@@ -6,8 +6,10 @@ const HoverInfoConainer = styled.div`
   font-family: "Noto Sans KR", sans-serif;
   position: absolute;
   z-index: 100;
-  left: 10px;
-  top: 5px;
+
+  top: -500px;
+  left: 100px;
+
   width: 450px;
   height: 250px;
 
@@ -27,10 +29,28 @@ const HoverInfoConainer = styled.div`
 `;
 
 export const HoverInfo = (props) => {
+  //const hoverCheck = screenStore((state) => state.hoverCheck);
+  const [render, setRender] = useState(false);
+  let hoverCheck = screenStore.getState().hoverCheck;
+
+  useEffect(() => {
+    screenStore.subscribe(
+      (state) => state.hoverCheck,
+      (state) => {
+        hoverCheck = state;
+        // setRender(!render);
+        console.log(state);
+        console.log(render);
+      }
+    );
+  }, []);
+
+  // useEffect(() => {
+  //   setRender(!render);
+  // }, [hoverCheck]);
+
   console.log("호버 정보창 랜더링");
-  const hoverCheck = screenStore((state) => state.hoverCheck);
-  console.log(hoverCheck);
-  console.log(props.allData);
+  console.log("호버 정보창 랜더링");
   return (
     <>
       {hoverCheck ? (

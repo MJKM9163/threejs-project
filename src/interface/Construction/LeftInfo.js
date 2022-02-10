@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import styled from "styled-components";
-import { planetStore } from "../../hooks/stores/planetStore";
+import { screenStore } from "../../hooks/stores/screenStore";
 
 const LeftInfoContainer = styled.div`
   width: 25%;
@@ -14,32 +14,36 @@ const LeftInfoContainer = styled.div`
   }
   .name {
     justify-content: center;
-    background-color: #7e967e81;
+    color: #b8b8b8;
+    //background-color: #7e967e81;
   }
 
   .food {
-    background-color: #8aff8a;
     .foodNum {
       font-size: 20px;
-      text-align: center;
+      margin-right: 15px;
+      color: #b8b8b8;
     }
   }
   .productivity {
-    background-color: #ff9844;
     .productNum {
       font-size: 20px;
+      margin-right: 15px;
+      color: #b8b8b8;
     }
   }
   .science {
-    background-color: #1d65ff;
     .scienceNum {
       font-size: 20px;
+      margin-right: 15px;
+      color: #b8b8b8;
     }
   }
 `;
 
 export const LeftInfo = (props) => {
   //const setHoverCheck = planetStore.setState({hoverCheck: false})
+
   console.log("왼쪽 정보창 랜더링");
   return (
     <LeftInfoContainer>
@@ -47,9 +51,9 @@ export const LeftInfo = (props) => {
       <div
         className="food"
         onMouseEnter={() =>
-          planetStore.setState({ hoverCheck: ["images", "potato"] })
+          screenStore.setState({ hoverCheck: ["images", "potato"] })
         }
-        onMouseLeave={() => planetStore.setState({ hoverCheck: false })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
       >
         <img
           src="images/resources/icons/corn.png"
@@ -64,9 +68,9 @@ export const LeftInfo = (props) => {
       <div
         className="productivity"
         onMouseEnter={() =>
-          planetStore.setState({ hoverCheck: ["images", "gear"] })
+          screenStore.setState({ hoverCheck: ["images", "gear"] })
         }
-        onMouseLeave={() => planetStore.setState({ hoverCheck: false })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
       >
         <img
           src="images/resources/icons/gear.png"
@@ -81,9 +85,9 @@ export const LeftInfo = (props) => {
       <div
         className="science"
         onMouseEnter={() =>
-          planetStore.setState({ hoverCheck: ["images", "science"] })
+          screenStore.setState({ hoverCheck: ["images", "science"] })
         }
-        onMouseLeave={() => planetStore.setState({ hoverCheck: false })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
       >
         <img
           src="images/resources/icons/flask.png"

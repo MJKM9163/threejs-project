@@ -1,16 +1,15 @@
 import React, { memo } from "react";
 import styled from "styled-components";
-import { planetStore } from "../../hooks/stores/planetStore";
+import { screenStore } from "../../hooks/stores/screenStore";
 
 const ResourcesContainer = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
-  top: -10%;
+  bottom: 200px;
   width: 50%;
   height: 40px;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(50%);
 
   div {
     display: flex;
@@ -28,48 +27,30 @@ const ResourcesContainer = styled.div`
   }
 
   div:nth-child(1) {
-    color: #aeff9e;
-    background: #91ff912e;
-    :hover {
-      color: #f3f3f3;
-      background: #91ff916a;
-    }
+    color: #b8b8b8;
   }
   div:nth-child(2) {
-    color: #4b48ff;
-    background: #0400ff1f;
-    :hover {
-      color: #f3f3f3;
-      background: #0400ff7a;
-    }
+    color: #b8b8b8;
   }
   div:nth-child(3) {
-    color: #ff0000;
-    background: #ff000044;
-    :hover {
-      color: #f3f3f3;
-      background: #ff000086;
-    }
+    color: #b8b8b8;
   }
   div:nth-child(4) {
-    color: #dd92ff;
-    background: #ae00ff21;
-    :hover {
-      color: #f3f3f3;
-      background: #ae00ff7a;
-    }
+    color: #b8b8b8;
   }
 `;
 
 export const Resources = (props) => {
+  console.log(screenStore.getState().hoverCheck);
+
   console.log("위쪽 통합 자원창 랜더링");
   return (
     <ResourcesContainer>
       <div
         onMouseEnter={() =>
-          planetStore.setState({ hoverCheck: ["images", "potato"] })
+          screenStore.setState({ hoverCheck: ["images", "potato"] })
         }
-        onMouseLeave={() => planetStore.setState({ hoverCheck: false })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
       >
         <img
           src="images/resources/icons/corn.png"
@@ -81,9 +62,9 @@ export const Resources = (props) => {
       </div>
       <div
         onMouseEnter={() =>
-          planetStore.setState({ hoverCheck: ["images", "titanium"] })
+          screenStore.setState({ hoverCheck: ["images", "titanium"] })
         }
-        onMouseLeave={() => planetStore.setState({ hoverCheck: false })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
       >
         <img
           src="images/resources/icons/titanium.png"
@@ -95,9 +76,9 @@ export const Resources = (props) => {
       </div>
       <div
         onMouseEnter={() =>
-          planetStore.setState({ hoverCheck: ["images", "orichalcon"] })
+          screenStore.setState({ hoverCheck: ["images", "orichalcon"] })
         }
-        onMouseLeave={() => planetStore.setState({ hoverCheck: false })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
       >
         <img
           src="images/resources/icons/orichalcon.png"
@@ -109,9 +90,9 @@ export const Resources = (props) => {
       </div>
       <div
         onMouseEnter={() =>
-          planetStore.setState({ hoverCheck: ["images", "science"] })
+          screenStore.setState({ hoverCheck: ["images", "science"] })
         }
-        onMouseLeave={() => planetStore.setState({ hoverCheck: false })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
       >
         <img
           src="images/resources/icons/flask.png"

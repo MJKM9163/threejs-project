@@ -20,12 +20,20 @@ export const SpaceCamera = ({ pos = new Vector3(), look = new Vector3() }) => {
   const zoomCheck = useRef(useStore.getState().zoom);
 
   useEffect(() => {
-    useStore.subscribe((state) => {
-      focus.current = state.focus;
-    });
-    useStore.subscribe((state) => {
-      zoomCheck.current = state.zoom;
-    });
+    useStore.subscribe(
+      (state) => {
+        focus.current = state.focus;
+      },
+      (state) => state.focus
+    );
+  });
+  useEffect(() => {
+    useStore.subscribe(
+      (state) => {
+        zoomCheck.current = state.zoom;
+      },
+      (state) => state.zoom
+    );
   });
   const camera = useThree((state) => state.camera);
   const gl = useThree((state) => state.gl);

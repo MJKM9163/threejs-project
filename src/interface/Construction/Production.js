@@ -1,9 +1,10 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import styled from "styled-components";
-import { planetStore } from "../../hooks/stores/planetStore";
+import { screenStore } from "../../hooks/stores/screenStore";
 
 const ProductionContainer = styled.div`
   width: 50%;
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   overflow: auto;
@@ -48,44 +49,92 @@ const ProductionContainer = styled.div`
   }
 `;
 
+const WaitingContainer = styled.div`
+  width: 25%;
+  /* display: flex;
+  flex-direction: row; */
+
+  .waiting {
+    //position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid yellow;
+
+    .waitingImage {
+      //position: absolute;
+      z-index: -2;
+      width: 160px;
+      height: 90px;
+    }
+    .waitingName {
+      //width: 200px;
+      color: white;
+      font-size: 21px;
+    }
+    .waitingTime {
+      color: white;
+    }
+  }
+`;
+
 export const Production = (props) => {
   const [render, setRender] = useState(false);
 
+  //const awaitings = screenStore.getState().awaitArray;
+  const productionArray = screenStore((state) => state.productionArray);
+  const production = screenStore.getState().production;
+
   console.log("생산 선택창 랜더링");
   return (
-    <ProductionContainer>
-      {props.allData.productionArray.map((item, index) =>
-        props.allData.production[item].research ? (
-          <div
-            className="productionInfo"
-            key={index}
-            onClick={() => {
-              setRender(!render);
-              props.awaitings.push(
-                props.allData.productionArray.splice(
-                  props.allData.productionArray.indexOf(item),
-                  1
-                )
-              );
-            }}
-            //onMouseEnter={() => setHoverCheck(["production", item])}
-            onMouseEnter={() =>
-              planetStore.setState({ hoverCheck: ["production", item] })
-            }
-            onMouseLeave={() => planetStore.setState({ hoverCheck: false })}
-          >
-            <img
-              className="image"
-              src={props.allData.production[item].img}
-              alt={"건물 이미지"}
-            ></img>
-            <div className="imageName">
-              {props.allData.production[item].name}
+    <>
+      <ProductionContainer>
+        {props.awaitings}
+        {productionArray.map((item, index) =>
+          production[item].research ? (
+            <div
+              className="productionInfo"
+              key={index}
+              onClick={() => {
+                setRender(!render);
+                props.awaitings.push(
+                  productionArray.splice(productionArray.indexOf(item), 1)
+                );
+                screenStore.setState({ hoverCheck: false });
+              }}
+              onMouseEnter={() =>
+                screenStore.setState({ hoverCheck: ["production", item] })
+              }
+              onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
+            >
+              <img
+                className="image"
+                src={production[item].img}
+                alt={"건물 이미지"}
+              ></img>
+              <div className="imageName">{production[item].name}</div>
             </div>
-          </div>
-        ) : null
-      )}
-    </ProductionContainer>
+          ) : null
+        )}
+      </ProductionContainer>
+      <WaitingContainer>
+        {props.awaitings.length !== 0
+          ? props.awaitings.map((item, index) => (
+              <div className="waiting" key={index}>
+                <img
+                  className="waitingImage"
+                  src={production[item].img}
+                  alt={"건물 이미지"}
+                ></img>
+                <div className="waitingName">{production[item].name}</div>
+                <div className="waitingTime">대기 중..</div>
+              </div>
+            ))
+          : null}
+      </WaitingContainer>
+    </>
   );
 };
 
