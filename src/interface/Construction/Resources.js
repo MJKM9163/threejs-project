@@ -41,8 +41,6 @@ const ResourcesContainer = styled.div`
 `;
 
 export const Resources = (props) => {
-  console.log(screenStore.getState().hoverCheck);
-
   console.log("위쪽 통합 자원창 랜더링");
   return (
     <ResourcesContainer>
@@ -58,7 +56,7 @@ export const Resources = (props) => {
           height={25}
           alt="식량 자원"
         ></img>
-        <span>275</span>
+        <span>0</span>
       </div>
       <div
         onMouseEnter={() =>
@@ -72,7 +70,7 @@ export const Resources = (props) => {
           height={25}
           alt="티타늄 자원"
         ></img>
-        <span>50</span>
+        <span>0</span>
       </div>
       <div
         onMouseEnter={() =>
@@ -86,7 +84,7 @@ export const Resources = (props) => {
           height={25}
           alt="오리하르콘 자원"
         ></img>
-        <span>12</span>
+        <span>0</span>
       </div>
       <div
         onMouseEnter={() =>
@@ -100,7 +98,7 @@ export const Resources = (props) => {
           height={25}
           alt="과학 자원"
         ></img>
-        <span>36</span>
+        <span>0</span>
       </div>
     </ResourcesContainer>
   );

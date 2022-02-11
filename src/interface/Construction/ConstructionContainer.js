@@ -79,9 +79,8 @@ const HoverInfoConainer = styled.div`
 let zero = 0;
 export const ConstructionContainer = () => {
   let allData = screenStore.getState();
-  let awaitings = screenStore.getState().awaitArray;
-  let planetName = useStore.getState().name;
   let resources = planetStore.getState().planetResources;
+  let planetName = useStore.getState().name;
   const hoverCheck = screenStore((state) => state.hoverCheck);
 
   useEffect(() => {
@@ -89,14 +88,6 @@ export const ConstructionContainer = () => {
       (state) => state,
       (state) => {
         allData = state;
-      }
-    );
-  }, []);
-  useEffect(() => {
-    screenStore.subscribe(
-      (state) => state.awaitArray,
-      (state) => {
-        awaitings = state;
       }
     );
   }, []);
@@ -119,8 +110,8 @@ export const ConstructionContainer = () => {
 
   // 20 / 100 = 0.2
 
-  const gearNum = resources[planetName]?.gear;
-  const maxNum = allData.production[awaitings[0]]?.max;
+  // const gearNum = resources[planetName]?.gear;
+  // const maxNum = allData.production[awaitings[0]]?.max;
 
   console.log("행성 관리창 랜더링");
 
@@ -159,7 +150,11 @@ export const ConstructionContainer = () => {
         <MemoResources />
         <div className="flexBox">
           <MemoLeftInfo planetName={planetName} resources={resources} />
-          <MemoProduction awaitings={awaitings} />
+          <MemoProduction
+            awaitArray={allData.awaitArray}
+            production={allData.production}
+            productionArray={allData.productionArray}
+          />
         </div>
       </ConstructionContainerDiv>
     </>

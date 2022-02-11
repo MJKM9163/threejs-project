@@ -65,6 +65,9 @@ const InfoTextBox = styled.div`
     //background-color: #e63232;
 
     .develop {
+      color: #70ff7c;
+    }
+    .unDevelop {
       color: #ff3b3b;
     }
     .selectSize,
@@ -225,7 +228,14 @@ export const PlanetInfo = () => {
           </div>
           <div className="state">
             <li>
-              상태: &nbsp;<span className="develop">미개척</span>
+              상태: &nbsp;
+              <span
+                className={
+                  resources.current[infoName.current] ? "develop" : "unDevelop"
+                }
+              >
+                {resources.current[infoName.current] ? "개척" : "미개척"}
+              </span>
             </li>
             <li>
               크기: &nbsp;
@@ -265,20 +275,26 @@ export const PlanetInfo = () => {
             className="buttons"
             style={{ height: mainPlanet ? "430px" : "80px" }}
           >
-            <button
-              className="start"
-              style={{ display: mainPlanet ? "none" : "block" }}
-              onClick={() => {
-                planetStore.setState({
-                  planetResources: {
-                    ...resources.current,
-                    [infoName.current]: types[typeName.current].resources,
-                  },
-                });
-              }}
-            >
-              개척 시작
-            </button>
+            {resources.current[infoName.current] ? null : (
+              <button
+                className="start"
+                style={{ display: mainPlanet ? "none" : "block" }}
+                onClick={() => {
+                  planetStore.setState({
+                    planetResources: {
+                      ...resources.current,
+                      [infoName.current]: {
+                        resources: types[typeName.current].resources,
+                        develop: true,
+                      },
+                    },
+                  });
+                }}
+              >
+                개척 시작
+              </button>
+            )}
+
             <button
               className="cancel"
               onClick={() => {

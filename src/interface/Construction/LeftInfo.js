@@ -43,7 +43,7 @@ const LeftInfoContainer = styled.div`
 
 export const LeftInfo = (props) => {
   //const setHoverCheck = planetStore.setState({hoverCheck: false})
-
+  console.log(props.resources);
   console.log("왼쪽 정보창 랜더링");
   return (
     <LeftInfoContainer>
@@ -62,7 +62,7 @@ export const LeftInfo = (props) => {
           alt="생산하는 식량"
         ></img>
         <span className="foodNum">
-          {props.resources[props.planetName]?.food}
+          {props.resources[props.planetName]?.resources.food}
         </span>
       </div>
       <div
@@ -79,7 +79,7 @@ export const LeftInfo = (props) => {
           alt="행성의 생산력"
         ></img>
         <span className="productNum">
-          {props.resources[props.planetName]?.gear}
+          {props.resources[props.planetName]?.resources.gear}
         </span>
       </div>
       <div
@@ -96,7 +96,7 @@ export const LeftInfo = (props) => {
           alt="행성의 과학"
         ></img>
         <span className="scienceNum">
-          {props.resources[props.planetName]?.science}
+          {props.resources[props.planetName]?.resources.science}
         </span>
       </div>
     </LeftInfoContainer>
