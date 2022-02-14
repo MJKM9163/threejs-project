@@ -54,7 +54,7 @@ export const screenStore = create(
         img: "images/production/images/planetCurtain.jpg",
         video: "images/production/videos/planetCurtain.mp4",
         add: { 행복도: 10, 방어막: 300 },
-        max: 50,
+        max: 100,
         description:
           "행성을 중심으로 에너지 차폐막을 만듭니다. 에너지 무기를 효과적으로 막을 수 있으며 행성의 거주민들의 불안감을 줄일 수 있습니다.",
       },

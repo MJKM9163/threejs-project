@@ -55,7 +55,7 @@ const WaitingContainer = styled.div`
   flex-direction: row; */
 
   .waiting {
-    //position: relative;
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -63,13 +63,25 @@ const WaitingContainer = styled.div`
     width: 100%;
     border-bottom: 1px solid yellow;
 
+    :first-child::before {
+      position: absolute;
+      width: 100%;
+      height: ${(props) => props.num};
+      bottom: 0px;
+      background-color: #cacaca;
+      opacity: 20%;
+      content: "";
+      display: block;
+    }
+
     .waitingImage {
       //position: absolute;
-      z-index: -2;
+      z-index: 1;
       width: 160px;
       height: 90px;
     }
     .waitingName {
+      //position: relative;
       //width: 200px;
       color: #b8b8b8;
       //margin-right: 10px;
@@ -87,13 +99,10 @@ let delay = 500;
 let check = false;
 let up;
 
-console.log("밖");
-
 export const Production = (props) => {
   const [render, setRender] = useState(false);
   const [reload, setReload] = useState(0);
   const completion = screenStore((state) => state.completion);
-  //console.log(completion);
 
   const numUp = (delay, awaitArray, completion) => {
     if (check === false) {
@@ -117,8 +126,7 @@ export const Production = (props) => {
             numUp(delay, awaitArray, completion);
           }
         }
-        setReload(i); // 랜더링 조정
-        console.log(i);
+        setReload(i); // Interval이 진행 될 떄 마다 랜더링 발생
       }, delay);
     }
   };
@@ -169,7 +177,13 @@ export const Production = (props) => {
           ) : null
         )}
       </ProductionContainer>
-      <WaitingContainer>
+      <WaitingContainer
+        num={
+          props.awaitArray.length !== 0
+            ? Math.floor((i / props.awaitArray[0][1]) * 100) + "%"
+            : null
+        }
+      >
         {props.awaitArray.length !== 0
           ? props.awaitArray.map((item, index) => (
               <div

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
+import produce from "immer";
 import { MemoLeftInfo } from "./LeftInfo";
 import { MemoProduction } from "./Production";
 import { MemoResources } from "./Resources";
@@ -13,7 +14,8 @@ const ConstructionContainerDiv = styled.div`
   bottom: 0px;
   width: 100vw;
   height: 200px;
-  z-index: 100;
+  z-index: ${(props) => (props.indexnum ? -5 : 200)};
+  opacity: ${(props) => (props.indexnum ? 0 : 1)};
   cursor: default;
 
   .flexBox {
@@ -79,9 +81,9 @@ const HoverInfoConainer = styled.div`
 let zero = 0;
 export const ConstructionContainer = () => {
   let allData = screenStore.getState();
-  let resources = planetStore.getState().planetResources;
   let planetName = useStore.getState().name;
   const hoverCheck = screenStore((state) => state.hoverCheck);
+  const resources = planetStore((state) => state.planetResources);
 
   useEffect(() => {
     screenStore.subscribe(
@@ -99,20 +101,14 @@ export const ConstructionContainer = () => {
       }
     );
   }, []);
-  useEffect(() => {
-    planetStore.subscribe(
-      (state) => state.planetResources,
-      (state) => {
-        resources = state;
-      }
-    );
-  }, []);
 
-  // 20 / 100 = 0.2
-
-  // const gearNum = resources[planetName]?.gear;
-  // const maxNum = allData.production[awaitings[0]]?.max;
-
+  // console.log(
+  //   resources.find((item) => (item[planetName] ? true : false))[planetName]
+  // );
+  // console.log(resources.find((item) => (item[planetName] ? true : false)));
+  console.log(allData);
+  console.log(resources);
+  console.log(planetName);
   console.log("행성 관리창 랜더링");
 
   return (
@@ -129,7 +125,7 @@ export const ConstructionContainer = () => {
               autoPlay
               width={250}
               height={250}
-              src="images/production/videos/planetCurtain.mp4"
+              src={allData[hoverCheck[0]][hoverCheck[1]].video}
             ></video>
           ) : (
             <img
@@ -146,7 +142,17 @@ export const ConstructionContainer = () => {
           </div>
         </HoverInfoConainer>
       ) : null}
-      <ConstructionContainerDiv>
+      {resources.length !== 0
+        ? resources.find((item) => item[planetName])[planetName].control
+        : null}
+      {/* ----------------------------------------------- */}
+      {/* <ConstructionContainerDiv
+        indexnum={
+          resources[planetName]?.hide === undefined
+            ? true
+            : resources[planetName]?.hide
+        }
+      >
         <MemoResources />
         <div className="flexBox">
           <MemoLeftInfo planetName={planetName} resources={resources} />
@@ -156,7 +162,7 @@ export const ConstructionContainer = () => {
             productionArray={allData.productionArray}
           />
         </div>
-      </ConstructionContainerDiv>
+      </ConstructionContainerDiv> */}
     </>
   );
 };

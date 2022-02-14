@@ -155,7 +155,9 @@ export const PlanetInfo = () => {
   //const mainPlanet = useRef(useStore.getState().mainPlanet);
   const explanation = useRef(planetStore.getState().explanation);
   const resources = useRef(planetStore.getState().planetResources);
+  const planetFind = useRef(planetStore.getState());
 
+  console.log(resources);
   useEffect(() => {
     useStore.subscribe(
       (state) => (infoName.current = state.name),
@@ -192,13 +194,6 @@ export const PlanetInfo = () => {
   }, [resources]);
 
   // useEffect(() => {
-  //   useStore.subscribe(
-  //     (state) => (mainPlanet.current = state.mainPlanet),
-  //     (state) => state.mainPlanet
-  //   );
-  // });
-
-  // useEffect(() => {
   //   effectStore.subscribe(
   //     (state) => (effects.current = state.effects),
   //     (state) => console.log("22", state)
@@ -212,6 +207,8 @@ export const PlanetInfo = () => {
     "???": { climate: null },
   };
 
+  console.log(resources.current);
+  console.log(infoName.current);
   console.log("info 랜더링 됨");
   return (
     <PlanetInfoDiv zoom={zoomCheck}>
@@ -231,10 +228,14 @@ export const PlanetInfo = () => {
               상태: &nbsp;
               <span
                 className={
-                  resources.current[infoName.current] ? "develop" : "unDevelop"
+                  resources.current.find((item) => item[infoName.current])
+                    ? "develop"
+                    : "unDevelop"
                 }
               >
-                {resources.current[infoName.current] ? "개척" : "미개척"}
+                {resources.current.find((item) => item[infoName.current])
+                  ? "개척"
+                  : "미개척"}
               </span>
             </li>
             <li>
@@ -280,15 +281,14 @@ export const PlanetInfo = () => {
                 className="start"
                 style={{ display: mainPlanet ? "none" : "block" }}
                 onClick={() => {
-                  planetStore.setState({
-                    planetResources: {
-                      ...resources.current,
-                      [infoName.current]: {
-                        resources: types[typeName.current].resources,
-                        develop: true,
-                      },
-                    },
-                  });
+                  planetStore
+                    .getState()
+                    .planetResourcesAdd(
+                      infoName.current,
+                      types[typeName.current].resources
+                    );
+                  useStore.setState({ zoom: false });
+                  useStore.setState({ orbitHide: false });
                 }}
               >
                 개척 시작
