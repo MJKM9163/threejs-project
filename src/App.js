@@ -1,4 +1,4 @@
-import React, { Suspense, useRef } from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import "./App.css";
 import { Canvas } from "@react-three/fiber";
 import { Debug, Physics } from "@react-three/cannon";
@@ -9,6 +9,8 @@ import { Background } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
 import { PlanetInfo } from "./interface/PlanetInfo";
 import { ConstructionContainer } from "./interface/Construction/ConstructionContainer";
+import { useStore } from "./hooks/stores/useStore";
+import { planetStore } from "./hooks/stores/planetStore";
 
 const Light = () => {
   const pointLight = useRef();
@@ -32,6 +34,28 @@ const Light = () => {
   );
 };
 
+const RightClick = (e) => {
+  let zoom = useStore.getState().zoom;
+  let planetName = useStore.getState().name;
+  let resources = planetStore.getState().planetResources;
+
+  if (zoom === true) {
+    useStore.setState({ zoom: false });
+  } else if (resources[planetName]?.hide === false) {
+    for (let i = 0; i < Object.keys(resources).length; i++) {
+      planetStore.getState().planetResources[Object.keys(resources)[i]].hide = true;
+    }
+    planetStore.setState({
+      planetResources: {
+        ...resources,
+      },
+    });
+  } else {
+    console.log("확대 / 건설 상태가 아닙니다");
+  }
+};
+document.addEventListener("contextmenu", RightClick);
+
 function App() {
   console.log("메인 랜더링 확인");
   return (
@@ -47,8 +71,7 @@ function App() {
           fov: 60,
           far: 250000,
           near: 3,
-        }}
-      >
+        }}>
         <ambientLight intensity={0.2} />
         <Light />
         <Physics gravity={[0, 0, 0]} iterations={1} broadphase="SAP">

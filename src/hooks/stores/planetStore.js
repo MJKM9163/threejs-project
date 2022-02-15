@@ -40,25 +40,25 @@ export const planetStore = create(
     },
 
     planetResources: [],
-    // planetFind: (name) =>
-    //   produce((draft) => {
-    //     return draft.planetResources.find((item) => item[name.current]);
-    //   }),
-    planetResourcesAdd: (name, resources) =>
-      set(
-        produce((draft) => {
-          draft.planetResources.push({
-            [name]: {
-              resources: resources,
-              develop: true,
-              hide: true,
-              control: <ProductionControl />,
-            },
-          });
-        })
-      ),
+
+    // planetResourcesUpdate: (name) =>
+    //   set(() => ({ planetResources: planetStore.getState().planetResources })),
+
+    // planetResourcesAdd: (name, resources) =>
+    //   set(
+    //     produce((state, draft) => {
+    //       state.planetResources.push({
+    //         [name]: {
+    //           resources: resources,
+    //           develop: true,
+    //           hide: true,
+    //           control: <ProductionControl />,
+    //         },
+    //       });
+    //     })
+    //   ),
   }))
 );
-
+//console.log(planetStore.getState().planetResources);
 // 찾기
 //const dramaIndex = draft.planetResources.find((el) => el[name]);

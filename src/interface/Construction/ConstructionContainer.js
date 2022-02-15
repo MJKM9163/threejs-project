@@ -7,6 +7,7 @@ import produce from "immer";
 import { MemoLeftInfo } from "./LeftInfo";
 import { MemoProduction } from "./Production";
 import { MemoResources } from "./Resources";
+import { MemoProductionControl } from "./ProductionControl";
 
 const ConstructionContainerDiv = styled.div`
   font-family: "Noto Sans KR", sans-serif;
@@ -81,7 +82,6 @@ const HoverInfoConainer = styled.div`
 let zero = 0;
 export const ConstructionContainer = () => {
   let allData = screenStore.getState();
-  let planetName = useStore.getState().name;
   const hoverCheck = screenStore((state) => state.hoverCheck);
   const resources = planetStore((state) => state.planetResources);
 
@@ -93,24 +93,8 @@ export const ConstructionContainer = () => {
       }
     );
   }, []);
-  useEffect(() => {
-    useStore.subscribe(
-      (state) => state.name,
-      (state) => {
-        planetName = state;
-      }
-    );
-  }, []);
 
-  // console.log(
-  //   resources.find((item) => (item[planetName] ? true : false))[planetName]
-  // );
-  // console.log(resources.find((item) => (item[planetName] ? true : false)));
-  console.log(allData);
-  console.log(resources);
-  console.log(planetName);
   console.log("행성 관리창 랜더링");
-
   return (
     <>
       {hoverCheck ? (
@@ -142,8 +126,10 @@ export const ConstructionContainer = () => {
           </div>
         </HoverInfoConainer>
       ) : null}
-      {resources.length !== 0
-        ? resources.find((item) => item[planetName])[planetName].control
+      {Object.keys(resources).length !== 0
+        ? Object.keys(resources).map((item, index) => (
+            <MemoProductionControl key={index} planetName={item} />
+          ))
         : null}
       {/* ----------------------------------------------- */}
       {/* <ConstructionContainerDiv

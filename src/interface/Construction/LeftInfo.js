@@ -43,7 +43,6 @@ const LeftInfoContainer = styled.div`
 
 export const LeftInfo = (props) => {
   //const setHoverCheck = planetStore.setState({hoverCheck: false})
-
   console.log("왼쪽 정보창 랜더링");
   return (
     <LeftInfoContainer>

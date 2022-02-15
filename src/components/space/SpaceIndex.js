@@ -13,20 +13,13 @@ export const SpaceIndex = () => {
   const earthOrbitRef = useRef();
   const unknownOrbitRef = useRef();
 
-  const zoomCheck = useRef(useStore.getState().zoom);
-  const orbitHide = useRef(useStore.getState().orbitHide);
+  const planetName = useRef(useStore.getState().name);
   const resources = useRef(planetStore.getState().planetResources);
 
   useEffect(() => {
     useStore.subscribe(
-      (state) => (zoomCheck.current = state.zoom),
-      (state) => state.zoom
-    );
-  });
-  useEffect(() => {
-    useStore.subscribe(
-      (state) => (orbitHide.current = state.orbitHide),
-      (state) => state.orbitHide
+      (state) => (planetName.current = state.name),
+      (state) => state.name
     );
   });
   useEffect(() => {
@@ -45,30 +38,21 @@ export const SpaceIndex = () => {
     useStore.setState({ name: name });
     if (resources.current[name]?.develop === true) {
       // 탭 만들기
+      for (let i = 0; i < Object.keys(resources.current).length; i++) {
+        planetStore.getState().planetResources[Object.keys(resources.current)[i]].hide = true;
+      }
+      planetStore.getState().planetResources[name].hide = false;
       planetStore.setState({
         planetResources: {
           ...resources.current,
-          [name]: {
-            develop: true,
-            hide: !resources.current[name].hide,
-            resources: resources.current[name].resources,
-          },
         },
       });
     } else {
       useStore.setState({ focus: focus });
       useStore.setState({ type: type });
       useStore.setState({ selectSize: size });
-      useStore.setState({ zoom: !zoomCheck.current });
-      useStore.setState({ orbitHide: !orbitHide.current });
-      // if () {
-      //   screenStore.setState({
-      //     awaitHide: {
-      //       ...awaitHide.current,
-      //       [awaitHide.current.map((item) => item)]: true,
-      //     },
-      //   });
-      // }
+      useStore.setState({ zoom: true }); // 행성을 두번 클릭 하지 않아서 제대로 작동함
+      useStore.setState({ orbitHide: true });
 
       if (type === "주계열성") {
         useStore.setState({ mainPlanet: true });

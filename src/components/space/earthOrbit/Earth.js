@@ -1,5 +1,5 @@
 import { useSphere } from "@react-three/cannon";
-import { useGLTF } from "@react-three/drei";
+import { Html, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useRef } from "react";
 import { Vector3 } from "three";
@@ -7,6 +7,7 @@ import { Vector3 } from "three";
 import { EffectSelect } from "../../../hooks/EffectSelect";
 import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
 import { useStore } from "../../../hooks/stores/useStore";
+import { HtmlContainer } from "../../../interface/CanvasInHTML/HtmlContainer";
 import { OrbitLine } from "../OrbitLine";
 
 let a = 0;
@@ -45,25 +46,19 @@ export const Earth = ({ SetUp, ...props }) => {
   return (
     <>
       <group ref={earthRef} dispose={null}>
+        <Html>
+          <HtmlContainer />
+        </Html>
         <group rotation={[-Math.PI / 2, 0, 0]} scale={1.9}>
           <mesh
             castShadow
             onClick={(e) => {
-              SetUp(
-                earthWorldPosition,
-                Pname,
-                "지구형",
-                argsSize.current["middle"],
-                effects
-              );
+              SetUp(earthWorldPosition, Pname, "지구형", argsSize.current["middle"], effects);
             }}
             geometry={nodes.mesh_0.geometry}
             material={materials.Material__25}
           />
-          <mesh
-            geometry={nodes.mesh_1.geometry}
-            material={materials.Material__65}
-          />
+          <mesh geometry={nodes.mesh_1.geometry} material={materials.Material__65} />
           <group ref={effectRef}>
             {/* {effectModels.map((model, index) => ( 잠시 주석처리
               <group

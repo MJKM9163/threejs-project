@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useStore } from "../hooks/stores/useStore";
 import { planetStore } from "../hooks/stores/planetStore";
 import { effectStore } from "../hooks/stores/effectStore";
+import { MemoProductionControl } from "./Construction/ProductionControl";
 
 const PlanetInfoDiv = styled.div`
   position: absolute;
@@ -155,9 +156,7 @@ export const PlanetInfo = () => {
   //const mainPlanet = useRef(useStore.getState().mainPlanet);
   const explanation = useRef(planetStore.getState().explanation);
   const resources = useRef(planetStore.getState().planetResources);
-  const planetFind = useRef(planetStore.getState());
 
-  console.log(resources);
   useEffect(() => {
     useStore.subscribe(
       (state) => (infoName.current = state.name),
@@ -193,13 +192,6 @@ export const PlanetInfo = () => {
     );
   }, [resources]);
 
-  // useEffect(() => {
-  //   effectStore.subscribe(
-  //     (state) => (effects.current = state.effects),
-  //     (state) => console.log("22", state)
-  //   );
-  // });
-
   const types = {
     지구형: { climate: "온대", resources: { food: 7, gear: 5, science: 1 } },
     얼음형: { climate: "한랭", resources: { food: 1, gear: 2, science: 5 } },
@@ -207,8 +199,6 @@ export const PlanetInfo = () => {
     "???": { climate: null },
   };
 
-  console.log(resources.current);
-  console.log(infoName.current);
   console.log("info 랜더링 됨");
   return (
     <PlanetInfoDiv zoom={zoomCheck}>
@@ -226,34 +216,20 @@ export const PlanetInfo = () => {
           <div className="state">
             <li>
               상태: &nbsp;
-              <span
-                className={
-                  resources.current.find((item) => item[infoName.current])
-                    ? "develop"
-                    : "unDevelop"
-                }
-              >
-                {resources.current.find((item) => item[infoName.current])
-                  ? "개척"
-                  : "미개척"}
+              <span className={resources.current[infoName.current] ? "develop" : "unDevelop"}>
+                {resources.current[infoName.current] ? "개척" : "미개척"}
               </span>
             </li>
             <li>
               크기: &nbsp;
               <span className="selectSize">
-                {selectSize.current >= 550
-                  ? "대형"
-                  : selectSize.current >= 180
-                  ? "중형"
-                  : "소형"}
+                {selectSize.current >= 550 ? "대형" : selectSize.current >= 180 ? "중형" : "소형"}
               </span>
             </li>
             {mainPlanet ? null : (
               <li>
                 기후: &nbsp;
-                <span className="climate">
-                  {types[typeName.current].climate}
-                </span>
+                <span className="climate">{types[typeName.current].climate}</span>
               </li>
             )}
           </div>
@@ -261,36 +237,40 @@ export const PlanetInfo = () => {
             <div className="special">
               특이 사항
               <div className="positive">
-                {effects
-                  ? effects[0].map((item, index) => <li key={index}>{item}</li>)
-                  : null}
+                {effects ? effects[0].map((item, index) => <li key={index}>{item}</li>) : null}
               </div>
               <div className="negative">
-                {effects
-                  ? effects[1].map((item, index) => <li key={index}>{item}</li>)
-                  : null}
+                {effects ? effects[1].map((item, index) => <li key={index}>{item}</li>) : null}
               </div>
             </div>
           )}
-          <div
-            className="buttons"
-            style={{ height: mainPlanet ? "430px" : "80px" }}
-          >
+          <div className="buttons" style={{ height: mainPlanet ? "430px" : "80px" }}>
             {resources.current[infoName.current] ? null : (
               <button
                 className="start"
                 style={{ display: mainPlanet ? "none" : "block" }}
                 onClick={() => {
-                  planetStore
-                    .getState()
-                    .planetResourcesAdd(
-                      infoName.current,
-                      types[typeName.current].resources
-                    );
+                  // planetStore
+                  //   .getState()
+                  //   .planetResourcesAdd(
+                  //     infoName.current,
+                  //     types[typeName.current].resources
+                  //   );
+
+                  planetStore.setState({
+                    planetResources: {
+                      ...resources.current,
+                      [infoName.current]: {
+                        resources: types[typeName.current].resources,
+                        develop: true,
+                        hide: true,
+                      },
+                    },
+                  });
+
                   useStore.setState({ zoom: false });
                   useStore.setState({ orbitHide: false });
-                }}
-              >
+                }}>
                 개척 시작
               </button>
             )}
@@ -306,8 +286,7 @@ export const PlanetInfo = () => {
                     useStore.setState({ mainPlanet: false });
                   }, 500);
                 }
-              }}
-            >
+              }}>
               돌아가기
             </button>
           </div>
