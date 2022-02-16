@@ -39,24 +39,8 @@ export const planetStore = create(
       "???": { climate: null },
     },
 
+    tapState: { planetName: "???", check: false },
     planetResources: [],
-
-    // planetResourcesUpdate: (name) =>
-    //   set(() => ({ planetResources: planetStore.getState().planetResources })),
-
-    // planetResourcesAdd: (name, resources) =>
-    //   set(
-    //     produce((state, draft) => {
-    //       state.planetResources.push({
-    //         [name]: {
-    //           resources: resources,
-    //           develop: true,
-    //           hide: true,
-    //           control: <ProductionControl />,
-    //         },
-    //       });
-    //     })
-    //   ),
   }))
 );
 //console.log(planetStore.getState().planetResources);

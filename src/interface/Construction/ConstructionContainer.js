@@ -3,10 +3,6 @@ import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
-import produce from "immer";
-import { MemoLeftInfo } from "./LeftInfo";
-import { MemoProduction } from "./Production";
-import { MemoResources } from "./Resources";
 import { MemoProductionControl } from "./ProductionControl";
 
 const ConstructionContainerDiv = styled.div`
@@ -15,20 +11,11 @@ const ConstructionContainerDiv = styled.div`
   bottom: 0px;
   width: 100vw;
   height: 200px;
-  z-index: ${(props) => (props.indexnum ? -5 : 200)};
+  z-index: ${(props) => (props.indexnum ? -500 : 200)};
   opacity: ${(props) => (props.indexnum ? 0 : 1)};
   cursor: default;
-
-  .flexBox {
-    position: absolute;
-    display: flex;
-    width: 100%;
-    height: 200px;
-    bottom: 0px;
-
-    background-color: #24272b13;
-  }
 `;
+
 const HoverInfoConainer = styled.div`
   font-family: "Noto Sans KR", sans-serif;
   position: absolute;
@@ -39,7 +26,7 @@ const HoverInfoConainer = styled.div`
 
   width: 450px;
   height: 250px;
-
+  //background-color: #a14e4ec3;
   div {
     background-color: #000000c3;
     width: 100%;
@@ -99,9 +86,7 @@ export const ConstructionContainer = () => {
     <>
       {hoverCheck ? (
         <HoverInfoConainer>
-          <div className="imageName">
-            {allData[hoverCheck[0]][hoverCheck[1]].name}
-          </div>
+          <div className="imageName">{allData[hoverCheck[0]][hoverCheck[1]].name}</div>
           {allData[hoverCheck[0]][hoverCheck[1]].video ? (
             <video
               muted
@@ -109,26 +94,22 @@ export const ConstructionContainer = () => {
               autoPlay
               width={250}
               height={250}
-              src={allData[hoverCheck[0]][hoverCheck[1]].video}
-            ></video>
+              src={allData[hoverCheck[0]][hoverCheck[1]].video}></video>
           ) : (
             <img
               className="imageBox"
               width={450}
               height={250}
               src={allData[hoverCheck[0]][hoverCheck[1]].img}
-              alt={"이미지"}
-            ></img>
+              alt={"이미지"}></img>
           )}
 
-          <div className="imageScript">
-            {allData[hoverCheck[0]][hoverCheck[1]].description}
-          </div>
+          <div className="imageScript">{allData[hoverCheck[0]][hoverCheck[1]].description}</div>
         </HoverInfoConainer>
       ) : null}
       {Object.keys(resources).length !== 0
-        ? Object.keys(resources).map((item, index) => (
-            <MemoProductionControl key={index} planetName={item} />
+        ? Object.keys(resources).map((planetName, index) => (
+            <MemoProductionControl key={index} name={planetName} />
           ))
         : null}
       {/* ----------------------------------------------- */}

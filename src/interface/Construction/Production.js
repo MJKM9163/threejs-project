@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import styled from "styled-components";
+import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 
 const ProductionContainer = styled.div`
@@ -99,7 +100,14 @@ let delay = 500;
 let check = false;
 let up;
 
-export const Production = (props) => {
+export const Production = ({
+  awaitArray,
+  production,
+  productionArray,
+  resourcesIn,
+  resources,
+  name,
+}) => {
   const [render, setRender] = useState(false);
   const [reload, setReload] = useState(0);
   const completion = screenStore((state) => state.completion);
@@ -112,17 +120,23 @@ export const Production = (props) => {
         if (awaitArray[0][1] <= i) {
           clearTimeout(up);
           completion.push(awaitArray[0][0]);
-          screenStore.setState({
-            completion: completion,
+          planetStore.setState({
+            planetResources: {
+              ...resources,
+              [name.name]: { ...resourcesIn, completion: resourcesIn.completion },
+            },
           });
           awaitArray.shift();
-          screenStore.setState({
-            awaitArray: awaitArray,
+          planetStore.setState({
+            planetResources: {
+              ...resources,
+              [name.name]: { ...resourcesIn, awaitArray: resourcesIn.awaitArray },
+            },
           });
           check = false;
           setReload(i + 1); // 건설 완료 시점 랜더링 조정
           i = 0;
-          if (props.awaitArray.length > 0) {
+          if (awaitArray.length > 0) {
             numUp(delay, awaitArray, completion);
           }
         }
@@ -132,92 +146,102 @@ export const Production = (props) => {
   };
   // 20 / 100 = 0.2
   useEffect(() => {
-    if (props.awaitArray.length > 0) {
-      numUp(delay, props.awaitArray, completion);
+    if (resourcesIn.awaitArray.length > 0) {
+      numUp(delay, resourcesIn.awaitArray, resourcesIn.completion);
     }
   });
-
+  console.log(name.name);
+  console.log(planetStore.getState().planetResources[name.name]);
+  console.log(planetStore.getState().planetResources);
   console.log("생산 선택창 랜더링");
   return (
     <>
       <ProductionContainer>
-        {props.awaitArray}
-        {props.productionArray.map((item, index) =>
-          props.production[item].research ? (
+        {resourcesIn.awaitArray}
+        {resourcesIn.productionArray.map((item, index) =>
+          production[item].research ? (
             <div
               className="productionInfo"
               key={index}
               onClick={() => {
-                props.awaitArray.push([item, props.production[item].max]);
-                screenStore.setState({
-                  awaitArray: props.awaitArray,
+                resourcesIn.awaitArray.push([item, production[item].max]);
+                // screenStore.setState({
+                //   awaitArray: resourcesIn.awaitArray,
+                // });
+
+                planetStore.setState({
+                  planetResources: {
+                    ...resources,
+                    [name.name]: { ...resourcesIn, awaitArray: resourcesIn.awaitArray },
+                  },
                 });
-                props.productionArray.splice(
-                  props.productionArray.indexOf(item),
-                  1
-                );
-                screenStore.setState({
-                  productionArray: props.productionArray,
+                resourcesIn.productionArray.splice(resourcesIn.productionArray.indexOf(item), 1);
+                planetStore.setState({
+                  planetResources: {
+                    ...resources,
+                    [name.name]: { ...resourcesIn, productionArray: resourcesIn.productionArray },
+                  },
                 });
+                console.log("333333");
+                console.log(name);
+                console.log(resources);
+
                 setRender(!render);
                 screenStore.setState({ hoverCheck: false });
               }}
-              onMouseEnter={() =>
-                screenStore.setState({ hoverCheck: ["production", item] })
-              }
-              onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
-            >
-              <img
-                className="image"
-                src={props.production[item].img}
-                alt={"건물 이미지"}
-              ></img>
-              <div className="imageName">{props.production[item].name}</div>
+              onMouseEnter={() => screenStore.setState({ hoverCheck: ["production", item] })}
+              onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
+              <img className="image" src={production[item].img} alt={"건물 이미지"}></img>
+              <div className="imageName">{production[item].name}</div>
             </div>
           ) : null
         )}
       </ProductionContainer>
       <WaitingContainer
         num={
-          props.awaitArray.length !== 0
-            ? Math.floor((i / props.awaitArray[0][1]) * 100) + "%"
+          resourcesIn.awaitArray.length !== 0
+            ? Math.floor((i / resourcesIn.awaitArray[0][1]) * 100) + "%"
             : null
-        }
-      >
-        {props.awaitArray.length !== 0
-          ? props.awaitArray.map((item, index) => (
+        }>
+        {resourcesIn.awaitArray.length !== 0
+          ? resourcesIn.awaitArray.map((item, index) => (
               <div
                 className="waiting"
                 key={index}
                 onClick={() => {
-                  if (props.awaitArray[0][0] === item[0]) {
+                  if (resourcesIn.awaitArray[0][0] === item[0]) {
                     i = 0;
                   }
-                  props.productionArray.push(item[0]);
-                  screenStore.setState({
-                    productionArray: props.productionArray,
+                  resourcesIn.productionArray.push(item[0]);
+
+                  planetStore.setState({
+                    planetResources: {
+                      ...resources,
+                      [name.name]: { ...resourcesIn, productionArray: resourcesIn.productionArray },
+                    },
                   });
-                  props.awaitArray.splice(index, 1);
-                  screenStore.setState({
-                    awaitArray: props.awaitArray,
+
+                  resourcesIn.awaitArray.splice(index, 1);
+                  planetStore.setState({
+                    planetResources: {
+                      ...resources,
+                      [name.name]: { ...resourcesIn, awaitArray: resourcesIn.awaitArray },
+                    },
                   });
+
                   clearTimeout(up);
                   check = false;
                   setRender(!render);
                   console.log("대기 그림 클릭");
-                }}
-              >
+                }}>
                 <img
                   className="waitingImage"
-                  src={props.production[item[0]].img}
-                  alt={"건물 이미지"}
-                ></img>
-                <div className="waitingName">
-                  {props.production[item[0]].name}
-                </div>
+                  src={production[item[0]].img}
+                  alt={"건물 이미지"}></img>
+                <div className="waitingName">{production[item[0]].name}</div>
                 <div className="waitingTime">
-                  {props.awaitArray[0][0] === item[0]
-                    ? Math.floor((i / props.awaitArray[0][1]) * 100) + " %"
+                  {resourcesIn.awaitArray[0][0] === item[0]
+                    ? Math.floor((i / resourcesIn.awaitArray[0][1]) * 100) + " %"
                     : "대기 중.."}
                 </div>
               </div>

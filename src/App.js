@@ -8,9 +8,9 @@ import { PointLightHelper } from "three";
 import { Background } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
 import { PlanetInfo } from "./interface/PlanetInfo";
-import { ConstructionContainer } from "./interface/Construction/ConstructionContainer";
 import { useStore } from "./hooks/stores/useStore";
 import { planetStore } from "./hooks/stores/planetStore";
+import { ConstructionContainer } from "./interface/Construction/ConstructionContainer";
 
 const Light = () => {
   const pointLight = useRef();
@@ -41,6 +41,7 @@ const RightClick = (e) => {
 
   if (zoom === true) {
     useStore.setState({ zoom: false });
+    console.log("우클릭!");
   } else if (resources[planetName]?.hide === false) {
     for (let i = 0; i < Object.keys(resources).length; i++) {
       planetStore.getState().planetResources[Object.keys(resources)[i]].hide = true;
@@ -50,13 +51,24 @@ const RightClick = (e) => {
         ...resources,
       },
     });
+    console.log("우클릭!");
   } else {
     console.log("확대 / 건설 상태가 아닙니다");
   }
 };
+
+const mouseUpEventAllScreen = () => {
+  if (planetStore.getState().tapState.check === true) {
+    planetStore.setState({ tapState: { planetName: "???", check: false } });
+  }
+};
+
 document.addEventListener("contextmenu", RightClick);
+document.addEventListener("mouseup", mouseUpEventAllScreen);
 
 function App() {
+  // const test = planetStore.getState().planetResourcesl
+
   console.log("메인 랜더링 확인");
   return (
     <>

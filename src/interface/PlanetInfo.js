@@ -250,17 +250,13 @@ export const PlanetInfo = () => {
                 className="start"
                 style={{ display: mainPlanet ? "none" : "block" }}
                 onClick={() => {
-                  // planetStore
-                  //   .getState()
-                  //   .planetResourcesAdd(
-                  //     infoName.current,
-                  //     types[typeName.current].resources
-                  //   );
-
                   planetStore.setState({
                     planetResources: {
                       ...resources.current,
                       [infoName.current]: {
+                        productionArray: ["planetCurtain", "giantMiner"],
+                        awaitArray: [],
+                        completion: [],
                         resources: types[typeName.current].resources,
                         develop: true,
                         hide: true,

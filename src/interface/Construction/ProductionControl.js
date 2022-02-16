@@ -28,7 +28,7 @@ const ConstructionContainerDiv = styled.div`
   }
 `;
 
-export const ProductionControl = () => {
+export const ProductionControl = (name) => {
   let allData = screenStore.getState();
   let planetName = useStore.getState().name;
   const resources = planetStore((state) => state.planetResources);
@@ -50,14 +50,10 @@ export const ProductionControl = () => {
     );
   }, []);
 
+  console.log(" 생산 컨트롤 창");
   return (
     <ConstructionContainerDiv
-      indexnum={
-        resources[planetName]?.hide === undefined
-          ? true
-          : resources[planetName]?.hide
-      }
-    >
+      indexnum={resources[planetName]?.hide === undefined ? true : resources[planetName]?.hide}>
       <MemoResources />
       <div className="flexBox">
         <MemoLeftInfo planetName={planetName} resources={resources} />
@@ -65,6 +61,9 @@ export const ProductionControl = () => {
           awaitArray={allData.awaitArray}
           production={allData.production}
           productionArray={allData.productionArray}
+          resourcesIn={resources[name.name]}
+          resources={resources}
+          name={name}
         />
       </div>
     </ConstructionContainerDiv>

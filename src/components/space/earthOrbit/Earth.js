@@ -1,13 +1,14 @@
 import { useSphere } from "@react-three/cannon";
 import { Html, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Vector3 } from "three";
 //import { EffectModelSelect } from "../../../hooks/EffectModelSelect"; 잠시 주석처리
 import { EffectSelect } from "../../../hooks/EffectSelect";
 import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
+import { planetStore } from "../../../hooks/stores/planetStore";
 import { useStore } from "../../../hooks/stores/useStore";
-import { HtmlContainer } from "../../../interface/CanvasInHTML/HtmlContainer";
+import { TapPlanet } from "../../../interface/CanvasInHTML/TapPlanet";
 import { OrbitLine } from "../OrbitLine";
 
 let a = 0;
@@ -15,11 +16,28 @@ let Pname = null;
 let effects;
 let effectsModels;
 
+let onTimer;
+
 export const Earth = ({ SetUp, ...props }) => {
   const effectRef = useRef();
+  const html = useRef();
   const { nodes, materials } = useGLTF("/mainPlanet/scene.gltf");
 
   const argsSize = useRef(useStore.getState().size);
+  const tap = useRef(planetStore.getState().tapState);
+
+  useEffect(() => {
+    planetStore.subscribe(
+      (state) => (tap.current = state.tapState),
+      (state) => state.tapState
+    );
+  });
+
+  const timer = () => {
+    onTimer = setTimeout(() => {
+      html.current.style.display = "block";
+    }, 300);
+  };
 
   const earthWorldPosition = new Vector3();
   const [earthRef, earthApi] = useSphere(() => ({
@@ -40,20 +58,30 @@ export const Earth = ({ SetUp, ...props }) => {
     earthApi.rotation.set(0, (a += 0.005), 0);
     earthRef.current?.getWorldPosition(earthWorldPosition);
     effectRef.current.rotation.set(0, a - 0.002, a - 0.003);
+
+    if (tap.current?.check === false) {
+      html.current.style.display = "none";
+    }
   });
 
   console.log("earth 랜더링 확인");
   return (
     <>
       <group ref={earthRef} dispose={null}>
-        <Html>
-          <HtmlContainer />
+        <Html ref={html}>
+          <TapPlanet planet={Pname} />
         </Html>
         <group rotation={[-Math.PI / 2, 0, 0]} scale={1.9}>
           <mesh
             castShadow
             onClick={(e) => {
               SetUp(earthWorldPosition, Pname, "지구형", argsSize.current["middle"], effects);
+            }}
+            onPointerDown={(e) => {
+              timer();
+            }}
+            onPointerUp={(e) => {
+              clearTimeout(onTimer);
             }}
             geometry={nodes.mesh_0.geometry}
             material={materials.Material__25}
