@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { planetStore } from "../../hooks/stores/planetStore";
+import { screenStore } from "../../hooks/stores/screenStore";
 
 const TapPlanetDiv = styled.div`
   display: flex;
@@ -58,14 +58,14 @@ export const TapPlanet = ({ planet }) => {
       <svg
         viewBox="100 0 100 200"
         onMouseUp={() => {
-          planetStore.setState({ tapState: { planetName: "???", check: false } });
+          screenStore.setState({ tapState: { planetName: "???", check: false } });
         }}>
         <circle
           style={{ opacity: opacity.top }}
           onMouseOver={() => setOpacity({ ...opacity, top: 0.5 })}
           onMouseLeave={() => setOpacity({ ...opacity, top: 0.8 })}
           onMouseUp={() => {
-            planetStore.setState({ tapState: { planetName: planet, check: false } });
+            screenStore.setState({ tapState: { planetName: planet, check: false } });
             console.log("스카이 블루");
           }}
           cx="100"
@@ -82,7 +82,7 @@ export const TapPlanet = ({ planet }) => {
           onMouseOver={() => setOpacity({ ...opacity, buttom: 0.5 })}
           onMouseLeave={() => setOpacity({ ...opacity, buttom: 0.8 })}
           onMouseUp={() => {
-            planetStore.setState({ tapState: { planetName: planet, check: false } });
+            screenStore.setState({ tapState: { planetName: planet, check: false } });
             console.log("미스티 로즈");
           }}
           cx="100"

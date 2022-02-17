@@ -6,10 +6,11 @@ const ResourcesContainer = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
-  bottom: 200px;
-  width: 50%;
+  left: 50vw;
+  bottom: 95vh;
+  width: 30%;
   height: 40px;
-  transform: translate(50%);
+  transform: translate(-50%);
 
   div {
     display: flex;
@@ -45,59 +46,35 @@ export const Resources = (props) => {
   return (
     <ResourcesContainer>
       <div
-        onMouseEnter={() =>
-          screenStore.setState({ hoverCheck: ["images", "potato"] })
-        }
-        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
-      >
-        <img
-          src="images/resources/icons/corn.png"
-          width={25}
-          height={25}
-          alt="식량 자원"
-        ></img>
+        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "potato"] })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
+        <img src="images/resources/icons/corn.png" width={25} height={25} alt="식량 자원"></img>
         <span>0</span>
       </div>
       <div
-        onMouseEnter={() =>
-          screenStore.setState({ hoverCheck: ["images", "titanium"] })
-        }
-        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
-      >
+        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "titanium"] })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img
           src="images/resources/icons/titanium.png"
           width={25}
           height={25}
-          alt="티타늄 자원"
-        ></img>
+          alt="티타늄 자원"></img>
         <span>0</span>
       </div>
       <div
-        onMouseEnter={() =>
-          screenStore.setState({ hoverCheck: ["images", "orichalcon"] })
-        }
-        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
-      >
+        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "orichalcon"] })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img
           src="images/resources/icons/orichalcon.png"
           width={25}
           height={25}
-          alt="오리하르콘 자원"
-        ></img>
+          alt="오리하르콘 자원"></img>
         <span>0</span>
       </div>
       <div
-        onMouseEnter={() =>
-          screenStore.setState({ hoverCheck: ["images", "science"] })
-        }
-        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}
-      >
-        <img
-          src="images/resources/icons/flask.png"
-          width={25}
-          height={25}
-          alt="과학 자원"
-        ></img>
+        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "science"] })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
+        <img src="images/resources/icons/flask.png" width={25} height={25} alt="과학 자원"></img>
         <span>0</span>
       </div>
     </ResourcesContainer>

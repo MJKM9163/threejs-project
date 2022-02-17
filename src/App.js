@@ -11,6 +11,8 @@ import { PlanetInfo } from "./interface/PlanetInfo";
 import { useStore } from "./hooks/stores/useStore";
 import { planetStore } from "./hooks/stores/planetStore";
 import { ConstructionContainer } from "./interface/Construction/ConstructionContainer";
+import { screenStore } from "./hooks/stores/screenStore";
+import { RightOption } from "./interface/SideTap/RightOption";
 
 const Light = () => {
   const pointLight = useRef();
@@ -40,6 +42,9 @@ const RightClick = (e) => {
   let resources = planetStore.getState().planetResources;
 
   if (zoom === true) {
+    setTimeout(() => {
+      useStore.setState({ mainPlanet: false });
+    }, 500);
     useStore.setState({ zoom: false });
   } else if (resources[planetName]?.hide === false) {
     for (let i = 0; i < Object.keys(resources).length; i++) {
@@ -56,8 +61,8 @@ const RightClick = (e) => {
 };
 
 const mouseUpEventAllScreen = () => {
-  if (planetStore.getState().tapState.check === true) {
-    planetStore.setState({ tapState: { planetName: "???", check: false } });
+  if (screenStore.getState().tapState.check === true) {
+    screenStore.setState({ tapState: { planetName: "???", check: false } });
   }
 };
 
@@ -72,6 +77,7 @@ function App() {
     <>
       <PlanetInfo />
       <ConstructionContainer />
+      <RightOption />
       <Canvas
         shadows
         colorManagement

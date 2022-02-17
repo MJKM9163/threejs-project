@@ -3,9 +3,10 @@ import { Html, useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { planetStore } from "../../hooks/stores/planetStore";
+import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
 import { TapPlanet } from "../../interface/CanvasInHTML/TapPlanet";
+import { LeftInfoBox } from "../../interface/LeftInfo/LeftInfoBox";
 
 const HtmlDiv = styled(Html)`
   display: ${(props) => (props.check ? "block" : "none")};
@@ -16,11 +17,20 @@ let onTimer;
 
 export const Sun = ({ SetUp, ...props }) => {
   const html = useRef();
+  const infoRef = useRef();
+
   const argsSize = useRef(useStore.getState().size);
-  const tap = useRef(planetStore.getState().tapState);
+  const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
+  const tap = useRef(screenStore.getState().tapState);
 
   useEffect(() => {
-    planetStore.subscribe(
+    screenStore.subscribe(
+      (state) => (leftInfoOnOff.current = state.leftInfoOnOff),
+      (state) => state.leftInfoOnOff
+    );
+  });
+  useEffect(() => {
+    screenStore.subscribe(
       (state) => (tap.current = state.tapState),
       (state) => state.tapState
     );
@@ -46,6 +56,11 @@ export const Sun = ({ SetUp, ...props }) => {
     if (tap.current?.check === false) {
       html.current.style.display = "none";
     }
+    if (leftInfoOnOff?.current === false) {
+      infoRef.current.style.display = "none";
+    } else if (leftInfoOnOff?.current === true) {
+      infoRef.current.style.display = "block";
+    }
   });
 
   console.log("태양 랜더링 확인");
@@ -55,6 +70,9 @@ export const Sun = ({ SetUp, ...props }) => {
         <HtmlDiv ref={html} check={tap.current.check}>
           <TapPlanet planet={"태양"} />
         </HtmlDiv>
+        <Html ref={infoRef} center distanceFactor={10000}>
+          <LeftInfoBox planet={"태양"} />
+        </Html>
         <group rotation={[-Math.PI / 2, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]}>
             <group rotation={[-Math.PI / 2, 0, 0]}>

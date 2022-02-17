@@ -1,8 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
-import { useStore } from "../../hooks/stores/useStore";
 
 const ProductionContainer = styled.div`
   width: 50%;
@@ -101,30 +99,10 @@ let delay = 500;
 let check = false;
 let up;
 
-export const Production = ({ production, planetName }) => {
+export const Production = ({ allData }) => {
   const [render, setRender] = useState(false);
   const [reload, setReload] = useState(0);
-  const resources = planetStore((state) => state.planetResources);
-  let name = useRef(useStore.getState().name);
-  // let resourcesRef = useRef(planetStore.getState().planetResources);
-  // let resources = resourcesRef.current;
-
-  useEffect(() => {
-    useStore.subscribe(
-      (state) => state.name,
-      (state) => {
-        name.current = state;
-      }
-    );
-  }, []);
-  // useEffect(() => {
-  //   planetStore.subscribe(
-  //     (state) => state.planetResources,
-  //     (state) => {
-  //       resourcesRef.current = state;
-  //     }
-  //   );
-  // }, []);
+  const completion = screenStore((state) => state.completion);
 
   const numUp = (delay, awaitArray, completion) => {
     if (check === false) {
@@ -134,29 +112,17 @@ export const Production = ({ production, planetName }) => {
         if (awaitArray[0][1] <= i) {
           clearTimeout(up);
           completion.push(awaitArray[0][0]);
-          planetStore.setState({
-            planetResources: {
-              ...resources[name.current],
-              [name.current]: {
-                ...resources[name.current],
-                completion: resources[name.current].completion,
-              },
-            },
+          screenStore.setState({
+            completion: completion,
           });
           awaitArray.shift();
-          planetStore.setState({
-            planetResources: {
-              ...resources,
-              [name.current]: {
-                ...resources[name.current],
-                awaitArray: resources[name.current].awaitArray,
-              },
-            },
+          screenStore.setState({
+            awaitArray: awaitArray,
           });
           check = false;
           setReload(i + 1); // 건설 완료 시점 랜더링 조정
           i = 0;
-          if (awaitArray.length > 0) {
+          if (allData.awaitArray.length > 0) {
             numUp(delay, awaitArray, completion);
           }
         }
@@ -166,184 +132,82 @@ export const Production = ({ production, planetName }) => {
   };
   // 20 / 100 = 0.2
   useEffect(() => {
-    if (resources[name.current].awaitArray.length > 0) {
-      numUp(delay, resources[name.current].awaitArray, resources[name.current].completion);
+    if (allData.awaitArray.length > 0) {
+      numUp(delay, allData.awaitArray, completion);
     }
   });
-  console.log(name.current, "현재 선택 된 이름");
-  console.log(planetName.name);
-  console.log(name.current === planetName.name);
-  console.log(resources[name.current]);
+
   console.log("생산 선택창 랜더링");
   return (
     <>
       <ProductionContainer>
-        {/* {resourcesIn.awaitArray} */}
-        {resources[name.current].productionArray.map((item, index) =>
-          production[item].research ? (
+        {allData.awaitArray}
+        {allData.productionArray.map((item, index) =>
+          allData.production[item].research ? (
             <div
               className="productionInfo"
               key={index}
               onClick={() => {
-                if (useStore.getState().name === name.current) {
-                  resources[name.current].awaitArray.push([item, production[item].max]);
+                allData.awaitArray.push([item, allData.production[item].max]);
 
-                  planetStore.setState({
-                    planetResources: {
-                      ...resources,
-                      [name.current]: {
-                        ...resources[name.current],
-                        awaitArray: resources[name.current].awaitArray,
-                      },
-                    },
-                  });
-                  resources[name.current].productionArray.splice(
-                    resources[name.current].productionArray.indexOf(item),
-                    1
-                  );
-                  planetStore.setState({
-                    planetResources: {
-                      ...resources,
-                      [name.current]: {
-                        ...resources[name.current],
-                        productionArray: resources[name.current].productionArray,
-                      },
-                    },
-                  });
+                screenStore.setState({
+                  awaitArray: allData.awaitArray,
+                });
+                allData.productionArray.splice(allData.productionArray.indexOf(item), 1);
+                screenStore.setState({
+                  productionArray: allData.productionArray,
+                });
 
-                  //setRender(!render);
-                  screenStore.setState({ hoverCheck: false });
-                }
+                setRender(!render);
+                screenStore.setState({ hoverCheck: false });
               }}
               onMouseEnter={() => screenStore.setState({ hoverCheck: ["production", item] })}
               onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
-              <img className="image" src={production[item].img} alt={"건물 이미지"}></img>
-              <div className="imageName">{production[item].name}</div>
+              <img className="image" src={allData.production[item].img} alt={"건물 이미지"}></img>
+              <div className="imageName">{allData.production[item].name}</div>
             </div>
           ) : null
         )}
       </ProductionContainer>
-      {/* {name.current === planetName.name ? (
-        <WaitingContainer
-          num={
-            resources[name.current].awaitArray.length !== 0
-              ? Math.floor((i / resources[name.current].awaitArray[0][1]) * 100) + "%"
-              : null
-          }
-          style={{ zIndex: name.current === planetName.name ? 5 : -5 }}>
-          {resources[name.current].awaitArray.length !== 0
-            ? resources[name.current].awaitArray.map((item, index) => (
-                <div
-                  className="waiting"
-                  key={index}
-                  onClick={() => {
-                    if (useStore.getState().name === name.current) {
-                      if (resources[name.current].awaitArray[0][0] === item[0]) {
-                        i = 0;
-                      }
-                      resources[name.current].productionArray.push(item[0]);
-
-                      planetStore.setState({
-                        planetResources: {
-                          ...resources,
-                          [name.current]: {
-                            ...resources[name.current],
-                            productionArray: resources[name.current].productionArray,
-                          },
-                        },
-                      });
-
-                      resources[name.current].awaitArray.splice(index, 1);
-                      planetStore.setState({
-                        planetResources: {
-                          ...resources,
-                          [name.current]: {
-                            ...resources[name.current],
-                            awaitArray: resources[name.current].awaitArray,
-                          },
-                        },
-                      });
-
-                      clearTimeout(up);
-                      check = false;
-                      //setRender(!render);
-                      console.log("대기 그림 클릭");
-                    }
-                  }}>
-                  <img
-                    className="waitingImage"
-                    src={production[item[0]].img}
-                    alt={"건물 이미지"}></img>
-                  <div className="waitingName">{production[item[0]].name}</div>
-                  <div className="waitingTime">
-                    {resources[name.current].awaitArray[0][0] === item[0]
-                      ? Math.floor((i / resources[name.current].awaitArray[0][1]) * 100) + " %"
-                      : "대기 중.."}
-                  </div>
-                </div>
-              ))
-            : null}
-        </WaitingContainer>
-      ) : null} */}
       <WaitingContainer
         num={
-          resources[name.current].awaitArray.length !== 0
-            ? Math.floor((i / resources[name.current].awaitArray[0][1]) * 100) + "%"
+          allData.awaitArray.length !== 0
+            ? Math.floor((i / allData.awaitArray[0][1]) * 100) + "%"
             : null
         }>
-        {resources[name.current].awaitArray.length !== 0
-          ? resources[name.current].awaitArray.map((item, index) => (
+        {allData.awaitArray.length !== 0
+          ? allData.awaitArray.map((item, index) => (
               <div
                 className="waiting"
                 key={index}
                 onClick={() => {
-                  if (useStore.getState().name === name.current) {
-                    if (resources[name.current].awaitArray[0][0] === item[0]) {
-                      i = 0;
-                    }
-                    resources[name.current].productionArray.push(item[0]);
-
-                    planetStore.setState({
-                      planetResources: {
-                        ...resources,
-                        [name.current]: {
-                          ...resources[name.current],
-                          productionArray: resources[name.current].productionArray,
-                        },
-                      },
-                    });
-
-                    resources[name.current].awaitArray.splice(index, 1);
-                    planetStore.setState({
-                      planetResources: {
-                        ...resources,
-                        [name.current]: {
-                          ...resources[name.current],
-                          awaitArray: resources[name.current].awaitArray,
-                        },
-                      },
-                    });
-
-                    clearTimeout(up);
-                    check = false;
-                    //setRender(!render);
-                    console.log("대기 그림 클릭");
+                  if (allData.awaitArray[0][0] === item[0]) {
+                    i = 0;
                   }
+                  allData.productionArray.push(item[0]);
+
+                  screenStore.setState({
+                    productionArray: allData.productionArray,
+                  });
+
+                  allData.awaitArray.splice(index, 1);
+                  screenStore.setState({
+                    awaitArray: allData.awaitArray,
+                  });
+
+                  clearTimeout(up);
+                  check = false;
+                  setRender(!render);
+                  console.log("대기 그림 클릭");
                 }}>
                 <img
                   className="waitingImage"
-                  src={production[item[0]].img}
+                  src={allData.production[item[0]].img}
                   alt={"건물 이미지"}></img>
-                <div className="waitingName">{production[item[0]].name}</div>
+                <div className="waitingName">{allData.production[item[0]].name}</div>
                 <div className="waitingTime">
-                  {/* {name.current === planetName.name
-                    ? resources[name.current].awaitArray[0][0] === item[0]
-                      ? Math.floor((i / resources[name.current].awaitArray[0][1]) * 100) + " %"
-                      : "대기 중.."
-                    : null} */}
-
-                  {resources[name.current].awaitArray[0][0] === item[0]
-                    ? Math.floor((i / resources[name.current].awaitArray[0][1]) * 100) + " %"
+                  {allData.awaitArray[0][0] === item[0]
+                    ? Math.floor((i / allData.awaitArray[0][1]) * 100) + " %"
                     : "대기 중.."}
                 </div>
               </div>

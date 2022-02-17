@@ -39,7 +39,6 @@ export const planetStore = create(
       "???": { climate: null },
     },
 
-    tapState: { planetName: "???", check: false },
     planetResources: [],
   }))
 );

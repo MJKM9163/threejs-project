@@ -6,9 +6,10 @@ import styled from "styled-components";
 import { Vector3 } from "three";
 import { EffectSelect } from "../../../hooks/EffectSelect";
 import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
-import { planetStore } from "../../../hooks/stores/planetStore";
+import { screenStore } from "../../../hooks/stores/screenStore";
 import { useStore } from "../../../hooks/stores/useStore";
 import { TapPlanet } from "../../../interface/CanvasInHTML/TapPlanet";
+import { LeftInfoBox } from "../../../interface/LeftInfo/LeftInfoBox";
 import { OrbitLine } from "../OrbitLine";
 
 const HtmlDiv = styled(Html)`
@@ -23,13 +24,21 @@ let effects = [];
 
 export const Unknown = ({ SetUp, ...props }) => {
   const html = useRef();
+  const infoRef = useRef();
   const { nodes, materials } = useGLTF("/unknown/scene.gltf");
 
   const argsSize = useRef(useStore.getState().size);
-  const tap = useRef(planetStore.getState().tapState);
+  const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
+  const tap = useRef(screenStore.getState().tapState);
 
   useEffect(() => {
-    planetStore.subscribe(
+    screenStore.subscribe(
+      (state) => (leftInfoOnOff.current = state.leftInfoOnOff),
+      (state) => state.leftInfoOnOff
+    );
+  });
+  useEffect(() => {
+    screenStore.subscribe(
       (state) => (tap.current = state.tapState),
       (state) => state.tapState
     );
@@ -60,7 +69,14 @@ export const Unknown = ({ SetUp, ...props }) => {
 
     if (tap.current?.check === false) {
       html.current.style.display = "none";
-      planetStore.getState().tapState.check = true;
+      screenStore.getState().tapState.check = true;
+    }
+    if (leftInfoOnOff?.current === false) {
+      infoRef.current.style.display = "none";
+      screenStore.getState().leftInfoOnOff = "false";
+    } else if (leftInfoOnOff?.current === true) {
+      infoRef.current.style.display = "block";
+      screenStore.getState().leftInfoOnOff = "true";
     }
   });
 
@@ -71,6 +87,9 @@ export const Unknown = ({ SetUp, ...props }) => {
         <HtmlDiv ref={html} check={tap.current.check}>
           <TapPlanet planet={Pname} />
         </HtmlDiv>
+        <Html ref={infoRef} center distanceFactor={10000}>
+          <LeftInfoBox planet={Pname} />
+        </Html>
         <group rotation={[-Math.PI / 2, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]}>
             <group

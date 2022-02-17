@@ -81,7 +81,6 @@ export const ConstructionContainer = () => {
     );
   }, []);
 
-  console.log(Object.keys(resources));
   console.log("행성 관리창 랜더링");
   return (
     <>
@@ -108,29 +107,7 @@ export const ConstructionContainer = () => {
           <div className="imageScript">{allData[hoverCheck[0]][hoverCheck[1]].description}</div>
         </HoverInfoConainer>
       ) : null}
-      {Object.keys(resources).length !== 0
-        ? Object.keys(resources).map((planetName, index) => (
-            <MemoProductionControl key={index} name={planetName} />
-          ))
-        : null}
-      {/* ----------------------------------------------- */}
-      {/* <ConstructionContainerDiv
-        indexnum={
-          resources[planetName]?.hide === undefined
-            ? true
-            : resources[planetName]?.hide
-        }
-      >
-        <MemoResources />
-        <div className="flexBox">
-          <MemoLeftInfo planetName={planetName} resources={resources} />
-          <MemoProduction
-            awaitArray={allData.awaitArray}
-            production={allData.production}
-            productionArray={allData.productionArray}
-          />
-        </div>
-      </ConstructionContainerDiv> */}
+      <MemoProductionControl />
     </>
   );
 };

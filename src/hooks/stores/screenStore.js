@@ -39,6 +39,12 @@ export const screenStore = create(
     // hover Check
     hoverCheck: false,
 
+    // left Info on/off
+    leftInfoOnOff: false,
+
+    // tap
+    tapState: { planetName: "???", check: false },
+
     // 대기열
     awaitArray: [],
 

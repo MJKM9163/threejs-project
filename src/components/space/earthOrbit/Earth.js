@@ -6,9 +6,10 @@ import { Vector3 } from "three";
 //import { EffectModelSelect } from "../../../hooks/EffectModelSelect"; 잠시 주석처리
 import { EffectSelect } from "../../../hooks/EffectSelect";
 import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
-import { planetStore } from "../../../hooks/stores/planetStore";
+import { screenStore } from "../../../hooks/stores/screenStore";
 import { useStore } from "../../../hooks/stores/useStore";
 import { TapPlanet } from "../../../interface/CanvasInHTML/TapPlanet";
+import { LeftInfoBox } from "../../../interface/LeftInfo/LeftInfoBox";
 import { OrbitLine } from "../OrbitLine";
 
 let a = 0;
@@ -20,14 +21,22 @@ let onTimer;
 
 export const Earth = ({ SetUp, ...props }) => {
   const effectRef = useRef();
-  const html = useRef();
+  const tapRef = useRef();
+  const infoRef = useRef();
   const { nodes, materials } = useGLTF("/mainPlanet/scene.gltf");
 
   const argsSize = useRef(useStore.getState().size);
-  const tap = useRef(planetStore.getState().tapState);
+  const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
+  const tap = useRef(screenStore.getState().tapState);
 
   useEffect(() => {
-    planetStore.subscribe(
+    screenStore.subscribe(
+      (state) => (leftInfoOnOff.current = state.leftInfoOnOff),
+      (state) => state.leftInfoOnOff
+    );
+  });
+  useEffect(() => {
+    screenStore.subscribe(
       (state) => (tap.current = state.tapState),
       (state) => state.tapState
     );
@@ -35,7 +44,7 @@ export const Earth = ({ SetUp, ...props }) => {
 
   const timer = () => {
     onTimer = setTimeout(() => {
-      html.current.style.display = "block";
+      tapRef.current.style.display = "block";
     }, 300);
   };
 
@@ -60,7 +69,12 @@ export const Earth = ({ SetUp, ...props }) => {
     effectRef.current.rotation.set(0, a - 0.002, a - 0.003);
 
     if (tap.current?.check === false) {
-      html.current.style.display = "none";
+      tapRef.current.style.display = "none";
+    }
+    if (leftInfoOnOff?.current === false) {
+      infoRef.current.style.display = "none";
+    } else if (leftInfoOnOff?.current === true) {
+      infoRef.current.style.display = "block";
     }
   });
 
@@ -68,8 +82,11 @@ export const Earth = ({ SetUp, ...props }) => {
   return (
     <>
       <group ref={earthRef} dispose={null}>
-        <Html ref={html}>
+        <Html ref={tapRef}>
           <TapPlanet planet={Pname} />
+        </Html>
+        <Html ref={infoRef} center distanceFactor={10000}>
+          <LeftInfoBox planet={Pname} />
         </Html>
         <group rotation={[-Math.PI / 2, 0, 0]} scale={1.9}>
           <mesh

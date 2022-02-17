@@ -254,9 +254,6 @@ export const PlanetInfo = () => {
                     planetResources: {
                       ...resources.current,
                       [infoName.current]: {
-                        productionArray: ["planetCurtain", "giantMiner"],
-                        awaitArray: [],
-                        completion: [],
                         resources: types[typeName.current].resources,
                         develop: true,
                         hide: true,
