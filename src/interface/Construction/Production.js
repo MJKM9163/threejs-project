@@ -1,7 +1,8 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
+import { useStore } from "../../hooks/stores/useStore";
 
 const ProductionContainer = styled.div`
   width: 50%;
@@ -100,17 +101,30 @@ let delay = 500;
 let check = false;
 let up;
 
-export const Production = ({
-  awaitArray,
-  production,
-  productionArray,
-  resourcesIn,
-  resources,
-  name,
-}) => {
+export const Production = ({ production, planetName }) => {
   const [render, setRender] = useState(false);
   const [reload, setReload] = useState(0);
-  const completion = screenStore((state) => state.completion);
+  const resources = planetStore((state) => state.planetResources);
+  let name = useRef(useStore.getState().name);
+  // let resourcesRef = useRef(planetStore.getState().planetResources);
+  // let resources = resourcesRef.current;
+
+  useEffect(() => {
+    useStore.subscribe(
+      (state) => state.name,
+      (state) => {
+        name.current = state;
+      }
+    );
+  }, []);
+  // useEffect(() => {
+  //   planetStore.subscribe(
+  //     (state) => state.planetResources,
+  //     (state) => {
+  //       resourcesRef.current = state;
+  //     }
+  //   );
+  // }, []);
 
   const numUp = (delay, awaitArray, completion) => {
     if (check === false) {
@@ -122,15 +136,21 @@ export const Production = ({
           completion.push(awaitArray[0][0]);
           planetStore.setState({
             planetResources: {
-              ...resources,
-              [name.name]: { ...resourcesIn, completion: resourcesIn.completion },
+              ...resources[name.current],
+              [name.current]: {
+                ...resources[name.current],
+                completion: resources[name.current].completion,
+              },
             },
           });
           awaitArray.shift();
           planetStore.setState({
             planetResources: {
               ...resources,
-              [name.name]: { ...resourcesIn, awaitArray: resourcesIn.awaitArray },
+              [name.current]: {
+                ...resources[name.current],
+                awaitArray: resources[name.current].awaitArray,
+              },
             },
           });
           check = false;
@@ -146,48 +166,54 @@ export const Production = ({
   };
   // 20 / 100 = 0.2
   useEffect(() => {
-    if (resourcesIn.awaitArray.length > 0) {
-      numUp(delay, resourcesIn.awaitArray, resourcesIn.completion);
+    if (resources[name.current].awaitArray.length > 0) {
+      numUp(delay, resources[name.current].awaitArray, resources[name.current].completion);
     }
   });
-  console.log(name.name);
-  console.log(planetStore.getState().planetResources[name.name]);
-  console.log(planetStore.getState().planetResources);
+  console.log(name.current, "현재 선택 된 이름");
+  console.log(planetName.name);
+  console.log(name.current === planetName.name);
+  console.log(resources[name.current]);
   console.log("생산 선택창 랜더링");
   return (
     <>
       <ProductionContainer>
-        {resourcesIn.awaitArray}
-        {resourcesIn.productionArray.map((item, index) =>
+        {/* {resourcesIn.awaitArray} */}
+        {resources[name.current].productionArray.map((item, index) =>
           production[item].research ? (
             <div
               className="productionInfo"
               key={index}
               onClick={() => {
-                resourcesIn.awaitArray.push([item, production[item].max]);
-                // screenStore.setState({
-                //   awaitArray: resourcesIn.awaitArray,
-                // });
+                if (useStore.getState().name === name.current) {
+                  resources[name.current].awaitArray.push([item, production[item].max]);
 
-                planetStore.setState({
-                  planetResources: {
-                    ...resources,
-                    [name.name]: { ...resourcesIn, awaitArray: resourcesIn.awaitArray },
-                  },
-                });
-                resourcesIn.productionArray.splice(resourcesIn.productionArray.indexOf(item), 1);
-                planetStore.setState({
-                  planetResources: {
-                    ...resources,
-                    [name.name]: { ...resourcesIn, productionArray: resourcesIn.productionArray },
-                  },
-                });
-                console.log("333333");
-                console.log(name);
-                console.log(resources);
+                  planetStore.setState({
+                    planetResources: {
+                      ...resources,
+                      [name.current]: {
+                        ...resources[name.current],
+                        awaitArray: resources[name.current].awaitArray,
+                      },
+                    },
+                  });
+                  resources[name.current].productionArray.splice(
+                    resources[name.current].productionArray.indexOf(item),
+                    1
+                  );
+                  planetStore.setState({
+                    planetResources: {
+                      ...resources,
+                      [name.current]: {
+                        ...resources[name.current],
+                        productionArray: resources[name.current].productionArray,
+                      },
+                    },
+                  });
 
-                setRender(!render);
-                screenStore.setState({ hoverCheck: false });
+                  //setRender(!render);
+                  screenStore.setState({ hoverCheck: false });
+                }
               }}
               onMouseEnter={() => screenStore.setState({ hoverCheck: ["production", item] })}
               onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
@@ -197,42 +223,112 @@ export const Production = ({
           ) : null
         )}
       </ProductionContainer>
+      {/* {name.current === planetName.name ? (
+        <WaitingContainer
+          num={
+            resources[name.current].awaitArray.length !== 0
+              ? Math.floor((i / resources[name.current].awaitArray[0][1]) * 100) + "%"
+              : null
+          }
+          style={{ zIndex: name.current === planetName.name ? 5 : -5 }}>
+          {resources[name.current].awaitArray.length !== 0
+            ? resources[name.current].awaitArray.map((item, index) => (
+                <div
+                  className="waiting"
+                  key={index}
+                  onClick={() => {
+                    if (useStore.getState().name === name.current) {
+                      if (resources[name.current].awaitArray[0][0] === item[0]) {
+                        i = 0;
+                      }
+                      resources[name.current].productionArray.push(item[0]);
+
+                      planetStore.setState({
+                        planetResources: {
+                          ...resources,
+                          [name.current]: {
+                            ...resources[name.current],
+                            productionArray: resources[name.current].productionArray,
+                          },
+                        },
+                      });
+
+                      resources[name.current].awaitArray.splice(index, 1);
+                      planetStore.setState({
+                        planetResources: {
+                          ...resources,
+                          [name.current]: {
+                            ...resources[name.current],
+                            awaitArray: resources[name.current].awaitArray,
+                          },
+                        },
+                      });
+
+                      clearTimeout(up);
+                      check = false;
+                      //setRender(!render);
+                      console.log("대기 그림 클릭");
+                    }
+                  }}>
+                  <img
+                    className="waitingImage"
+                    src={production[item[0]].img}
+                    alt={"건물 이미지"}></img>
+                  <div className="waitingName">{production[item[0]].name}</div>
+                  <div className="waitingTime">
+                    {resources[name.current].awaitArray[0][0] === item[0]
+                      ? Math.floor((i / resources[name.current].awaitArray[0][1]) * 100) + " %"
+                      : "대기 중.."}
+                  </div>
+                </div>
+              ))
+            : null}
+        </WaitingContainer>
+      ) : null} */}
       <WaitingContainer
         num={
-          resourcesIn.awaitArray.length !== 0
-            ? Math.floor((i / resourcesIn.awaitArray[0][1]) * 100) + "%"
+          resources[name.current].awaitArray.length !== 0
+            ? Math.floor((i / resources[name.current].awaitArray[0][1]) * 100) + "%"
             : null
         }>
-        {resourcesIn.awaitArray.length !== 0
-          ? resourcesIn.awaitArray.map((item, index) => (
+        {resources[name.current].awaitArray.length !== 0
+          ? resources[name.current].awaitArray.map((item, index) => (
               <div
                 className="waiting"
                 key={index}
                 onClick={() => {
-                  if (resourcesIn.awaitArray[0][0] === item[0]) {
-                    i = 0;
+                  if (useStore.getState().name === name.current) {
+                    if (resources[name.current].awaitArray[0][0] === item[0]) {
+                      i = 0;
+                    }
+                    resources[name.current].productionArray.push(item[0]);
+
+                    planetStore.setState({
+                      planetResources: {
+                        ...resources,
+                        [name.current]: {
+                          ...resources[name.current],
+                          productionArray: resources[name.current].productionArray,
+                        },
+                      },
+                    });
+
+                    resources[name.current].awaitArray.splice(index, 1);
+                    planetStore.setState({
+                      planetResources: {
+                        ...resources,
+                        [name.current]: {
+                          ...resources[name.current],
+                          awaitArray: resources[name.current].awaitArray,
+                        },
+                      },
+                    });
+
+                    clearTimeout(up);
+                    check = false;
+                    //setRender(!render);
+                    console.log("대기 그림 클릭");
                   }
-                  resourcesIn.productionArray.push(item[0]);
-
-                  planetStore.setState({
-                    planetResources: {
-                      ...resources,
-                      [name.name]: { ...resourcesIn, productionArray: resourcesIn.productionArray },
-                    },
-                  });
-
-                  resourcesIn.awaitArray.splice(index, 1);
-                  planetStore.setState({
-                    planetResources: {
-                      ...resources,
-                      [name.name]: { ...resourcesIn, awaitArray: resourcesIn.awaitArray },
-                    },
-                  });
-
-                  clearTimeout(up);
-                  check = false;
-                  setRender(!render);
-                  console.log("대기 그림 클릭");
                 }}>
                 <img
                   className="waitingImage"
@@ -240,8 +336,14 @@ export const Production = ({
                   alt={"건물 이미지"}></img>
                 <div className="waitingName">{production[item[0]].name}</div>
                 <div className="waitingTime">
-                  {resourcesIn.awaitArray[0][0] === item[0]
-                    ? Math.floor((i / resourcesIn.awaitArray[0][1]) * 100) + " %"
+                  {/* {name.current === planetName.name
+                    ? resources[name.current].awaitArray[0][0] === item[0]
+                      ? Math.floor((i / resources[name.current].awaitArray[0][1]) * 100) + " %"
+                      : "대기 중.."
+                    : null} */}
+
+                  {resources[name.current].awaitArray[0][0] === item[0]
+                    ? Math.floor((i / resources[name.current].awaitArray[0][1]) * 100) + " %"
                     : "대기 중.."}
                 </div>
               </div>

@@ -41,7 +41,6 @@ const RightClick = (e) => {
 
   if (zoom === true) {
     useStore.setState({ zoom: false });
-    console.log("우클릭!");
   } else if (resources[planetName]?.hide === false) {
     for (let i = 0; i < Object.keys(resources).length; i++) {
       planetStore.getState().planetResources[Object.keys(resources)[i]].hide = true;
@@ -51,7 +50,6 @@ const RightClick = (e) => {
         ...resources,
       },
     });
-    console.log("우클릭!");
   } else {
     console.log("확대 / 건설 상태가 아닙니다");
   }

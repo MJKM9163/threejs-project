@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
@@ -53,18 +53,17 @@ export const ProductionControl = (name) => {
   console.log(" 생산 컨트롤 창");
   return (
     <ConstructionContainerDiv
-      indexnum={resources[planetName]?.hide === undefined ? true : resources[planetName]?.hide}>
+      indexnum={
+        resources[planetName]?.hide === undefined
+          ? true
+          : planetName === name
+          ? false
+          : resources[planetName]?.hide
+      }>
       <MemoResources />
       <div className="flexBox">
         <MemoLeftInfo planetName={planetName} resources={resources} />
-        <MemoProduction
-          awaitArray={allData.awaitArray}
-          production={allData.production}
-          productionArray={allData.productionArray}
-          resourcesIn={resources[name.name]}
-          resources={resources}
-          name={name}
-        />
+        <MemoProduction production={allData.production} planetName={name} />
       </div>
     </ConstructionContainerDiv>
   );

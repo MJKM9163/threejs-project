@@ -1,8 +1,12 @@
+import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { effectStore } from "../../hooks/stores/effectStore";
 import { planetStore } from "../../hooks/stores/planetStore";
+import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
+import { MemoLeftInfo } from "../../interface/Construction/LeftInfo";
+import { MemoProduction } from "../../interface/Construction/Production";
 import { Earth } from "./earthOrbit/Earth";
 import { Sun } from "./Sun";
 import { Unknown } from "./unknownOrbit/Unknown";
@@ -37,16 +41,19 @@ export const SpaceIndex = () => {
   const SetUp = (focus, name, type, size, effects) => {
     useStore.setState({ name: name });
     if (resources.current[name]?.develop === true) {
-      // 탭 만들기
       for (let i = 0; i < Object.keys(resources.current).length; i++) {
         planetStore.getState().planetResources[Object.keys(resources.current)[i]].hide = true;
+        console.log("클릭");
       }
       planetStore.getState().planetResources[name].hide = false;
+      console.log("클릭2");
       planetStore.setState({
         planetResources: {
           ...resources.current,
         },
       });
+      console.log(planetStore.getState().planetResources);
+      console.log("클릭3");
     } else {
       useStore.setState({ focus: focus });
       useStore.setState({ type: type });
@@ -61,6 +68,7 @@ export const SpaceIndex = () => {
       }
     }
   };
+  let production = screenStore.getState().production;
 
   console.log("우주 랜더링 확인");
   return (
@@ -72,6 +80,15 @@ export const SpaceIndex = () => {
       <group ref={unknownOrbitRef}>
         <Unknown position={[3400, 0, 0]} SetUp={SetUp} />
       </group>
+      {/* <Html
+        center
+        distanceFactor={10000}
+        style={{ backgroundColor: "MistyRose", position: "absolute", top: 10 }}>
+        <div className="flexBox" style={{ backgroundColor: "none" }}>
+          <MemoLeftInfo planetName={planetName.current} resources={resources.current} />
+          <MemoProduction production={production} />
+        </div>
+      </Html> */}
     </group>
   );
 };

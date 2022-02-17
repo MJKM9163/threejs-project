@@ -81,6 +81,7 @@ export const ConstructionContainer = () => {
     );
   }, []);
 
+  console.log(Object.keys(resources));
   console.log("행성 관리창 랜더링");
   return (
     <>
