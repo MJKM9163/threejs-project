@@ -1,10 +1,9 @@
-import React, { memo, useEffect, useRef } from "react";
+import React, { memo, useEffect } from "react";
 import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
 import { MemoProduction } from "./Production";
-import { MemoResources } from "./Resources";
 
 const ConstructionContainerDiv = styled.div`
   font-family: "Noto Sans KR", sans-serif;
@@ -54,7 +53,6 @@ export const ProductionControl = () => {
   return (
     <ConstructionContainerDiv
       indexnum={resources[planetName]?.hide === undefined ? true : resources[planetName]?.hide}>
-      <MemoResources />
       <div className="flexBox">
         <MemoProduction production={allData.production} allData={allData} />
       </div>

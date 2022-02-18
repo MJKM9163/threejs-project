@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 
 const ProductionContainer = styled.div`
@@ -102,13 +103,22 @@ let up;
 export const Production = ({ allData }) => {
   const [render, setRender] = useState(false);
   const [reload, setReload] = useState(0);
+
   const completion = screenStore((state) => state.completion);
+  const allGear = useRef(planetStore.getState().allResources.gear);
+
+  useEffect(() => {
+    planetStore.subscribe(
+      (state) => state.allResources.gear,
+      (state) => (allGear.current = state)
+    );
+  });
 
   const numUp = (delay, awaitArray, completion) => {
     if (check === false) {
       check = true;
       up = setInterval(() => {
-        i += 7;
+        i += allGear.current;
         if (awaitArray[0][1] <= i) {
           clearTimeout(up);
           completion.push(awaitArray[0][0]);

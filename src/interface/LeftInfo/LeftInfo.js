@@ -4,6 +4,7 @@ import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 
 const LeftInfoContainer = styled.div`
+  cursor: default;
   div {
     width: 100%;
     height: 25%;

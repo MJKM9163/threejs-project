@@ -5,17 +5,6 @@ import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
 import { MemoProductionControl } from "./ProductionControl";
 
-const ConstructionContainerDiv = styled.div`
-  font-family: "Noto Sans KR", sans-serif;
-  position: absolute;
-  bottom: 0px;
-  width: 100vw;
-  height: 200px;
-  z-index: ${(props) => (props.indexnum ? -500 : 200)};
-  opacity: ${(props) => (props.indexnum ? 0 : 1)};
-  cursor: default;
-`;
-
 const HoverInfoConainer = styled.div`
   font-family: "Noto Sans KR", sans-serif;
   position: absolute;

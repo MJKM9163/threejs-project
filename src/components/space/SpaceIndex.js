@@ -38,8 +38,8 @@ export const SpaceIndex = () => {
   const SetUp = (focus, name, type, size, effects) => {
     useStore.setState({ name: name });
     if (resources.current[name]?.develop === true) {
-      for (let i = 0; i < Object.keys(resources.current).length; i++) {
-        planetStore.getState().planetResources[Object.keys(resources.current)[i]].hide = true;
+      for (let item in resources.current) {
+        planetStore.getState().planetResources[item].hide = true;
       }
       planetStore.getState().planetResources[name].hide = false;
 

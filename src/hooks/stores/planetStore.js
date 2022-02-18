@@ -39,7 +39,15 @@ export const planetStore = create(
       "???": { climate: null },
     },
 
-    planetResources: [],
+    allResources: {
+      food: 0,
+      gear: 0,
+      science: 0,
+      titanium: 0,
+      orichalcon: 0,
+    },
+
+    planetResources: {},
   }))
 );
 //console.log(planetStore.getState().planetResources);

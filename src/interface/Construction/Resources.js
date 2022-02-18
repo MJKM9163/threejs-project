@@ -1,22 +1,26 @@
-import React, { memo } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 
 const ResourcesContainer = styled.div`
+  font-family: "Noto Sans KR", sans-serif;
   position: absolute;
   display: flex;
   align-items: center;
   left: 50vw;
   bottom: 95vh;
-  width: 30%;
+  width: 40%;
   height: 40px;
   transform: translate(-50%);
+  cursor: default;
+  z-index: 50;
 
   div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 25%;
+    width: 20%;
     height: 100%;
     padding: 0px 10px 0px 10px;
     font-weight: bold;
@@ -39,9 +43,14 @@ const ResourcesContainer = styled.div`
   div:nth-child(4) {
     color: #b8b8b8;
   }
+  div:nth-child(5) {
+    color: #b8b8b8;
+  }
 `;
 
-export const Resources = (props) => {
+export const Resources = () => {
+  const allResources = planetStore((state) => state.allResources);
+
   console.log("위쪽 통합 자원창 랜더링");
   return (
     <ResourcesContainer>
@@ -49,7 +58,19 @@ export const Resources = (props) => {
         onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "potato"] })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/corn.png" width={25} height={25} alt="식량 자원"></img>
-        <span>0</span>
+        <span>{Math.floor(allResources.food)}</span>
+      </div>
+      <div
+        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "gear"] })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
+        <img src="images/resources/icons/gear.png" width={25} height={25} alt="생산력"></img>
+        <span>{allResources.gear}</span>
+      </div>
+      <div
+        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "science"] })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
+        <img src="images/resources/icons/flask.png" width={25} height={25} alt="과학 자원"></img>
+        <span>{allResources.science}</span>
       </div>
       <div
         onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "titanium"] })}
@@ -59,7 +80,7 @@ export const Resources = (props) => {
           width={25}
           height={25}
           alt="티타늄 자원"></img>
-        <span>0</span>
+        <span>{allResources.titanium}</span>
       </div>
       <div
         onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "orichalcon"] })}
@@ -69,16 +90,8 @@ export const Resources = (props) => {
           width={25}
           height={25}
           alt="오리하르콘 자원"></img>
-        <span>0</span>
-      </div>
-      <div
-        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "science"] })}
-        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
-        <img src="images/resources/icons/flask.png" width={25} height={25} alt="과학 자원"></img>
-        <span>0</span>
+        <span>{allResources.orichalcon}</span>
       </div>
     </ResourcesContainer>
   );
 };
-
-export const MemoResources = memo(Resources);

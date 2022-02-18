@@ -13,6 +13,9 @@ import { planetStore } from "./hooks/stores/planetStore";
 import { ConstructionContainer } from "./interface/Construction/ConstructionContainer";
 import { screenStore } from "./hooks/stores/screenStore";
 import { RightOption } from "./interface/SideTap/RightOption";
+import { Resources } from "./interface/Construction/Resources";
+import { AllResourcesFun } from "./hooks/AllResourcesFun";
+import { ResearchMap } from "./interface/Research/ResearchMap";
 
 const Light = () => {
   const pointLight = useRef();
@@ -40,21 +43,25 @@ const RightClick = (e) => {
   let zoom = useStore.getState().zoom;
   let planetName = useStore.getState().name;
   let resources = planetStore.getState().planetResources;
+  let researchMapOnOff = screenStore.getState().researchMapOnOff;
 
   if (zoom === true) {
     setTimeout(() => {
       useStore.setState({ mainPlanet: false });
     }, 500);
     useStore.setState({ zoom: false });
+    useStore.setState({ orbitHide: false });
   } else if (resources[planetName]?.hide === false) {
-    for (let i = 0; i < Object.keys(resources).length; i++) {
-      planetStore.getState().planetResources[Object.keys(resources)[i]].hide = true;
+    for (let item in resources) {
+      planetStore.getState().planetResources[item].hide = true;
     }
     planetStore.setState({
       planetResources: {
         ...resources,
       },
     });
+  } else if (researchMapOnOff === true) {
+    screenStore.setState({ researchMapOnOff: false });
   } else {
     console.log("확대 / 건설 상태가 아닙니다");
   }
@@ -75,7 +82,10 @@ function App() {
   console.log("메인 랜더링 확인");
   return (
     <>
+      <ResearchMap />
       <PlanetInfo />
+      <AllResourcesFun />
+      <Resources />
       <ConstructionContainer />
       <RightOption />
       <Canvas

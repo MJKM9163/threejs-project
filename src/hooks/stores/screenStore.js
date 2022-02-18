@@ -39,8 +39,11 @@ export const screenStore = create(
     // hover Check
     hoverCheck: false,
 
-    // left Info on/off
+    // right Options
+    // ---left Info on/off
     leftInfoOnOff: false,
+    // ---research Map on/off
+    researchMapOnOff: false,
 
     // tap
     tapState: { planetName: "???", check: false },

@@ -193,8 +193,8 @@ export const PlanetInfo = () => {
   }, [resources]);
 
   const types = {
-    지구형: { climate: "온대", resources: { food: 7, gear: 5, science: 1 } },
-    얼음형: { climate: "한랭", resources: { food: 1, gear: 2, science: 5 } },
+    지구형: { climate: "온대", resources: { food: 0.5, gear: 5, science: 1 } },
+    얼음형: { climate: "한랭", resources: { food: 0.1, gear: 2, science: 5 } },
     주계열성: { climate: "없음" },
     "???": { climate: null },
   };
