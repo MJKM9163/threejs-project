@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
+import { researchStore } from "../../hooks/stores/researchStore";
 import { screenStore } from "../../hooks/stores/screenStore";
+import { ResearchInfo } from "./ResearchInfo";
 
 const ResearchMapBox = styled.div`
   position: absolute;
@@ -37,16 +39,21 @@ const ResearchMapBox = styled.div`
       border-radius: 50%;
       background-color: #00212b;
       color: #d3d3d3;
-      :after,
-      :before {
-        content: "";
+      ::before {
         position: absolute;
-        border-top: 7px solid;
-        border-image: linear-gradient(to right, #fbfcb9be, #ffcdf3aa, #65d3ffaa);
-        border-image-slice: 1;
-        opacity: 0.3;
-        z-index: -10;
+        width: 110px;
+        height: 20px;
+        background-color: black;
+        text-align: center;
+        bottom: -20px;
       }
+    }
+    img:not(.inImg) {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #8cd8e9;
+      color: #d3d3d3;
     }
 
     .widthAndHeight {
@@ -56,124 +63,102 @@ const ResearchMapBox = styled.div`
       z-index: -1000;
     }
 
+    .basicLine {
+      position: absolute;
+      top: 115px;
+      left: 320px;
+      line {
+        transition: 0.3s;
+      }
+    }
+
     .basic {
-      top: 200px;
+      top: 250px;
       left: 195px;
-      :after {
-        width: 500px;
-        margin-top: -30px;
-        margin-left: 550px;
-        transform: rotate(-4deg);
-      }
-      :hover:after {
-        animation: basicAfter 0.5s infinite alternate;
-        @keyframes basicAfter {
-          100% {
-            opacity: 1;
-          }
-        }
-      }
-      :before {
-        width: 450px;
-        margin-top: 200px;
-        margin-left: 350px;
-        transform: rotate(27deg);
-      }
-      :hover:before {
-        animation: basicBefore 0.5s infinite alternate;
-        @keyframes basicBefore {
-          100% {
-            opacity: 1;
-          }
-        }
+      background-color: #00ce5d;
+      ::before {
+        content: "시스템 활성화";
       }
     }
 
     .PlanetSystem {
-      top: 170px;
-      left: 750px;
-      :after {
-        width: 500px;
-        margin-top: -150px;
-        margin-left: 550px;
-        transform: rotate(-15deg);
-      }
-      :hover:after {
-        animation: PlanetSystemAfter 0.5s infinite alternate;
-        @keyframes PlanetSystemAfter {
-          100% {
-            opacity: 1;
-          }
-        }
-      }
-      :before {
-        width: 300px;
-        margin-top: 150px;
-        margin-left: 350px;
-        transform: rotate(20deg);
-      }
-      :hover:before {
-        animation: PlanetSystemBefore 0.5s infinite alternate;
-        @keyframes PlanetSystemBefore {
-          100% {
-            opacity: 1;
-          }
-        }
-      }
-    }
-
-    .LargeScaleIndustrialization {
-      top: 420px;
+      top: 55px;
       left: 605px;
-      :after {
-        width: 400px;
-        margin-top: -100px;
-        margin-left: 500px;
-        transform: rotate(-12deg);
-      }
-      :hover:after {
-        animation: LargeScaleIndustrializationAfter 0.5s infinite alternate;
-        @keyframes LargeScaleIndustrializationAfter {
-          100% {
-            opacity: 1;
-          }
-        }
-      }
-      :before {
-        width: 350px;
-        margin-top: 280px;
-        margin-left: -320px;
-        transform: rotate(138deg);
-      }
-      :hover:before {
-        animation: LargeScaleIndustrializationAfter 0.5s infinite alternate;
-        @keyframes LargeScaleIndustrializationAfter {
-          100% {
-            opacity: 1;
-          }
-        }
+      ::before {
+        content: "행성 시스템";
       }
     }
-
+    .LargeScaleIndustrialization {
+      top: 250px;
+      left: 605px;
+      ::before {
+        content: "대규모 산업화";
+      }
+    }
     .ArtificialBacteria {
-      top: 720px;
-      left: 275px;
+      top: 450px;
+      left: 605px;
+      ::before {
+        content: "인공 박테리아";
+      }
     }
-
-    .AlienArchitecture {
-      top: 320px;
-      left: 1105px;
+    .SpaceArchitecture {
+      top: 650px;
+      left: 605px;
+      ::before {
+        content: "우주 건축";
+      }
+    }
+    .Xenology {
+      top: 850px;
+      left: 605px;
+      ::before {
+        content: "외계학";
+      }
+    }
+    .SatelliteBoundarySystem {
+      top: 55px;
+      left: 955px;
+      ::before {
+        content: "위성 경계 체계";
+      }
+    }
+    .InterplanetaryTrade {
+      top: 150px;
+      left: 805px;
+      ::before {
+        content: "행선간 교역";
+      }
+    }
+    .TitaniumAlloy {
+      top: 250px;
+      left: 955px;
+      ::before {
+        content: "티타늄 합금";
+      }
     }
   }
 `;
 
 export const ResearchMap = () => {
   const researchMapOnOff = screenStore((state) => state.researchMapOnOff);
+  const researchList = researchStore.getState().list;
 
   const ContainerRef = useRef();
   const [isDrag, setIsDrag] = useState(false);
   const [startX, setStartX] = useState();
   const [startY, setStartY] = useState();
+  const [hovers, setHovers] = useState({
+    basicLineColor: "MintCream",
+    planetLineColor: ["MintCream", "MintCream"],
+    largeLineColor: ["MintCream", "MintCream"],
+    bacteriaLineColor: ["MintCream", "MintCream"],
+    SpaceLineColor: ["MintCream", "MintCream"],
+    XenoLineColor: "MintCream",
+  });
+  const [info, setInfo] = useState(false);
+  const [pos, setPos] = useState([0, 0]);
+  const [list, setList] = useState({ AddResources: { food: 0, gear: 0, science: 0 } });
 
   const onDragStart = (e) => {
     e.preventDefault();
@@ -202,12 +187,207 @@ export const ResearchMap = () => {
         onMouseMove={onDragMove}
         onMouseUp={onDragEnd}
         onMouseLeave={onDragEnd}>
-        <div className="basic">시스템 활성화</div>
-        <div className="PlanetSystem">행성 시스템</div>
-        <div className="LargeScaleIndustrialization">대규모 산업화</div>
-        <div className="ArtificialBacteria">인공 박테리아</div>
+        <ResearchInfo info={info} pos={pos} list={list} />
+        <svg className="basicLine" width={1200} height={1200} viewBox="-50 0 1200 1200">
+          <line x1={0} y1={0} x2={300} y2={0} stroke={hovers.basicLineColor} strokeWidth={15} />
+          <line x1={-50} y1={200} x2={300} y2={200} stroke={hovers.basicLineColor} strokeWidth={7} />
+          <line x1={0} y1={400} x2={300} y2={400} stroke={hovers.basicLineColor} strokeWidth={7} />
+          <line x1={0} y1={600} x2={300} y2={600} stroke={hovers.basicLineColor} strokeWidth={7} />
+          <line x1={0} y1={796} x2={300} y2={796} stroke={hovers.basicLineColor} strokeWidth={7} />
+          <line x1={0} y1={0} x2={0} y2={800} stroke={hovers.basicLineColor} strokeWidth={8} />
 
-        <div className="AlienArchitecture">외계 건축</div>
+          <line x1={300} y1={0} x2={600} y2={0} stroke={hovers.planetLineColor[0]} strokeWidth={15} />
+          <line x1={300} y1={50} x2={300} y2={150} stroke={hovers.planetLineColor[1]} strokeWidth={7} name="행+대" />
+          <line x1={300} y1={102} x2={500} y2={102} stroke={hovers.planetLineColor[1]} strokeWidth={7} />
+
+          <line x1={300} y1={200} x2={600} y2={200} stroke={hovers.largeLineColor[0]} strokeWidth={7} />
+          <line x1={300} y1={250} x2={300} y2={350} stroke={hovers.largeLineColor[1]} strokeWidth={7} name="대+인" />
+          <line x1={300} y1={302} x2={500} y2={302} stroke={hovers.largeLineColor[1]} strokeWidth={7} />
+
+          <line x1={300} y1={400} x2={600} y2={400} stroke={hovers.bacteriaLineColor[0]} strokeWidth={7} />
+          <line x1={300} y1={450} x2={300} y2={550} stroke={hovers.bacteriaLineColor[1]} strokeWidth={7} name="인+우" />
+          <line x1={300} y1={502} x2={500} y2={502} stroke={hovers.bacteriaLineColor[1]} strokeWidth={7} />
+
+          <line x1={300} y1={600} x2={600} y2={600} stroke={hovers.SpaceLineColor[0]} strokeWidth={7} />
+          <line x1={300} y1={650} x2={300} y2={750} stroke={hovers.SpaceLineColor[1]} strokeWidth={7} name="우+외" />
+          <line x1={300} y1={702} x2={500} y2={702} stroke={hovers.SpaceLineColor[1]} strokeWidth={7} />
+
+          <line x1={300} y1={800} x2={600} y2={800} stroke={hovers.XenoLineColor} strokeWidth={7} />
+        </svg>
+        <div className="basic">
+          <img
+            src="images/research/basic.png"
+            alt="시스템 이미지"
+            name="Basic"
+            onMouseEnter={(e) => {
+              setHovers({ ...hovers, basicLineColor: "Crimson" });
+              setInfo(true);
+              setPos([250, 195]);
+              setList(researchList[e.target.name]);
+            }}
+            onMouseLeave={() => {
+              setHovers({ ...hovers, basicLineColor: "MintCream" });
+              setInfo(false);
+            }}></img>
+        </div>
+        <div className="PlanetSystem">
+          <img
+            src="images/research/planetSystem.png"
+            alt="행성 시스템 이미지"
+            name="PlanetSystem"
+            onMouseEnter={(e) => {
+              setHovers({ ...hovers, planetLineColor: ["Crimson", "SandyBrown"] });
+              setInfo(true);
+              setPos([55, 605]);
+              setList(researchList[e.target.name]);
+            }}
+            onMouseLeave={() => {
+              setHovers({ ...hovers, planetLineColor: ["MintCream", "MintCream"] });
+              setInfo(false);
+            }}></img>
+        </div>
+        <div className="LargeScaleIndustrialization">
+          <img
+            src="images/research/largeScaleIndustrialization.png"
+            alt="대규모 산업화 이미지"
+            name="LargeScaleIndustrialization"
+            onMouseEnter={(e) => {
+              setHovers({
+                ...hovers,
+                planetLineColor: ["MintCream", "SandyBrown"],
+                largeLineColor: ["Crimson", "SandyBrown"],
+              });
+              setInfo(true);
+              setPos([255, 605]);
+              setList(researchList[e.target.name]);
+            }}
+            onMouseLeave={() => {
+              setHovers({
+                ...hovers,
+                planetLineColor: ["MintCream", "MintCream"],
+                largeLineColor: ["MintCream", "MintCream"],
+              });
+              setInfo(false);
+            }}></img>
+        </div>
+        <div className="ArtificialBacteria">
+          <img
+            src="images/research/artificialBacteria.png"
+            alt="인공 박테리아 이미지"
+            name="ArtificialBacteria"
+            onMouseEnter={(e) => {
+              setHovers({
+                ...hovers,
+                largeLineColor: ["MintCream", "SandyBrown"],
+                bacteriaLineColor: ["Crimson", "SandyBrown"],
+              });
+              setInfo(true);
+              setPos([450, 605]);
+              setList(researchList[e.target.name]);
+            }}
+            onMouseLeave={() => {
+              setHovers({
+                ...hovers,
+                largeLineColor: ["MintCream", "MintCream"],
+                bacteriaLineColor: ["MintCream", "MintCream"],
+              });
+              setInfo(false);
+            }}></img>
+        </div>
+        <div className="SpaceArchitecture">
+          <img
+            src="images/research/spaceArchitecture.png"
+            alt="우주 건축 이미지"
+            name="SpaceArchitecture"
+            onMouseEnter={(e) => {
+              setHovers({
+                ...hovers,
+                bacteriaLineColor: ["MintCream", "SandyBrown"],
+                SpaceLineColor: ["Crimson", "SandyBrown"],
+              });
+              setInfo(true);
+              setPos([650, 605]);
+              setList(researchList[e.target.name]);
+            }}
+            onMouseLeave={() => {
+              setHovers({
+                ...hovers,
+                bacteriaLineColor: ["MintCream", "MintCream"],
+                SpaceLineColor: ["MintCream", "MintCream"],
+              });
+              setInfo(false);
+            }}></img>
+        </div>
+        <div className="Xenology">
+          <img
+            src="images/research/xenology.png"
+            alt="외계학 이미지"
+            name="Xenology"
+            onMouseEnter={(e) => {
+              setHovers({
+                ...hovers,
+                SpaceLineColor: ["MintCream", "SandyBrown"],
+                XenoLineColor: "Crimson",
+              });
+              setInfo(true);
+              setPos([850, 605]);
+              setList(researchList[e.target.name]);
+            }}
+            onMouseLeave={() => {
+              setHovers({
+                ...hovers,
+                SpaceLineColor: ["MintCream", "MintCream"],
+                XenoLineColor: "MintCream",
+              });
+              setInfo(false);
+            }}></img>
+        </div>
+        <div className="SatelliteBoundarySystem">
+          <img
+            src="images/research/satelliteBoundarySystem.png"
+            alt="위성 경계 체계 이미지"
+            name="SatelliteBoundarySystem"
+            onMouseEnter={(e) => {
+              setInfo(true);
+              setPos([55, 955]);
+              setList(researchList[e.target.name]);
+            }}
+            onMouseLeave={() => {
+              setInfo(false);
+            }}></img>
+        </div>
+        <div className="InterplanetaryTrade">
+          <img
+            src="images/research/interplanetaryTrade.png"
+            alt="행성간 교역 이미지"
+            name="InterplanetaryTrade"
+            onMouseEnter={(e) => {
+              setInfo(true);
+              setPos([150, 805]);
+              setList(researchList[e.target.name]);
+            }}
+            onMouseLeave={() => {
+              setInfo(false);
+            }}></img>
+        </div>
+        <div className="TitaniumAlloy">
+          <img
+            src="images/research/titaniumAlloy.png"
+            alt="티타늄 합금 이미지"
+            name="TitaniumAlloy"
+            onMouseEnter={(e) => {
+              setInfo(true);
+              setPos([250, 955]);
+              setList(researchList[e.target.name]);
+            }}
+            onMouseLeave={() => {
+              setInfo(false);
+            }}></img>
+        </div>
+
+        {/* <div className="OrichalconAlloy">오리하르콘 합금</div>
+        <div className="DysonSphere">다이슨 구</div>
+        <div className="InsightSense">천리안 감지</div> */}
 
         <span className="widthAndHeight"></span>
       </div>

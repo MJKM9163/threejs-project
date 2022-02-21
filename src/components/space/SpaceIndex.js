@@ -2,7 +2,6 @@ import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { effectStore } from "../../hooks/stores/effectStore";
 import { planetStore } from "../../hooks/stores/planetStore";
-import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
 import { Earth } from "./earthOrbit/Earth";
 import { Sun } from "./Sun";

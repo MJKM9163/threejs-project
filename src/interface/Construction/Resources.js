@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
@@ -75,21 +75,13 @@ export const Resources = () => {
       <div
         onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "titanium"] })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
-        <img
-          src="images/resources/icons/titanium.png"
-          width={25}
-          height={25}
-          alt="티타늄 자원"></img>
+        <img src="images/resources/icons/titanium.png" width={25} height={25} alt="티타늄 자원"></img>
         <span>{allResources.titanium}</span>
       </div>
       <div
         onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "orichalcon"] })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
-        <img
-          src="images/resources/icons/orichalcon.png"
-          width={25}
-          height={25}
-          alt="오리하르콘 자원"></img>
+        <img src="images/resources/icons/orichalcon.png" width={25} height={25} alt="오리하르콘 자원"></img>
         <span>{allResources.orichalcon}</span>
       </div>
     </ResourcesContainer>
