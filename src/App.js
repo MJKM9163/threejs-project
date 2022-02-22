@@ -68,8 +68,8 @@ const RightClick = (e) => {
 };
 
 const mouseUpEventAllScreen = () => {
-  if (screenStore.getState().tapState.check === true) {
-    screenStore.setState({ tapState: { planetName: "???", check: false } });
+  if (screenStore.getState().tapCheck === true) {
+    screenStore.setState({ tapCheck: false });
   }
 };
 

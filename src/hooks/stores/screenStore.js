@@ -27,8 +27,7 @@ export const screenStore = create(
       science: {
         name: "과학",
         img: "images/resources/images/science.jpg",
-        description:
-          "과학은 기술 발전의 핵심입니다. 과학 수준을 높여서 누구보다 빠르게 신기술을 확보하세요.",
+        description: "과학은 기술 발전의 핵심입니다. 과학 수준을 높여서 누구보다 빠르게 신기술을 확보하세요.",
       },
       gear: {
         name: "생산력",
@@ -46,7 +45,8 @@ export const screenStore = create(
     researchMapOnOff: false,
 
     // tap
-    tapState: { planetName: "???", check: false },
+    //tapState: { planetName: "???", check: false },
+    tapCheck: false,
 
     // 대기열
     awaitArray: [],

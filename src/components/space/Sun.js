@@ -2,15 +2,10 @@ import { useSphere } from "@react-three/cannon";
 import { Html, useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
-import styled from "styled-components";
 import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
 import { TapPlanet } from "../../interface/CanvasInHTML/TapPlanet";
 import { LeftInfoBox } from "../../interface/LeftInfo/LeftInfoBox";
-
-const HtmlDiv = styled(Html)`
-  display: ${(props) => (props.check ? "block" : "none")};
-`;
 
 let a = 0.5;
 let onTimer;
@@ -21,18 +16,18 @@ export const Sun = ({ SetUp, ...props }) => {
 
   const argsSize = useRef(useStore.getState().size);
   const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
-  const tap = useRef(screenStore.getState().tapState);
+  const tap = useRef(screenStore.getState().tapCheck);
 
   useEffect(() => {
     screenStore.subscribe(
       (state) => (leftInfoOnOff.current = state.leftInfoOnOff),
-      (state) => state.leftInfoOnOff
+      (state) => state
     );
   });
   useEffect(() => {
     screenStore.subscribe(
-      (state) => (tap.current = state.tapState),
-      (state) => state.tapState
+      (state) => (tap.current = state.tapCheck),
+      (state) => state
     );
   });
 
@@ -53,7 +48,7 @@ export const Sun = ({ SetUp, ...props }) => {
   useFrame(() => {
     sunApi.rotation.set(0, (a += 0.003), 0);
 
-    if (tap.current?.check === false) {
+    if (tap?.current === false) {
       html.current.style.display = "none";
     }
     if (leftInfoOnOff?.current === false) {
@@ -67,9 +62,9 @@ export const Sun = ({ SetUp, ...props }) => {
   return (
     <>
       <group ref={sunRef} scale={argsSize.current["large"] / 10} {...props} dispose={null}>
-        <HtmlDiv ref={html} check={tap.current.check}>
+        <Html ref={html}>
           <TapPlanet planet={"태양"} />
-        </HtmlDiv>
+        </Html>
         <Html ref={infoRef} center distanceFactor={10000}>
           <LeftInfoBox planet={"태양"} />
         </Html>

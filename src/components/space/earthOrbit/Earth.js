@@ -27,18 +27,18 @@ export const Earth = ({ SetUp, ...props }) => {
 
   const argsSize = useRef(useStore.getState().size);
   const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
-  const tap = useRef(screenStore.getState().tapState);
+  const tap = useRef(screenStore.getState().tapCheck);
 
   useEffect(() => {
     screenStore.subscribe(
       (state) => (leftInfoOnOff.current = state.leftInfoOnOff),
-      (state) => state.leftInfoOnOff
+      (state) => state
     );
   });
   useEffect(() => {
     screenStore.subscribe(
-      (state) => (tap.current = state.tapState),
-      (state) => state.tapState
+      (state) => (tap.current = state.tapCheck),
+      (state) => state
     );
   });
 
@@ -68,7 +68,7 @@ export const Earth = ({ SetUp, ...props }) => {
     earthRef.current?.getWorldPosition(earthWorldPosition);
     effectRef.current.rotation.set(0, a - 0.002, a - 0.003);
 
-    if (tap.current?.check === false) {
+    if (tap?.current === false) {
       tapRef.current.style.display = "none";
     }
     if (leftInfoOnOff?.current === false) {

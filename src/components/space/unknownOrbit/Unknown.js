@@ -2,7 +2,6 @@ import { useSphere } from "@react-three/cannon";
 import { Html, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
-import styled from "styled-components";
 import { Vector3 } from "three";
 import { EffectSelect } from "../../../hooks/EffectSelect";
 import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
@@ -11,10 +10,6 @@ import { useStore } from "../../../hooks/stores/useStore";
 import { TapPlanet } from "../../../interface/CanvasInHTML/TapPlanet";
 import { LeftInfoBox } from "../../../interface/LeftInfo/LeftInfoBox";
 import { OrbitLine } from "../OrbitLine";
-
-const HtmlDiv = styled(Html)`
-  display: ${(props) => (props.check ? "block" : "none")};
-`;
 
 let onTimer;
 
@@ -29,18 +24,18 @@ export const Unknown = ({ SetUp, ...props }) => {
 
   const argsSize = useRef(useStore.getState().size);
   const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
-  const tap = useRef(screenStore.getState().tapState);
+  const tap = useRef(screenStore.getState().tapCheck);
 
   useEffect(() => {
     screenStore.subscribe(
       (state) => (leftInfoOnOff.current = state.leftInfoOnOff),
-      (state) => state.leftInfoOnOff
+      (state) => state
     );
   });
   useEffect(() => {
     screenStore.subscribe(
-      (state) => (tap.current = state.tapState),
-      (state) => state.tapState
+      (state) => (tap.current = state.tapCheck),
+      (state) => state
     );
   });
 
@@ -67,9 +62,9 @@ export const Unknown = ({ SetUp, ...props }) => {
     unknownApi.rotation.set(0, (a += 0.01), 0);
     unknownRef.current?.getWorldPosition(unknownWorldPosition);
 
-    if (tap.current?.check === false) {
+    if (tap?.current === false) {
       html.current.style.display = "none";
-      screenStore.getState().tapState.check = true;
+      screenStore.setState({ tapCheck: true });
     }
     if (leftInfoOnOff?.current === false) {
       infoRef.current.style.display = "none";
@@ -84,9 +79,9 @@ export const Unknown = ({ SetUp, ...props }) => {
   return (
     <>
       <group ref={unknownRef} {...props} dispose={null}>
-        <HtmlDiv ref={html} check={tap.current.check}>
+        <Html ref={html}>
           <TapPlanet planet={Pname} />
-        </HtmlDiv>
+        </Html>
         <Html ref={infoRef} center distanceFactor={10000}>
           <LeftInfoBox planet={Pname} />
         </Html>
@@ -94,21 +89,11 @@ export const Unknown = ({ SetUp, ...props }) => {
           <group rotation={[Math.PI / 2, 0, 0]}>
             <group
               rotation={[-Math.PI / 2, 0, 0]}
-              scale={[
-                argsSize.current["small"],
-                argsSize.current["small"],
-                argsSize.current["small"],
-              ]}>
+              scale={[argsSize.current["small"], argsSize.current["small"], argsSize.current["small"]]}>
               <mesh
                 receiveShadow
                 onClick={(e) => {
-                  SetUp(
-                    unknownWorldPosition,
-                    Pname,
-                    "얼음형",
-                    argsSize.current["small"],
-                    ...effects
-                  );
+                  SetUp(unknownWorldPosition, Pname, "얼음형", argsSize.current["small"], ...effects);
                 }}
                 onPointerDown={(e) => {
                   timer();

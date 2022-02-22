@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { planetStore } from "./stores/planetStore";
 
 let cycle;
@@ -18,24 +18,40 @@ const FoodResources = () => {
   //console.log("식량 랜더링");
 };
 
+let gearArray = [];
 const GearRresources = () => {
   const planetResources = planetStore((state) => state.planetResources);
+  const allResources = planetStore((state) => state.allResources);
 
-  planetStore.getState().allResources.gear = 0;
-  for (let item in planetResources) {
-    planetStore.getState().allResources.gear += planetResources[item].resources.gear;
+  if (gearArray.length !== Object.keys(planetResources).length) {
+    let gear = 0;
+    gearArray.length = 0;
+    for (let item in planetResources) {
+      gearArray.push(planetResources[item].resources.gear);
+    }
+    for (let i = Object.keys(planetResources).length - 1; i < Object.keys(planetResources).length; i++) {
+      gear = Object.values(planetResources)[i].resources["gear"];
+    }
+    planetStore.getState().allResources.gear = allResources.gear + gear;
   }
-  //console.log("기어 랜더링");
 };
 
+let scienceArray = [];
 const ScienceRresources = () => {
   const planetResources = planetStore((state) => state.planetResources);
+  const allResources = planetStore((state) => state.allResources);
 
-  planetStore.getState().allResources.science = 0;
-  for (let item in planetResources) {
-    planetStore.getState().allResources.science += planetResources[item].resources.science;
+  if (scienceArray.length !== Object.keys(planetResources).length) {
+    let science = 0;
+    scienceArray.length = 0;
+    for (let item in planetResources) {
+      scienceArray.push(planetResources[item].resources.science);
+    }
+    for (let i = Object.keys(planetResources).length - 1; i < Object.keys(planetResources).length; i++) {
+      science = Object.values(planetResources)[i].resources["science"];
+    }
+    planetStore.getState().allResources.science = allResources.science + science;
   }
-  //console.log("과학 랜더링");
 };
 
 const TitaniumRresources = () => {
