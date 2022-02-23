@@ -4,6 +4,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 export const researchStore = create(
   subscribeWithSelector((set) => ({
     position: null,
+    completionList: ["laboratory"],
     list: {
       basic: {
         description: "연구를 시작하기 위해 연구 시스템을 활성화 합니다.",
@@ -11,6 +12,7 @@ export const researchStore = create(
         AddStructure: {},
         cost: 1,
         position: [250, 195],
+        NecessaryResearch: ["laboratory"],
       },
       planetSystem: {
         description:
@@ -19,6 +21,7 @@ export const researchStore = create(
         AddStructure: {},
         cost: 1,
         position: [55, 605],
+        NecessaryResearch: ["basic"],
       },
       largeScaleIndustrialization: {
         description:
@@ -27,6 +30,7 @@ export const researchStore = create(
         AddStructure: {},
         cost: 1,
         position: [255, 605],
+        NecessaryResearch: ["basic"],
       },
       artificialBacteria: {
         description:
@@ -35,6 +39,7 @@ export const researchStore = create(
         AddStructure: {},
         cost: 1,
         position: [450, 605],
+        NecessaryResearch: ["basic"],
       },
       spaceArchitecture: {
         description: "이제 행성에서 하늘을 올려다보면 위성 말고도 둥둥 떠있는 건물을 볼 수 있게 되었습니다.",
@@ -42,6 +47,7 @@ export const researchStore = create(
         AddStructure: {},
         cost: 1,
         position: [650, 605],
+        NecessaryResearch: ["basic"],
       },
       xenology: {
         description:
@@ -50,6 +56,7 @@ export const researchStore = create(
         AddStructure: {},
         cost: 1,
         position: [850, 605],
+        NecessaryResearch: ["basic"],
       },
       satelliteBoundarySystem: {
         description:
@@ -58,6 +65,7 @@ export const researchStore = create(
         AddStructure: {},
         cost: 1,
         position: [55, 955],
+        NecessaryResearch: ["planetSystem"],
       },
       interplanetaryTrade: {
         description: "교역의 무대가 우주로 확장됩니다. 외계의 광물을 더 쉽게 구할 수 있게 됩니다.",
@@ -65,6 +73,7 @@ export const researchStore = create(
         AddStructure: {},
         cost: 1,
         position: [150, 805],
+        NecessaryResearch: ["planetSystem", "largeScaleIndustrialization"],
       },
       titaniumAlloy: {
         description:
@@ -73,6 +82,7 @@ export const researchStore = create(
         AddStructure: {},
         cost: 1,
         position: [250, 955],
+        NecessaryResearch: ["largeScaleIndustrialization"],
       },
     },
   }))

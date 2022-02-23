@@ -14,7 +14,7 @@ import { ConstructionContainer } from "./interface/Construction/ConstructionCont
 import { screenStore } from "./hooks/stores/screenStore";
 import { RightOption } from "./interface/SideTap/RightOption";
 import { Resources } from "./interface/Construction/Resources";
-import { AllResourcesFun } from "./hooks/AllResourcesFun";
+import { AllResourcesFun, MemoAllResourcesFun } from "./hooks/AllResourcesFun";
 import { ResearchMap } from "./interface/Research/ResearchMap";
 
 const Light = () => {

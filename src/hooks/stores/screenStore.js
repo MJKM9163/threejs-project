@@ -62,7 +62,7 @@ export const screenStore = create(
         name: "행성 차폐막",
         img: "images/production/images/planetCurtain.jpg",
         video: "images/production/videos/planetCurtain.mp4",
-        add: { 행복도: 10, 방어막: 300 },
+        add: { happiness: 10, shield: 300 },
         max: 100,
         description:
           "행성을 중심으로 에너지 차폐막을 만듭니다. 에너지 무기를 효과적으로 막을 수 있으며 행성의 거주민들의 불안감을 줄일 수 있습니다.",
@@ -72,7 +72,7 @@ export const screenStore = create(
         name: "거대 채굴기",
         img: "images/production/images/giantMiner.jpg",
         video: false,
-        add: { 행복도: -5, 생산력: 20, 식량: -7 },
+        add: { happiness: -5, gear: 20, food: -7 },
         max: 30,
         description:
           "거대한 행성용 채굴기 입니다. 강력한 채굴 능력을 가진 이 기계는 대부분 거주 구역과 멀리 떨어져 있습니다. 크기처럼 가동될 때의 소리가 만만치 않고, 땅을 파며 나오는 먼지또한 거주민에게 불편함을 줄 수 있기 때문입니다.",

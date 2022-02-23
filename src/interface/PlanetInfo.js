@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useStore } from "../hooks/stores/useStore";
 import { planetStore } from "../hooks/stores/planetStore";
 import { effectStore } from "../hooks/stores/effectStore";
-import { MemoProductionControl } from "./Construction/ProductionControl";
 
 const PlanetInfoDiv = styled.div`
   position: absolute;
@@ -11,7 +10,6 @@ const PlanetInfoDiv = styled.div`
   height: 100vh;
   z-index: ${(props) => (props.zoom ? "100" : "0")};
   opacity: ${(props) => (props.zoom ? "1" : "0")};
-  /* display: ${(props) => (props.zoom ? "block" : "none")}; */
   transition: 0.5s;
   list-style-type: none;
   .aaa {
@@ -149,48 +147,46 @@ export const PlanetInfo = () => {
   //const zoomCheck = useRef(useStore.getState().zoom);
 
   const selectSize = useRef(useStore.getState().selectSize);
-
   const infoName = useRef(useStore.getState().name);
   const typeName = useRef(useStore.getState().type);
 
-  //const mainPlanet = useRef(useStore.getState().mainPlanet);
   const explanation = useRef(planetStore.getState().explanation);
   const resources = useRef(planetStore.getState().planetResources);
 
   useEffect(() => {
     useStore.subscribe(
       (state) => (infoName.current = state.name),
-      (state) => state.name
+      (state) => state
     );
-  }, [infoName]);
+  });
 
   useEffect(() => {
     useStore.subscribe(
       (state) => (typeName.current = state.type),
-      (state) => state.type
+      (state) => state
     );
-  }, [typeName]);
+  });
 
   useEffect(() => {
     useStore.subscribe(
       (state) => (selectSize.current = state.selectSize),
-      (state) => state.selectSize
+      (state) => state
     );
-  }, [selectSize]);
+  });
 
   useEffect(() => {
     planetStore.subscribe(
       (state) => (explanation.current = state.explanation),
-      (state) => state.explanation
+      (state) => state
     );
-  }, [explanation]);
+  });
 
   useEffect(() => {
     planetStore.subscribe(
       (state) => (resources.current = state.planetResources),
-      (state) => state.planetResources
+      (state) => state
     );
-  }, [resources]);
+  });
 
   const types = {
     지구형: { climate: "온대", resources: { food: 0.5, gear: 5, science: 1 } },
@@ -209,9 +205,7 @@ export const PlanetInfo = () => {
             &nbsp;<span className="type">{typeName.current}</span>
           </div>
           <div className="explanation">
-            {infoName.current in explanation.current
-              ? explanation.current[infoName.current]
-              : explanation.current["etc"]}
+            {infoName.current in explanation.current ? explanation.current[infoName.current] : explanation.current["etc"]}
           </div>
           <div className="state">
             <li>
@@ -236,12 +230,8 @@ export const PlanetInfo = () => {
           {mainPlanet ? null : (
             <div className="special">
               특이 사항
-              <div className="positive">
-                {effects ? effects[0].map((item, index) => <li key={index}>{item}</li>) : null}
-              </div>
-              <div className="negative">
-                {effects ? effects[1].map((item, index) => <li key={index}>{item}</li>) : null}
-              </div>
+              <div className="positive">{effects ? effects[0].map((item, index) => <li key={index}>{item}</li>) : null}</div>
+              <div className="negative">{effects ? effects[1].map((item, index) => <li key={index}>{item}</li>) : null}</div>
             </div>
           )}
           <div className="buttons" style={{ height: mainPlanet ? "430px" : "80px" }}>
