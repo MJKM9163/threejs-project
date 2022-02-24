@@ -1,19 +1,47 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { researchStore } from "../../hooks/stores/researchStore";
 import { screenStore } from "../../hooks/stores/screenStore";
-import { ResearchInfo } from "./ResearchInfo";
+import { MemoResearchInfo, ResearchInfo } from "./ResearchInfo";
 import { MemoResearchWarning } from "./ResearchWarning";
 
 const ResearchMapBox = styled.div`
+  font-family: "Noto Sans KR", sans-serif;
   position: absolute;
   width: 100%;
   height: 100%;
   background-color: #b9b9b929;
-  z-index: ${(props) => (props.check ? 1000 : -500)};
+  z-index: ${(props) => (props.check ? 1000000 : -500)};
   opacity: ${(props) => (props.check ? 1 : 0)};
   cursor: default;
+
+  .resourcesInfo {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    left: 5%;
+    top: 5%;
+
+    background-color: #cac5a587;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    z-index: 1000;
+
+    span {
+      width: 150px;
+      margin: 5px 0px 5px 10px;
+      font-weight: bold;
+      font-size: 25px;
+
+      img {
+        width: 40px;
+        height: 40px;
+        vertical-align: top;
+      }
+    }
+  }
 
   .researchMapContainer {
     position: absolute;
@@ -144,6 +172,8 @@ const ResearchMapBox = styled.div`
 export const ResearchMap = () => {
   const researchMapOnOff = screenStore((state) => state.researchMapOnOff);
   const researchList = researchStore((state) => state.list);
+  //const researchResources = researchStore((state) => state.researchResources);
+  const researchResources = researchStore.getState().researchResources;
   const completionList = researchStore.getState().completionList;
   const allResources = planetStore.getState().allResources;
   // const planetResources = planetStore.getState().planetResources;
@@ -167,26 +197,44 @@ export const ResearchMap = () => {
   const [pos, setPos] = useState([0, 0]);
   const [list, setList] = useState({ AddResources: { food: 0, gear: 0, science: 0 } });
 
-  const onDragStart = (e) => {
+  const onDragStart = useCallback((e) => {
     e.preventDefault();
-    setIsDrag(true);
+    setIsDrag(() => true);
     setStartX(e.pageX + ContainerRef.current.scrollLeft);
     setStartY(e.pageY + ContainerRef.current.scrollTop);
-  };
+  }, []);
 
-  const onDragEnd = () => {
-    setIsDrag(false);
-  };
+  const onDragEnd = useCallback(() => {
+    setIsDrag(() => false);
+  }, []);
 
-  const onDragMove = (e) => {
-    if (isDrag) {
-      ContainerRef.current.scrollLeft = startX - e.pageX;
-      ContainerRef.current.scrollTop = startY - e.pageY;
-    }
-  };
+  const onDragMove = useCallback(
+    (e) => {
+      if (isDrag) {
+        ContainerRef.current.scrollLeft = startX - e.pageX;
+        ContainerRef.current.scrollTop = startY - e.pageY;
+      }
+    },
+    [isDrag]
+  );
+
   console.log("연구창 실행");
   return (
     <ResearchMapBox check={researchMapOnOff}>
+      <span className="resourcesInfo">
+        <span style={{ color: "DarkGreen", borderBottom: "1px solid DarkGreen" }}>
+          <img className="inImg" src="images/resources/icons/corn.png" alt="추가 식량" />
+          {" + " + researchResources.food * 2 + "/s"}
+        </span>
+        <span style={{ color: "DarkOrange", borderBottom: "1px solid DarkOrange" }}>
+          <img className="inImg" src="images/resources/icons/gear.png" alt="추가 생산력" />
+          {" + " + researchResources.gear}
+        </span>
+        <span style={{ color: "DeepSkyBlue", borderBottom: "1px solid DeepSkyBlue" }}>
+          <img className="inImg" src="images/resources/icons/flask.png" alt="추가 과학" />
+          {" + " + researchResources.science}
+        </span>
+      </span>
       <div
         className="researchMapContainer"
         ref={ContainerRef}
@@ -194,8 +242,9 @@ export const ResearchMap = () => {
         onMouseMove={onDragMove}
         onMouseUp={onDragEnd}
         onMouseLeave={onDragEnd}>
-        <ResearchInfo info={info} pos={pos} list={list} />
+        <MemoResearchInfo info={info} pos={pos} list={list} />
         <MemoResearchWarning pos={pos} warning={warning} setWarning={setWarning} message={message} />
+
         <svg className="basicLine" width={1200} height={1200} viewBox="-50 0 1200 1200">
           <line x1={0} y1={0} x2={300} y2={0} stroke={hovers.basicLineColor[0]} strokeWidth={15} />
           <line x1={-50} y1={200} x2={300} y2={200} stroke={hovers.basicLineColor[0]} strokeWidth={7} />
@@ -297,17 +346,28 @@ export const ResearchMap = () => {
                   if (researchList[item].cost <= allResources.science && check === true) {
                     e.target.parentElement.style.backgroundColor = "#00ce5d";
                     researchStore.getState().completionList.push(item);
-                    planetStore.setState({
-                      allResources: {
-                        ...allResources,
+                    researchStore.setState({
+                      researchResources: {
+                        ...researchResources,
                         [researchList[item]?.AddResources["food"] ? `food` : null]:
-                          allResources.food + researchList[item].AddResources["food"],
+                          researchResources.food + researchList[item].AddResources["food"],
                         [researchList[item]?.AddResources["gear"] ? `gear` : null]:
-                          allResources.gear + researchList[item].AddResources["gear"],
+                          researchResources.gear + researchList[item].AddResources["gear"],
                         [researchList[item]?.AddResources["science"] ? `science` : null]:
-                          allResources.science + researchList[item].AddResources["science"],
+                          researchResources.science + researchList[item].AddResources["science"],
                       },
                     });
+                    // planetStore.setState({
+                    //   allResources: {
+                    //     ...allResources,
+                    //     [researchList[item]?.AddResources["food"] ? `food` : null]:
+                    //       allResources.food + researchList[item].AddResources["food"],
+                    //     [researchList[item]?.AddResources["gear"] ? `gear` : null]:
+                    //       allResources.gear + researchList[item].AddResources["gear"],
+                    //     [researchList[item]?.AddResources["science"] ? `science` : null]:
+                    //       allResources.science + researchList[item].AddResources["science"],
+                    //   },
+                    // });
                   } else if (check !== true) {
                     setMessage("선행 연구가 완료되지 않았습니다!");
                     setWarning(true);

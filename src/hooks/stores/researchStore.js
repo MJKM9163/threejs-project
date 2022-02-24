@@ -3,7 +3,12 @@ import { subscribeWithSelector } from "zustand/middleware";
 
 export const researchStore = create(
   subscribeWithSelector((set) => ({
-    position: null,
+    position: null, // 아직 결정 못함
+    researchResources: {
+      food: 0,
+      gear: 0,
+      science: 0,
+    },
     completionList: ["laboratory"],
     list: {
       basic: {
@@ -35,7 +40,7 @@ export const researchStore = create(
       artificialBacteria: {
         description:
           "대부분 행성의 환경은 우리에게 적대적입니다. 일반 박테리아로는 적대적인 환경을 개선시키기 어려웠지만, 높은 과학기술로 강화된 박테리아를 이용해 조금이나마 환경을 개선할 수 있게 되었습니다.",
-        AddResources: { food: 1, science: 1 },
+        AddResources: { food: 0.5, science: 1 },
         AddStructure: {},
         cost: 1,
         position: [450, 605],

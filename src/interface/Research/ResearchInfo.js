@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 
 const ResearchInfoContainer = styled.span`
@@ -12,7 +12,6 @@ const ResearchInfoContainer = styled.span`
   outline: 1px solid black;
   z-index: 1500;
   opacity: 0.9;
-  font-family: "Noto Sans KR", sans-serif;
   color: #383838;
 
   .flexBox {
@@ -51,6 +50,7 @@ const ResearchInfoContainer = styled.span`
 `;
 
 export const ResearchInfo = ({ info, pos, list }) => {
+  console.log("연구 인포");
   return (
     <ResearchInfoContainer info={info} pos={pos}>
       <span className="flexBox">
@@ -80,3 +80,5 @@ export const ResearchInfo = ({ info, pos, list }) => {
     </ResearchInfoContainer>
   );
 };
+
+export const MemoResearchInfo = memo(ResearchInfo);

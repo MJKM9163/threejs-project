@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { planetStore } from "./stores/planetStore";
+import { researchStore } from "./stores/researchStore";
 
 let cycle;
 let gearArray = [];
 let scienceArray = [];
 export const AllResourcesFun = () => {
   const allResourcesRef = useRef(planetStore.getState().allResources);
+  const researchResources = useRef(researchStore.getState().researchResources.food);
   const planetResources = planetStore((state) => state.planetResources);
 
   useEffect(() => {
@@ -14,12 +16,18 @@ export const AllResourcesFun = () => {
       (state) => state
     );
   });
+  useEffect(() => {
+    researchStore.subscribe(
+      (state) => (researchResources.current = state.researchResources.food),
+      (state) => state
+    );
+  });
 
   const FoodResources = () => {
     clearInterval(cycle);
     cycle = setInterval(() => {
       for (let item in planetResources) {
-        planetStore.getState().allResources.food += planetResources[item].resources.food;
+        planetStore.getState().allResources.food += planetResources[item].resources.food + researchResources.current;
       }
       planetStore.setState({
         allResources: { ...allResourcesRef.current },
@@ -27,9 +35,9 @@ export const AllResourcesFun = () => {
     }, 500);
   };
 
+  let gear = 0;
   const GearRresources = () => {
     if (gearArray.length !== Object.keys(planetResources).length) {
-      let gear = 0;
       gearArray.length = 0;
       for (let item in planetResources) {
         gearArray.push(planetResources[item].resources.gear);
@@ -41,9 +49,9 @@ export const AllResourcesFun = () => {
     }
   };
 
+  let science = 0;
   const ScienceRresources = () => {
     if (scienceArray.length !== Object.keys(planetResources).length) {
-      let science = 0;
       scienceArray.length = 0;
       for (let item in planetResources) {
         scienceArray.push(planetResources[item].resources.science);

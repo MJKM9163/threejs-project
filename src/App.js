@@ -5,7 +5,7 @@ import { Debug, Physics } from "@react-three/cannon";
 import { SpaceIndex } from "./components/space/SpaceIndex";
 import { Html, Stars, useHelper } from "@react-three/drei";
 import { PointLightHelper } from "three";
-import { Background } from "./components/space/Background";
+import { Background, MemoBackground } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
 import { PlanetInfo } from "./interface/PlanetInfo";
 import { useStore } from "./hooks/stores/useStore";
@@ -16,6 +16,7 @@ import { RightOption } from "./interface/SideTap/RightOption";
 import { Resources } from "./interface/Construction/Resources";
 import { AllResourcesFun, MemoAllResourcesFun } from "./hooks/AllResourcesFun";
 import { ResearchMap } from "./interface/Research/ResearchMap";
+import { FlyingIndex } from "./flyingObjects/FlyingIndex";
 
 const Light = () => {
   const pointLight = useRef();
@@ -100,12 +101,13 @@ function App() {
         }}>
         <ambientLight intensity={0.2} />
         <Light />
-        <Physics gravity={[0, 0, 0]} iterations={1} broadphase="SAP">
+        <Physics gravity={[0, 0, 0]} iterations={1}>
           {/* <Debug> */}
           <Suspense fallback={<Html>loading..</Html>}>
             {/* <Galaxy /> */}
             <SpaceIndex />
             <Background />
+            <FlyingIndex />
           </Suspense>
           {/* </Debug> */}
         </Physics>

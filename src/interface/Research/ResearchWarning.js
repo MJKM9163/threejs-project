@@ -2,7 +2,6 @@ import React, { memo } from "react";
 import styled from "styled-components";
 
 const WarningBox = styled.span`
-  font-family: "Noto Sans KR", sans-serif;
   position: absolute;
   display: ${(props) => (props.warning ? "block" : "none")};
   top: ${(props) => props.pos[0] - 30 + "px"};
@@ -24,21 +23,18 @@ const WarningBox = styled.span`
 `;
 
 let effet;
-let audioCheck = true;
 export const ResearchWarning = ({ pos, warning, setWarning, message }) => {
-  let testAudio = new Audio("soundEffects/clicks/clickWarning.mp3");
+  let warningAudio = new Audio("soundEffects/clicks/clickWarning.mp3");
 
-  if (warning === true && audioCheck === true) {
-    audioCheck = false;
-    testAudio.volume = 0.5;
-    testAudio.play();
+  if (warning === true) {
+    warningAudio.volume = 0.5;
+    warningAudio.play();
   }
   clearTimeout(effet);
   effet = setTimeout(() => {
     setWarning(false);
-    audioCheck = true;
   }, 1500);
-
+  //console.log("연구 경고");
   return (
     <WarningBox pos={pos} warning={warning}>
       {message}

@@ -12,7 +12,7 @@ const RightOptionBox = styled.div`
   background-color: #7ed0ff7d;
   outline: 1px solid #8af1ff7b;
   color: black;
-  z-index: 10000;
+  z-index: 10000000;
 
   img {
     outline: 1px solid #8af1ff7b;
