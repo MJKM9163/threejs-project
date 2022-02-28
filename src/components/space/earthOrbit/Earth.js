@@ -19,6 +19,9 @@ let effectsModels;
 
 let onTimer;
 
+let b = 0;
+let c = -250;
+
 export const Earth = ({ SetUp, ...props }) => {
   const effectRef = useRef();
   const tapRef = useRef();
@@ -48,11 +51,11 @@ export const Earth = ({ SetUp, ...props }) => {
     }, 300);
   };
 
-  const earthWorldPosition = new Vector3();
+  const collisionWorldPosition = new Vector3();
+  const CollisionRef = useRef();
   const [earthRef, earthApi] = useSphere(() => ({
-    mass: 1,
+    mass: 0,
     type: "Static",
-    position: props.position,
     args: [argsSize.current["middle"]],
   }));
 
@@ -64,9 +67,9 @@ export const Earth = ({ SetUp, ...props }) => {
   //const effectModels = EffectModelSelect(effects[0], effects[1]); 잠시 주석처리
 
   useFrame(() => {
-    earthApi.rotation.set(0, (a += 0.005), 0);
-    earthRef.current?.getWorldPosition(earthWorldPosition);
     effectRef.current.rotation.set(0, a - 0.002, a - 0.003);
+    CollisionRef.current?.getWorldPosition(collisionWorldPosition);
+    earthApi.position.copy(collisionWorldPosition);
 
     if (tap?.current === false) {
       tapRef.current.style.display = "none";
@@ -81,18 +84,19 @@ export const Earth = ({ SetUp, ...props }) => {
   console.log("earth 랜더링 확인");
   return (
     <>
-      <group ref={earthRef} dispose={null}>
+      <group position={props.position} dispose={null}>
         <Html ref={tapRef}>
           <TapPlanet planet={Pname} />
         </Html>
         <Html ref={infoRef} center distanceFactor={10000}>
           <LeftInfoBox planet={Pname} />
         </Html>
+        <mesh ref={CollisionRef} />
         <group rotation={[-Math.PI / 2, 0, 0]} scale={1.9}>
           <mesh
             castShadow
             onClick={(e) => {
-              SetUp(earthWorldPosition, Pname, "지구형", argsSize.current["middle"], effects);
+              SetUp(collisionWorldPosition, Pname, "지구형", argsSize.current["middle"], effects);
             }}
             onPointerDown={(e) => {
               timer();

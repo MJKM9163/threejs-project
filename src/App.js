@@ -102,14 +102,14 @@ function App() {
         <ambientLight intensity={0.2} />
         <Light />
         <Physics gravity={[0, 0, 0]} iterations={1}>
-          {/* <Debug> */}
-          <Suspense fallback={<Html>loading..</Html>}>
-            {/* <Galaxy /> */}
-            <SpaceIndex />
-            <Background />
-            <FlyingIndex />
-          </Suspense>
-          {/* </Debug> */}
+          <Debug color="red" scale={1.1}>
+            <Suspense fallback={<Html>loading..</Html>}>
+              {/* <Galaxy /> */}
+              <SpaceIndex />
+              <Background />
+              <FlyingIndex />
+            </Suspense>
+          </Debug>
         </Physics>
         <axesHelper scale={5000} />
         <Stars radius={5000} depth={5000} count={500} />

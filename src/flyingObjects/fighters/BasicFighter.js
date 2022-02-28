@@ -1,43 +1,43 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
-import { useBox, useSphere } from "@react-three/cannon";
+import { useRaycastAny, useSphere } from "@react-three/cannon";
 import { useFrame } from "@react-three/fiber";
+import { effectSound } from "../../hooks/stores/effectSound";
 
-let a = 1;
+let a = -150;
 let b = 0;
+
 export const BasicFighter = ({ args, ...props }) => {
-  const group = useRef();
+  const box = useRef();
   const { nodes, materials } = useGLTF("flyingObjects/basicFighter/scene.gltf");
 
   const [hitBoxRef, hitBoxApi] = useSphere(() => ({
     type: "Dynamic",
-    mass: 0,
-    position: [1000, 0, -1000],
+    mass: 100,
+    position: [800, 0, -1000],
     rotation: [0, Math.PI / 2, 0],
     args: [args],
+    onCollide: (e) => {
+      effectSound.getState().fighter.FlightExplosionSound.action();
+      console.log("아군 비행기 충돌!");
+      //hitBoxApi.position.set(800, 0, -1000);
+      a = 0;
+    },
   }));
 
   useFrame(() => {
-    //hitBoxApi.rotation.set(0, 0, 0);
-    hitBoxApi.velocity.set(0, 0, 0); // 가속!
-    //hitBoxApi.position.set((b -= 0.05), 0, 0);
-    //group.current?.position.set((a += 0.1), 0, 0);
-    //console.log(ref.current?.position);
+    hitBoxApi.velocity.set(a, 0, 0); // 가속!
+    //console.log(box.current?.getWorldPosition(vector));
   });
-  console.log(hitBoxRef.current?.scale);
-  console.log(hitBoxRef);
-  console.log(hitBoxApi);
-  console.log(group);
 
   console.log("비행체");
-  const [color, setColor] = useState("hotpink");
   return (
-    <group ref={hitBoxRef} {...props} dispose={null}>
-      <mesh>
-        <sphereGeometry args={[args]} />
-        <meshStandardMaterial wireframe opacity={0.5} transparent color={color} />
+    <group ref={hitBoxRef} dispose={null}>
+      <mesh ref={box}>
+        <sphereGeometry args={[650]} />
+        <meshStandardMaterial wireframe opacity={0.5} transparent />
       </mesh>
-      <group rotation={[-Math.PI / 2, 0, 0]}>
+      <group rotation={[-Math.PI / 2, 0, 0]} scale={20}>
         <mesh geometry={nodes["wave-material"].geometry} material={nodes["wave-material"].material} />
         <group scale={0.75}>
           <mesh geometry={nodes["wave-material_1"].geometry} material={nodes["wave-material_1"].material} />

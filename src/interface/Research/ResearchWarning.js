@@ -24,7 +24,7 @@ const WarningBox = styled.span`
 
 let effet;
 export const ResearchWarning = ({ pos, warning, setWarning, message }) => {
-  let warningAudio = new Audio("soundEffects/clicks/clickWarning.mp3");
+  let warningAudio = new Audio("soundEffects/clickWarning.mp3");
 
   if (warning === true) {
     warningAudio.volume = 0.5;

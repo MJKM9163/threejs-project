@@ -39,11 +39,11 @@ export const Unknown = ({ SetUp, ...props }) => {
     );
   });
 
-  const unknownWorldPosition = new Vector3();
+  const collisionWorldPosition = new Vector3();
+  const CollisionRef = useRef();
   const [unknownRef, unknownApi] = useSphere(() => ({
     mass: 1,
     type: "Static",
-    position: props.position,
     args: [argsSize.current["small"]],
   }));
 
@@ -60,7 +60,8 @@ export const Unknown = ({ SetUp, ...props }) => {
 
   useFrame(() => {
     unknownApi.rotation.set(0, (a += 0.01), 0);
-    unknownRef.current?.getWorldPosition(unknownWorldPosition);
+    CollisionRef.current?.getWorldPosition(collisionWorldPosition);
+    unknownApi.position.copy(collisionWorldPosition);
 
     if (tap?.current === false) {
       html.current.style.display = "none";
@@ -78,13 +79,14 @@ export const Unknown = ({ SetUp, ...props }) => {
   console.log("unknown 랜더링 확인");
   return (
     <>
-      <group ref={unknownRef} {...props} dispose={null}>
+      <group position={props.position} dispose={null}>
         <Html ref={html}>
           <TapPlanet planet={Pname} />
         </Html>
         <Html ref={infoRef} center distanceFactor={10000}>
           <LeftInfoBox planet={Pname} />
         </Html>
+        <mesh ref={CollisionRef} />
         <group rotation={[-Math.PI / 2, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]}>
             <group
@@ -93,7 +95,7 @@ export const Unknown = ({ SetUp, ...props }) => {
               <mesh
                 receiveShadow
                 onClick={(e) => {
-                  SetUp(unknownWorldPosition, Pname, "얼음형", argsSize.current["small"], ...effects);
+                  SetUp(collisionWorldPosition, Pname, "얼음형", argsSize.current["small"], ...effects);
                 }}
                 onPointerDown={(e) => {
                   timer();

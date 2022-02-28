@@ -5,8 +5,8 @@ import EnemyFighter from "./fighters/enemyFighter";
 export const FlyingIndex = () => {
   return (
     <group>
-      <BasicFighter position={[800, 0, -1000]} rotation={[0, Math.PI / 2, 0]} args={18} scale={25} />
-      <EnemyFighter position={[-800, 0, -1000]} rotation={[0, 0, 0]} args={1} scale={100} />
+      <BasicFighter position={[0, 0, 0]} rotation={[0, 0, 0]} args={500} scale={25} />
+      <EnemyFighter position={[-1000, 0, -1000]} rotation={[0, 0, 0]} args={500} scale={25} />
     </group>
   );
 };

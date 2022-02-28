@@ -357,17 +357,6 @@ export const ResearchMap = () => {
                           researchResources.science + researchList[item].AddResources["science"],
                       },
                     });
-                    // planetStore.setState({
-                    //   allResources: {
-                    //     ...allResources,
-                    //     [researchList[item]?.AddResources["food"] ? `food` : null]:
-                    //       allResources.food + researchList[item].AddResources["food"],
-                    //     [researchList[item]?.AddResources["gear"] ? `gear` : null]:
-                    //       allResources.gear + researchList[item].AddResources["gear"],
-                    //     [researchList[item]?.AddResources["science"] ? `science` : null]:
-                    //       allResources.science + researchList[item].AddResources["science"],
-                    //   },
-                    // });
                   } else if (check !== true) {
                     setMessage("선행 연구가 완료되지 않았습니다!");
                     setWarning(true);
