@@ -7,6 +7,7 @@
 // MAIN
 
 // standard global variables
+import * as THREE from "three";
 var container, scene, camera, renderer, controls, stats;
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();

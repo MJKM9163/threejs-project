@@ -58,6 +58,10 @@ export const Background = () => {
         <planeGeometry attach="geometry" args={[1000000, 1000000]} />
         <meshBasicMaterial map={textureStarField3} opacity={1} attach="material" transparent />
       </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -20000, 20000]}>
+        <planeGeometry attach="geometry" args={[20000, 20000]} />
+        <meshBasicMaterial color={"red"} opacity={1} attach="material" transparent />
+      </mesh>
     </group>
   );
 };
