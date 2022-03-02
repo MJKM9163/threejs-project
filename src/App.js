@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useRef } from "react";
 import "./App.css";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Debug, Physics } from "@react-three/cannon";
 import { SpaceIndex } from "./components/space/SpaceIndex";
 import { Html, Stars, useHelper } from "@react-three/drei";
@@ -17,6 +17,7 @@ import { Resources } from "./interface/Construction/Resources";
 import { AllResourcesFun, MemoAllResourcesFun } from "./hooks/AllResourcesFun";
 import { ResearchMap } from "./interface/Research/ResearchMap";
 import { FlyingIndex } from "./flyingObjects/FlyingIndex";
+import { RayCasters } from "./hooks/RayCasters";
 
 const Light = () => {
   const pointLight = useRef();
@@ -79,7 +80,6 @@ document.addEventListener("mouseup", mouseUpEventAllScreen);
 
 function App() {
   // const test = planetStore.getState().planetResourcesl
-
   console.log("메인 랜더링 확인");
   return (
     <>
@@ -100,6 +100,7 @@ function App() {
           near: 3,
         }}>
         <ambientLight intensity={0.2} />
+
         <Light />
         <Physics gravity={[0, 0, 0]} iterations={1}>
           <Debug color="red" scale={1.1}>
@@ -115,6 +116,7 @@ function App() {
         <Stars radius={5000} depth={5000} count={500} />
         {/* <OrbitControls /> */}
         <SpaceCamera />
+        <RayCasters />
       </Canvas>
     </>
   );

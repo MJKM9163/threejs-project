@@ -32,6 +32,10 @@ export default function EnemyFighter({ args, ...props }) {
     <group ref={hitBoxRef} dispose={null}>
       <axesHelper scale={1500} />
       <mesh>
+        <sphereGeometry args={[650]} />
+        <meshStandardMaterial wireframe opacity={0.5} transparent />
+      </mesh>
+      <mesh>
         <sphereGeometry />
         <meshStandardMaterial wireframe opacity={0.5} transparent />
       </mesh>
