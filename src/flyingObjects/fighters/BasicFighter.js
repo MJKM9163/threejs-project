@@ -1,22 +1,22 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
-import { useRaycastAny, useSphere } from "@react-three/cannon";
+import { useSphere } from "@react-three/cannon";
 import { useFrame, useThree } from "@react-three/fiber";
 import { effectSound } from "../../hooks/stores/effectSound";
-import { OBB } from "three/examples/jsm/math/OBB";
 
 let a = -150;
 let b = 0;
 
 export const BasicFighter = ({ args, ...props }) => {
-  const box = useRef();
+  const sphere = useRef();
   const { nodes, materials } = useGLTF("flyingObjects/basicFighter/scene.gltf");
+  const { raycaster, scene, clock } = useThree();
 
   const [hitBoxRef, hitBoxApi] = useSphere(() => ({
     type: "Dynamic",
     mass: 1,
     position: [800, 0, -1000],
-    rotation: [0, Math.PI / 2, 0],
+    rotation: [0, 0, 0],
     args: [args],
     onCollide: (e) => {
       effectSound.getState().fighter.FlightExplosionSound.action();
@@ -30,28 +30,17 @@ export const BasicFighter = ({ args, ...props }) => {
   }));
 
   useFrame(() => {
-    hitBoxApi.velocity.set(a, 0, 0); // 가속!
+    //hitBoxApi.velocity.set(a, 0, 0); // 가속!
   });
 
-  const ref = useRef();
-  useLayoutEffect(() => {
-    ref.current.geometry.computeBoundingBox();
-    ref.current.geometry.boundingBox.applyMatrix4(hitBoxRef.current.matrixWorld);
-
-    console.log(ref);
-    console.log(ref.current.geometry.boundingBox);
-    const t = new OBB().fromBox3(ref.current.geometry.boundingBox);
-    console.log(t);
-    ref.current.userData.obb = new OBB(); // 여기서 부터 시작
-  }, []);
   console.log("비행체");
   return (
     <group ref={hitBoxRef} dispose={null}>
-      <mesh ref={ref}>
-        <sphereGeometry args={[650]} />
+      <mesh>
+        <sphereGeometry args={[850]} />
         <meshStandardMaterial wireframe opacity={0.5} transparent color={"green"} />
       </mesh>
-      <group rotation={[-Math.PI / 2, 0, 0]} scale={20}>
+      <group rotation={[-Math.PI / 2, 0, Math.PI / 2]} scale={20}>
         <mesh geometry={nodes["wave-material"].geometry} material={nodes["wave-material"].material} />
         <group scale={0.75}>
           <mesh geometry={nodes["wave-material_1"].geometry} material={nodes["wave-material_1"].material} />

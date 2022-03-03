@@ -116,7 +116,7 @@ function App() {
         <Stars radius={5000} depth={5000} count={500} />
         {/* <OrbitControls /> */}
         <SpaceCamera />
-        <RayCasters />
+        {/* <RayCasters /> */}
       </Canvas>
     </>
   );

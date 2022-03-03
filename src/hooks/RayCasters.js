@@ -13,9 +13,8 @@ export const RayCasters = () => {
   let intersects = raycaster.intersectObjects(scene.children, true);
   for (let item of intersects) {
     item.object.material.color.set("yellow");
-    console.log(item);
+    //console.log(item);
   }
-  //intersects[i].object.material.color.set("blue");
   //   origin : Vector3,
   //   direction : Vector3,
   //   near : Float,
