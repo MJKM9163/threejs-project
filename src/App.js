@@ -94,7 +94,6 @@ function App() {
         colorManagement
         sRGB
         camera={{
-          position: [1500, 7000, -7000],
           fov: 60,
           far: 250000,
           near: 3,

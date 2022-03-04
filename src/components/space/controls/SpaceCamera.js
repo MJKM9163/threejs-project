@@ -11,8 +11,8 @@ let x = 0;
 let z = 0;
 
 let posX = 300;
-let posY = 4000;
-let posZ = -7000;
+let posY = 7000;
+let posZ = -10000;
 
 export const SpaceCamera = ({ pos = new Vector3(), look = new Vector3() }) => {
   console.log("카메라 랜더링 확인");
@@ -53,15 +53,9 @@ export const SpaceCamera = ({ pos = new Vector3(), look = new Vector3() }) => {
       x -= 100;
     }
     zoomCheck.current
-      ? pos.set(
-          focus.current.x - 400,
-          focus.current.y + 550,
-          focus.current.z + -1500
-        )
+      ? pos.set(focus.current.x - 400, focus.current.y + 550, focus.current.z + -1500)
       : pos.set(posX + x, posY, posZ + z);
-    zoomCheck.current
-      ? look.set(focus.current.x, focus.current.y, focus.current.z)
-      : look.set(0 + x, 0, 0 + z);
+    zoomCheck.current ? look.set(focus.current.x, focus.current.y, focus.current.z) : look.set(0 + x, 0, 0 + z);
 
     state.camera.position.lerp(pos, 0.5);
     state.camera.updateProjectionMatrix();
