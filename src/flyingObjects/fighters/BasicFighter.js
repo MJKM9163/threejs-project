@@ -1,44 +1,80 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useSphere } from "@react-three/cannon";
 import { useFrame, useThree } from "@react-three/fiber";
 import { effectSound } from "../../hooks/stores/effectSound";
+import { boundingStore } from "../../hooks/stores/boundingStore";
+import { Box3 } from "three";
 
 let a = -150;
 let b = 0;
+let boundingArray;
+
+let detectArray = [];
 
 export const BasicFighter = ({ args, ...props }) => {
   const sphere = useRef();
+  const move = useRef();
+  const BS = useRef();
   const { nodes, materials } = useGLTF("flyingObjects/basicFighter/scene.gltf");
   const { raycaster, scene, clock } = useThree();
 
-  const [hitBoxRef, hitBoxApi] = useSphere(() => ({
+  const [collideRef, collideApi] = useSphere(() => ({
     type: "Dynamic",
     mass: 1,
-    position: [800, 0, -1000],
+    position: [0, 0, -3000],
     rotation: [0, 0, 0],
     args: [args],
     onCollide: (e) => {
-      effectSound.getState().fighter.FlightExplosionSound.action();
-      console.log("아군 비행기 충돌!");
-      //hitBoxApi.position.set(800, 0, -1000);
+      //effectSound.getState().fighter.FlightExplosionSound.action();
+      //console.log("아군 비행기 충돌!");
+      collideApi.position.set(0, 0, -3000);
       a = 0;
     },
     onCollideEnd: () => {
-      console.log("충돌 끝");
+      //console.log("충돌 끝");
     },
   }));
+  useEffect(() => {
+    console.log(boundingStore.getState().fighter);
+    boundingArray = boundingStore.getState().fighter.enemy;
+  }, []);
+
+  let boundingFun = () => {
+    for (let key in boundingArray) {
+      //console.log(key);
+      //console.log(boundingArray[key].current);
+      const check = BS.current.geometry.boundingSphere?.intersectsSphere(boundingArray[key]);
+      if (check === true) {
+        //collideApi.velocity.copy(boundingArray[key].current.geometry.boundingSphere.center);
+        return check;
+      }
+    }
+  };
 
   useFrame(() => {
-    //hitBoxApi.velocity.set(a, 0, 0); // 가속!
-  });
+    collideApi.velocity.set(0, 0, -900); // 가속!
+    if (BS.current.geometry.boundingSphere) {
+      collideRef.current.getWorldPosition(BS.current.geometry.boundingSphere.center);
+    }
 
+    if (boundingFun()) {
+      move.current.material.color.set("yellow");
+    } else {
+      move.current.material.color.set("blue");
+    }
+  });
+  console.log(collideRef);
   console.log("비행체");
   return (
-    <group ref={hitBoxRef} dispose={null}>
-      <mesh>
-        <sphereGeometry args={[850]} />
+    <group ref={collideRef} dispose={null}>
+      <mesh ref={move}>
+        <sphereGeometry args={[args + 50]} />
         <meshStandardMaterial wireframe opacity={0.5} transparent color={"green"} />
+      </mesh>
+      <mesh ref={BS}>
+        <sphereGeometry args={[args + 50]} />
+        <meshStandardMaterial wireframe opacity={0} transparent />
       </mesh>
       <group rotation={[-Math.PI / 2, 0, Math.PI / 2]} scale={20}>
         <mesh geometry={nodes["wave-material"].geometry} material={nodes["wave-material"].material} />

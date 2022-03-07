@@ -1,12 +1,10 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { Sphere } from "@react-three/drei";
-import React, { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Vector3 } from "three";
-import { OBB } from "three/examples/jsm/math/OBB";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { boundingStore } from "../../hooks/stores/boundingStore";
 
 let a = 0;
 let num = 0;
-let intersectsTestNum = 0;
 let check = false;
 let array = [];
 let space = Array.from({ length: 2 }, (v, i) => i);
@@ -28,31 +26,17 @@ export const Ttest = () => {
     setRender((value) => !value);
   }, []);
 
-  //------------
+  useEffect(() => {
+    //boundingStore.getState().test.push(checkTestSphere);
+  }, []);
 
-  const intersectsTest = () => {
-    for (let item of refArray.current) {
-      if (item[intersectsTestNum].current === null) {
-        break;
-      }
-      // for (let i = 0; i <) {
-
-      // }
-      item[intersectsTestNum].current.geometry.boundingSphere?.intersectsSphere();
-      console.log(item);
-    }
-
-    //-------- 각 컴포넌트에서 비교하기
-  };
-
-  console.log(refArray);
   useFrame(() => {
     if (movingBoundingSphere.current.geometry.boundingSphere && checkTestSphere.current.geometry.boundingSphere) {
       movingBoundingSphere.current.geometry.boundingSphere.center = movinSphereGroup.current.position;
       checkTestSphere.current.geometry.boundingSphere.center = checkTestSphere.current.position;
     }
 
-    movinSphereGroup.current.position.set(Math.sin(clock.getElapsedTime() * 1) * 3000, 0, -2800);
+    movinSphereGroup.current.position.set(Math.sin(clock.getElapsedTime() * 2) * 3000, 0, -2800);
 
     if (
       movingBoundingSphere.current.geometry.boundingSphere?.intersectsSphere(checkTestSphere.current.geometry.boundingSphere)
@@ -64,9 +48,12 @@ export const Ttest = () => {
       }
     } else {
       if (a === 3 && array.length !== 2) {
+        array.push("비행기");
         onAdd();
+        //refBsArray.current[num].current.geometry.boundingSphere.center = refArray.current[num].current.position;
+        boundingStore.getState().test.push(refBsArray.current[num]);
+        console.log(boundingStore.getState().test);
         num += 1;
-        array.push("비행기" + num);
         a = 0;
       }
       check = false;

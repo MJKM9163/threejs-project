@@ -1,43 +1,55 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useSphere } from "@react-three/cannon";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { effectSound } from "../../hooks/stores/effectSound";
+import { boundingStore } from "../../hooks/stores/boundingStore";
 
 let a = 0;
-export default function EnemyFighter({ args, ...props }) {
+
+export default function EnemyFighter({ args, position, rotation, num }) {
   const group = useRef();
+  const move = useRef();
+  const BS = useRef();
+  const { clock } = useThree();
+  const fighter = boundingStore.getState().fighter;
   const { nodes, materials } = useGLTF("flyingObjects/enemyFighter/scene.gltf");
 
-  const [hitBoxRef, hitBoxApi] = useSphere(() => ({
-    type: "Static",
+  const [collideRef, collideApi] = useSphere(() => ({
+    type: "Dynamic",
     mass: 100,
-    position: [-500, 0, -1000],
-    rotation: [0, 0, 0],
+    position,
+    rotation,
     args: [args],
     onCollide: (e) => {
       //effectSound.getState().fighter.FlightExplosionSound.action();
-      console.log("적 비행기 충돌!");
     },
   }));
 
+  useEffect(() => {
+    console.log(boundingStore.getState().fighter);
+    let boundingArray = boundingStore.getState().fighter.friendly;
+  }, []);
+
   useFrame(() => {
-    //hitBoxApi.rotation.set(0, 0, 0);
-    hitBoxApi.velocity.set(0, 0, 0); // 가속!
-    //group.current?.position.set((a += 0.1), 0, 0);
-    //console.log(ref.current?.position);
+    collideApi.velocity.set(Math.sin(clock.getElapsedTime() * 5) * -500, 0, 0); // 가속!
+    if (BS.current.geometry.boundingSphere) {
+      collideRef.current.getWorldPosition(BS.current.geometry.boundingSphere.center);
+      boundingStore.getState().fighter.enemy = { ...fighter.enemy, ["전투기" + num]: BS.current.geometry.boundingSphere };
+      //console.log(fighter);
+    }
   });
 
   return (
-    <group ref={hitBoxRef} dispose={null}>
+    <group ref={collideRef} dispose={null}>
       <axesHelper scale={1500} />
-      <mesh>
-        <sphereGeometry args={[650]} />
-        <meshStandardMaterial wireframe opacity={0.5} transparent />
+      <mesh ref={move}>
+        <sphereGeometry args={[args + 50]} />
+        <meshStandardMaterial wireframe opacity={0.5} transparent color={"green"} />
       </mesh>
-      <mesh>
-        <sphereGeometry />
-        <meshStandardMaterial wireframe opacity={0.5} transparent />
+      <mesh ref={BS}>
+        <sphereGeometry args={[args + 50]} />
+        <meshStandardMaterial wireframe opacity={0} transparent />
       </mesh>
       <group rotation={[-Math.PI / 2, 0, 0]} scale={100}>
         <group rotation={[Math.PI / 2, 0, 0]}>
