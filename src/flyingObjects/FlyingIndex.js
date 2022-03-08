@@ -1,14 +1,14 @@
 import React from "react";
 import { Anemys } from "./Anemys";
-import { MemoTtest, Ttest } from "./fighters/Ttest";
 import { Friendlys } from "./Friendlys";
+import { ProjectileIndex } from "./projectiles/ProjectileIndex";
 
 export const FlyingIndex = () => {
   return (
     <group>
-      {/* <Ttest /> */}
       <Friendlys />
       <Anemys />
+      <ProjectileIndex />
     </group>
   );
 };

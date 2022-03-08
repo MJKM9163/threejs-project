@@ -15,7 +15,7 @@ export const Anemys = () => {
         <EnemyFighter
           key={item + index}
           num={index + 1}
-          position={[-500, 0, -4000 + index * -500]}
+          position={[2500 + index * -1800, 0, -4000]}
           rotation={[0, 0, 0]}
           args={300}
           scale={25}

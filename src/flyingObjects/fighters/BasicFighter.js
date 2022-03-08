@@ -4,61 +4,53 @@ import { useSphere } from "@react-three/cannon";
 import { useFrame, useThree } from "@react-three/fiber";
 import { effectSound } from "../../hooks/stores/effectSound";
 import { boundingStore } from "../../hooks/stores/boundingStore";
-import { Box3 } from "three";
 
-let a = -150;
-let b = 0;
-let boundingArray;
-
-let detectArray = [];
-
-export const BasicFighter = ({ args, ...props }) => {
+export const BasicFighter = ({ args, position, rotation, num }) => {
   const sphere = useRef();
   const move = useRef();
   const BS = useRef();
+  const fighter = boundingStore.getState().fighter;
   const { nodes, materials } = useGLTF("flyingObjects/basicFighter/scene.gltf");
   const { raycaster, scene, clock } = useThree();
 
   const [collideRef, collideApi] = useSphere(() => ({
     type: "Dynamic",
-    mass: 1,
-    position: [0, 0, -3000],
-    rotation: [0, 0, 0],
+    mass: 100,
+    position,
+    rotation,
     args: [args],
     onCollide: (e) => {
       //effectSound.getState().fighter.FlightExplosionSound.action();
       //console.log("아군 비행기 충돌!");
-      collideApi.position.set(0, 0, -3000);
-      a = 0;
+      //collideApi.position.set(0, 0, -3000);
     },
     onCollideEnd: () => {
       //console.log("충돌 끝");
     },
   }));
-  useEffect(() => {
-    console.log(boundingStore.getState().fighter);
-    boundingArray = boundingStore.getState().fighter.enemy;
-  }, []);
 
-  let boundingFun = () => {
+  let boundingDetect = () => {
+    let boundingArray = boundingStore.getState().fighter.enemy;
     for (let key in boundingArray) {
-      //console.log(key);
-      //console.log(boundingArray[key].current);
       const check = BS.current.geometry.boundingSphere?.intersectsSphere(boundingArray[key]);
       if (check === true) {
-        //collideApi.velocity.copy(boundingArray[key].current.geometry.boundingSphere.center);
         return check;
       }
     }
   };
 
   useFrame(() => {
-    collideApi.velocity.set(0, 0, -900); // 가속!
+    //collideApi.velocity.set(0, 0, 2000);
+    //collideApi.velocity.set(Math.sin(clock.getElapsedTime() * 2) * 0, 0, 0);
     if (BS.current.geometry.boundingSphere) {
       collideRef.current.getWorldPosition(BS.current.geometry.boundingSphere.center);
+      boundingStore.getState().fighter.friendly = {
+        ...fighter.friendly,
+        ["전투기" + num]: BS.current.geometry.boundingSphere,
+      };
     }
 
-    if (boundingFun()) {
+    if (boundingDetect()) {
       move.current.material.color.set("yellow");
     } else {
       move.current.material.color.set("blue");
