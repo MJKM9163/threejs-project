@@ -7,9 +7,8 @@ import { boundingStore } from "../../hooks/stores/boundingStore";
 import { Vector3 } from "three";
 
 let a = 0;
-let launch = false;
-
 export default function EnemyFighter({ args, position, rotation, num }) {
+  let launch = false;
   const group = useRef();
   const move = useRef();
   const BS = useRef();
@@ -47,23 +46,9 @@ export default function EnemyFighter({ args, position, rotation, num }) {
     for (let key in boundingArray) {
       const check = BS.current.geometry.boundingSphere?.intersectsSphere(boundingArray[key]);
       if (check === true) {
-        if (
-          (BS.current.geometry.boundingSphere.center.x < 0 && boundingArray[key].center.x < 0) ||
-          (BS.current.geometry.boundingSphere.center.x > 0 && boundingArray[key].center.x > 0)
-        ) {
-          xPos = (BS.current.geometry.boundingSphere.center.x - boundingArray[key].center.x) * -1;
-        } else {
-          xPos = BS.current.geometry.boundingSphere.center.x - boundingArray[key].center.x;
-        }
+        xPos = (BS.current.geometry.boundingSphere.center.x - boundingArray[key].center.x) * -1;
+        zPos = (BS.current.geometry.boundingSphere.center.z - boundingArray[key].center.z) * -1;
 
-        if (
-          (BS.current.geometry.boundingSphere.center.z < 0 && boundingArray[key].center.z < 0) ||
-          (BS.current.geometry.boundingSphere.center.z > 0 && boundingArray[key].center.z > 0)
-        ) {
-          zPos = (BS.current.geometry.boundingSphere.center.z - boundingArray[key].center.z) * -1;
-        } else {
-          zPos = BS.current.geometry.boundingSphere.center.z - boundingArray[key].center.z;
-        }
         return [xPos, zPos];
       }
     }
@@ -77,24 +62,29 @@ export default function EnemyFighter({ args, position, rotation, num }) {
     }
     if (boundingDetect()) {
       let [X, Z] = moveFun();
-      collideApi.velocity.set(X / 2, 0, Z / 2);
+      collideApi.velocity.set(X / 10, 0, Z / 10);
       move.current.material.color.set("yellow");
       if (launch === false) {
         launch = true;
         const MPos = new Vector3();
+        const TPos = new Vector3(X, 0, Z);
         collideRef.current.getWorldPosition(MPos);
+        const PosArray = { MPos: MPos, TPos: TPos };
         const add = boundingStore.getState().explosiveNum;
-        boundingStore.setState({ explosiveNum: [...add, MPos] });
+        boundingStore.setState({ explosiveNum: [...add, PosArray] });
+        //boundingStore.getState().explosiveNum = [...add, PosArray];
+
         setTimeout(() => {
           launch = false;
         }, 3000);
       }
     } else {
+      //collideApi.velocity.set(0, 0, Math.sin(clock.getElapsedTime() * 1) * 500);
       collideApi.velocity.set(0, 0, 0);
       move.current.material.color.set("blue");
     }
   });
-
+  console.log("적 비행기!!!!!!!!!!");
   return (
     <group ref={collideRef} dispose={null}>
       <axesHelper scale={1500} />

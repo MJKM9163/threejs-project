@@ -10,9 +10,10 @@ export const boundingStore = create(
     },
     planet: {},
 
-    enemyNum: [1, 2, 3, 4],
+    enemyNum: [1, 2],
     friendlyNum: [1],
     explosiveNum: [],
     pulseNum: [1],
+    ttt: [1, 2, 3],
   }))
 );

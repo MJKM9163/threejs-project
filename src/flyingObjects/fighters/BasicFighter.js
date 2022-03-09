@@ -41,7 +41,7 @@ export const BasicFighter = ({ args, position, rotation, num }) => {
 
   useFrame(() => {
     //collideApi.velocity.set(0, 0, 2000);
-    //collideApi.velocity.set(Math.sin(clock.getElapsedTime() * 2) * 0, 0, 0);
+    collideApi.velocity.set(Math.sin(clock.getElapsedTime() * 2) * 5000, 0, 0);
     if (BS.current.geometry.boundingSphere) {
       collideRef.current.getWorldPosition(BS.current.geometry.boundingSphere.center);
       boundingStore.getState().fighter.friendly = {
@@ -56,7 +56,7 @@ export const BasicFighter = ({ args, position, rotation, num }) => {
       move.current.material.color.set("blue");
     }
   });
-  console.log(collideRef);
+
   console.log("비행체");
   return (
     <group ref={collideRef} dispose={null}>
