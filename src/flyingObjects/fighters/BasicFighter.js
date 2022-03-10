@@ -6,7 +6,7 @@ import { effectSound } from "../../hooks/stores/effectSound";
 import { boundingStore } from "../../hooks/stores/boundingStore";
 
 export const BasicFighter = ({ args, position, rotation, num }) => {
-  const sphere = useRef();
+  let launch = false;
   const move = useRef();
   const BS = useRef();
   const fighter = boundingStore.getState().fighter;
@@ -14,7 +14,7 @@ export const BasicFighter = ({ args, position, rotation, num }) => {
   const { raycaster, scene, clock } = useThree();
 
   const [collideRef, collideApi] = useSphere(() => ({
-    type: "Dynamic",
+    type: "Static",
     mass: 100,
     position,
     rotation,
@@ -22,7 +22,7 @@ export const BasicFighter = ({ args, position, rotation, num }) => {
     onCollide: (e) => {
       //effectSound.getState().fighter.FlightExplosionSound.action();
       //console.log("아군 비행기 충돌!");
-      //collideApi.position.set(0, 0, -3000);
+      //collideApi.position.set();
     },
     onCollideEnd: () => {
       //console.log("충돌 끝");
@@ -41,7 +41,7 @@ export const BasicFighter = ({ args, position, rotation, num }) => {
 
   useFrame(() => {
     //collideApi.velocity.set(0, 0, 2000);
-    collideApi.velocity.set(Math.sin(clock.getElapsedTime() * 2) * 5000, 0, 0);
+    //collideApi.velocity.set(Math.sin(clock.getElapsedTime() * 2) * 5000, 0, 0);
     if (BS.current.geometry.boundingSphere) {
       collideRef.current.getWorldPosition(BS.current.geometry.boundingSphere.center);
       boundingStore.getState().fighter.friendly = {
@@ -55,6 +55,15 @@ export const BasicFighter = ({ args, position, rotation, num }) => {
     } else {
       move.current.material.color.set("blue");
     }
+
+    // if (launch === false) {
+    //   launch = true;
+    //   const add = boundingStore.getState().friendlyNum;
+    //   //boundingStore.setState({ friendlyNum: [...add, 3] });
+    //   setTimeout(() => {
+    //     launch = false;
+    //   }, 3000);
+    // }
   });
 
   console.log("비행체");
@@ -105,4 +114,3 @@ export const BasicFighter = ({ args, position, rotation, num }) => {
     </group>
   );
 };
-useGLTF.preload("flyingObjects/basicFighter/scene.gltf");

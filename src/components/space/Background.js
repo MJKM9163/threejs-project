@@ -23,26 +23,26 @@ export const Background = () => {
   const { moveForward, moveBackward, moveLeft, moveRight } = KeyboardControls();
 
   console.log("배경 랜더링");
-  useFrame(() => {
-    if (moveLeft === true && camera.position.x < 3000) {
-      x -= 150;
-      x2 += 10;
-    } else if (moveRight === true && camera.position.x > -2500) {
-      x += 150;
-      x2 -= 10;
-    }
-    if (moveForward === true && camera.position.z < -2100) {
-      z -= 100;
-      z2 += 20;
-    } else if (moveBackward === true && camera.position.z > -9800) {
-      z += 100;
-      z2 -= 20;
-    }
-    back1.current.position.x = x;
-    back1.current.position.z = z;
-    back2.current.position.x = x2;
-    back2.current.position.z = z2;
-  });
+  // useFrame(() => {
+  //   if (moveLeft === true && camera.position.x < 3000) {
+  //     x -= 150;
+  //     x2 += 10;
+  //   } else if (moveRight === true && camera.position.x > -2500) {
+  //     x += 150;
+  //     x2 -= 10;
+  //   }
+  //   if (moveForward === true && camera.position.z < -2100) {
+  //     z -= 100;
+  //     z2 += 20;
+  //   } else if (moveBackward === true && camera.position.z > -9800) {
+  //     z += 100;
+  //     z2 -= 20;
+  //   }
+  //   back1.current.position.x = x;
+  //   back1.current.position.z = z;
+  //   back2.current.position.x = x2;
+  //   back2.current.position.z = z2;
+  // });
 
   return (
     <group>

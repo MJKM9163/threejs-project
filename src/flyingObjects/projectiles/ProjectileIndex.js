@@ -1,21 +1,43 @@
 import { useFrame } from "@react-three/fiber";
-import React, { useEffect, useRef } from "react";
-import { Vector3 } from "three";
+import React, { memo, useState } from "react";
 import { boundingStore } from "../../hooks/stores/boundingStore";
-import { Explosive } from "./missiles/Explosive";
+import { MemoExplosive } from "./missiles/Explosive";
 import { Pulse } from "./missiles/Pulse";
 
 export const ProjectileIndex = () => {
-  //const explosiveNum = boundingStore.getState().explosiveNum;
+  const [we, ee] = useState(false);
+  //let explosiveNum = boundingStore.getState().explosiveNum;
   const explosiveNum = boundingStore((state) => state.explosiveNum);
-  //console.log(explosiveNum);
+  console.log(explosiveNum.length);
+  // useFrame(() => {
+  //   ee(!we);
+  // });
 
   return (
     <group>
-      {explosiveNum[0] === undefined
-        ? null
-        : explosiveNum.map((pos, index) => <Explosive key={index} num={index + 1} position={pos.MPos} tPos={pos.TPos} />)}
+      {/* {explosiveNum.map((pos, index) => (
+        <MemoExplosive key={index} num={index} />
+      ))} */}
+      {explosiveNum.length > 3 ? explosiveNum.length > 6 ? <MemoExplosive num={1} /> : null : <MemoExplosive num={1} />}
+      <MemoExplosive num={1} />
+      <MemoExplosive num={1} />
+      <MemoExplosive num={1} />
+      <MemoExplosive num={1} />
+      <MemoExplosive num={1} />
+      <MemoExplosive num={1} />
+      <MemoExplosive num={1} />
+      <MemoExplosive num={1} />
+      {/* {explosiveNum.map((pos, index) => (
+        <mesh key={index}>
+          <boxGeometry args={[1000, 1000 * (index + 1), 1000]} />
+          <meshBasicMaterial />
+        </mesh>
+      ))} */}
+      {/* <MemoExplosive num={0} /> */}
+      {}
       <Pulse />
     </group>
   );
 };
+
+export const MemoProjectileIndex = memo(ProjectileIndex);
