@@ -11,9 +11,10 @@ export const Friendlys = () => {
     <group ref={num}>
       {friendlyNum.map((item, index) => (
         <BasicFighter
-          key={item + index}
+          key={index}
           num={index + 1}
-          position={[1500, 0, -4000 + index * -800]}
+          position={[-2500, 0, -3000 + index * -800]}
+          mPos={[-2500, 500, -3000 + index * -800]}
           rotation={[0, 0, 0]}
           args={300}
           scale={25}
