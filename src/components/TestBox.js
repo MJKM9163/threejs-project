@@ -8,7 +8,7 @@ export const TestBox = ({ ...props }) => {
     mass: 1,
     type: "Dynamic",
     args: [10, 10, 10],
-    position: [0, 5, 0],
+    position: [0, 5000, 0],
     rotation: [0, 0, 0],
   }));
 
