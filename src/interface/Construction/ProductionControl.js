@@ -32,27 +32,26 @@ export const ProductionControl = () => {
   let planetName = useStore.getState().name;
   const resources = planetStore((state) => state.planetResources);
 
-  useEffect(() => {
-    screenStore.subscribe(
-      (state) => state,
-      (state) => {
-        allData = state;
-      }
-    );
-  }, []);
-  useEffect(() => {
-    useStore.subscribe(
-      (state) => state.name,
-      (state) => {
-        planetName = state;
-      }
-    );
-  }, []);
+  // useEffect(() => {
+  //   screenStore.subscribe(
+  //     (state) => state,
+  //     (state) => {
+  //       allData = state;
+  //     }
+  //   );
+  // }, []);
+  // useEffect(() => {
+  //   useStore.subscribe(
+  //     (state) => state.name,
+  //     (state) => {
+  //       planetName = state;
+  //     }
+  //   );
+  // }, []);
 
   console.log(" 생산 컨트롤 창");
   return (
-    <ConstructionContainerDiv
-      indexnum={resources[planetName]?.hide === undefined ? true : resources[planetName]?.hide}>
+    <ConstructionContainerDiv indexnum={resources[planetName]?.hide === undefined ? true : resources[planetName]?.hide}>
       <div className="flexBox">
         <MemoProduction production={allData.production} allData={allData} />
       </div>
