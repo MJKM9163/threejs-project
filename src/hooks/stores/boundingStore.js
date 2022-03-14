@@ -9,13 +9,9 @@ export const boundingStore = create(
       friendly: {},
       enemy: {},
     },
-    //planet: {},
 
     enemyNum: [], // 적군 비행기 수
     friendlyNum: [], // 아군 비행기 수
-
-    //explosiveNum: [{ MPos: new Vector3(0, 2000, 0), TPos: new Vector3(1000, 0, 0) }],
-    //pulseNum: [1],
   }))
 );
 //{ MPos: new Vector3(0, 2000, 0), TPos: new Vector3(1000, 0, 0) }
