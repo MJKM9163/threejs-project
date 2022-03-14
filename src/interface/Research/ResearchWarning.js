@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import styled from "styled-components";
 
 const WarningBox = styled.span`
@@ -24,7 +24,8 @@ const WarningBox = styled.span`
 
 let effet;
 export const ResearchWarning = ({ pos, warning, setWarning, message }) => {
-  let warningAudio = new Audio("soundEffects/clickWarning.mp3");
+  //const warningAudio = new Audio("soundEffects/clickWarning.mp3");
+  const warningAudio = useMemo(() => new Audio("soundEffects/clickWarning.mp3"), []);
 
   if (warning === true) {
     warningAudio.volume = 0.5;
