@@ -10,6 +10,17 @@ const ProductionContainer = styled.div`
   flex-wrap: wrap;
   overflow: auto;
 
+  .sprite {
+    background-image: url("images/RRC.png");
+    background-repeat: no-repeat;
+    display: block;
+    width: 450px;
+    height: 253px;
+  }
+  .sprite-planetCurtain {
+    background-position: -5px -1057px;
+  }
+
   .productionInfo {
     position: relative;
     width: 25%;
@@ -153,7 +164,7 @@ export const Production = ({ allData }) => {
       <ProductionContainer>
         {allData.awaitArray}
         {allData.productionArray.map((item, index) =>
-          allData.production[item].research ? (
+          allData.resourcesProduction[item].research ? (
             <div
               className="productionInfo"
               key={index}
@@ -171,20 +182,18 @@ export const Production = ({ allData }) => {
                 setRender(!render);
                 screenStore.setState({ hoverCheck: false });
               }}
-              onMouseEnter={() => screenStore.setState({ hoverCheck: ["production", item] })}
+              //onMouseEnter={() => screenStore.setState({ hoverCheck: ["production", item] })}
+              onMouseEnter={() => screenStore.setState({ hoverCheck: item })}
               onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
-              <img className="image" src={allData.production[item].img} alt={"건물 이미지"}></img>
-              <div className="imageName">{allData.production[item].name}</div>
+              <i className={`${"sprite sprite-" + item}`}></i>
+              {/* <img className="image" src={allData.resourcesProduction[item].img} alt={"건물 이미지"}></img> */}
+              <div className="imageName">{allData.resourcesProduction[item].name}</div>
             </div>
           ) : null
         )}
       </ProductionContainer>
       <WaitingContainer
-        num={
-          allData.awaitArray.length !== 0
-            ? Math.floor((i / allData.awaitArray[0][1]) * 100) + "%"
-            : null
-        }>
+        num={allData.awaitArray.length !== 0 ? Math.floor((i / allData.awaitArray[0][1]) * 100) + "%" : null}>
         {allData.awaitArray.length !== 0
           ? allData.awaitArray.map((item, index) => (
               <div
@@ -210,11 +219,8 @@ export const Production = ({ allData }) => {
                   setRender(!render);
                   console.log("대기 그림 클릭");
                 }}>
-                <img
-                  className="waitingImage"
-                  src={allData.production[item[0]].img}
-                  alt={"건물 이미지"}></img>
-                <div className="waitingName">{allData.production[item[0]].name}</div>
+                <img className="waitingImage" src={allData.resourcesProduction[item[0]].img} alt={"건물 이미지"}></img>
+                <div className="waitingName">{allData.resourcesProduction[item[0]].name}</div>
                 <div className="waitingTime">
                   {allData.awaitArray[0][0] === item[0]
                     ? Math.floor((i / allData.awaitArray[0][1]) * 100) + " %"

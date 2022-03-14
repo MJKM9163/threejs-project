@@ -1,9 +1,9 @@
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
-import { MemoProduction } from "./Production";
+import { Production } from "./Production";
 
 const ConstructionContainerDiv = styled.div`
   font-family: "Noto Sans KR", sans-serif;
@@ -32,28 +32,11 @@ export const ProductionControl = () => {
   let planetName = useStore.getState().name;
   const resources = planetStore((state) => state.planetResources);
 
-  // useEffect(() => {
-  //   screenStore.subscribe(
-  //     (state) => state,
-  //     (state) => {
-  //       allData = state;
-  //     }
-  //   );
-  // }, []);
-  // useEffect(() => {
-  //   useStore.subscribe(
-  //     (state) => state.name,
-  //     (state) => {
-  //       planetName = state;
-  //     }
-  //   );
-  // }, []);
-
   console.log(" 생산 컨트롤 창");
   return (
     <ConstructionContainerDiv indexnum={resources[planetName]?.hide === undefined ? true : resources[planetName]?.hide}>
       <div className="flexBox">
-        <MemoProduction production={allData.production} allData={allData} />
+        <Production allData={allData} />
       </div>
     </ConstructionContainerDiv>
   );
