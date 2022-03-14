@@ -1,11 +1,11 @@
-import React, { Suspense, useEffect, useRef } from "react";
+import React, { Suspense, useRef } from "react";
 import "./App.css";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { Debug, Physics } from "@react-three/cannon";
 import { SpaceIndex } from "./components/space/SpaceIndex";
 import { Html, Stars, useHelper } from "@react-three/drei";
 import { PointLightHelper } from "three";
-import { Background, MemoBackground } from "./components/space/Background";
+import { Background } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
 import { PlanetInfo } from "./interface/PlanetInfo";
 import { useStore } from "./hooks/stores/useStore";
@@ -14,7 +14,7 @@ import { ConstructionContainer } from "./interface/Construction/ConstructionCont
 import { screenStore } from "./hooks/stores/screenStore";
 import { RightOption } from "./interface/SideTap/RightOption";
 import { Resources } from "./interface/Construction/Resources";
-import { AllResourcesFun, MemoAllResourcesFun } from "./hooks/AllResourcesFun";
+import { AllResourcesFun } from "./hooks/AllResourcesFun";
 import { ResearchMap } from "./interface/Research/ResearchMap";
 import { FlyingIndex } from "./flyingObjects/FlyingIndex";
 import { RayCasters } from "./hooks/RayCasters";
@@ -79,7 +79,6 @@ document.addEventListener("contextmenu", RightClick);
 document.addEventListener("mouseup", mouseUpEventAllScreen);
 
 function App() {
-  // const test = planetStore.getState().planetResourcesl
   console.log("메인 랜더링 확인");
   return (
     <>
