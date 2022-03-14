@@ -57,31 +57,31 @@ export const Resources = () => {
   return (
     <ResourcesContainer>
       <div
-        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "potato"] })}
+        onMouseEnter={() => screenStore.setState({ hoverCheck: "potato" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/corn.png" width={25} height={25} alt="식량 자원"></img>
         <span>{Math.floor(allResources.food)}</span>
       </div>
       <div
-        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "gear"] })}
+        onMouseEnter={() => screenStore.setState({ hoverCheck: "gear" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/gear.png" width={25} height={25} alt="생산력"></img>
         <span>{allResources.gear + researchResources.gear}</span>
       </div>
       <div
-        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "science"] })}
+        onMouseEnter={() => screenStore.setState({ hoverCheck: "science" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/flask.png" width={25} height={25} alt="과학 자원"></img>
         <span>{allResources.science + researchResources.science}</span>
       </div>
       <div
-        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "titanium"] })}
+        onMouseEnter={() => screenStore.setState({ hoverCheck: "titanium" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/titanium.png" width={25} height={25} alt="티타늄 자원"></img>
         <span>{allResources.titanium}</span>
       </div>
       <div
-        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "orichalcon"] })}
+        onMouseEnter={() => screenStore.setState({ hoverCheck: "orichalcon" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/orichalcon.png" width={25} height={25} alt="오리하르콘 자원"></img>
         <span>{allResources.orichalcon}</span>
