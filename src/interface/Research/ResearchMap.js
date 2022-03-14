@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { researchStore } from "../../hooks/stores/researchStore";
 import { screenStore } from "../../hooks/stores/screenStore";
-import { MemoResearchInfo, ResearchInfo } from "./ResearchInfo";
+import { ResearchInfo } from "./ResearchInfo";
 import { MemoResearchWarning } from "./ResearchWarning";
 
 const ResearchMapBox = styled.div`
@@ -58,6 +58,12 @@ const ResearchMapBox = styled.div`
       display: none;
     }
 
+    .researchName {
+      position: absolute;
+      bottom: -10px;
+      background-color: black;
+    }
+
     div {
       display: flex;
       flex-direction: column;
@@ -105,66 +111,39 @@ const ResearchMapBox = styled.div`
     .basic {
       top: 250px;
       left: 195px;
-      ::before {
-        content: "시스템 활성화";
-      }
     }
 
     .planetSystem {
       top: 55px;
       left: 605px;
-      ::before {
-        content: "행성 시스템";
-      }
     }
     .largeScaleIndustrialization {
       top: 250px;
       left: 605px;
-      ::before {
-        content: "대규모 산업화";
-      }
     }
     .artificialBacteria {
       top: 450px;
       left: 605px;
-      ::before {
-        content: "인공 박테리아";
-      }
     }
     .spaceArchitecture {
       top: 650px;
       left: 605px;
-      ::before {
-        content: "우주 건축";
-      }
     }
     .xenology {
       top: 850px;
       left: 605px;
-      ::before {
-        content: "외계학";
-      }
     }
     .satelliteBoundarySystem {
       top: 55px;
       left: 955px;
-      ::before {
-        content: "위성 경계 체계";
-      }
     }
     .interplanetaryTrade {
       top: 150px;
       left: 805px;
-      ::before {
-        content: "행선간 교역";
-      }
     }
     .titaniumAlloy {
       top: 250px;
       left: 955px;
-      ::before {
-        content: "티타늄 합금";
-      }
     }
   }
 `;
@@ -195,6 +174,7 @@ export const ResearchMap = () => {
   const [message, setMessage] = useState("");
   const [info, setInfo] = useState(false);
   const [pos, setPos] = useState([0, 0]);
+  const [addStructure, setAddStructure] = useState([]);
   const [list, setList] = useState({ AddResources: { food: 0, gear: 0, science: 0 } });
 
   const onDragStart = useCallback((e) => {
@@ -242,7 +222,7 @@ export const ResearchMap = () => {
         onMouseMove={onDragMove}
         onMouseUp={onDragEnd}
         onMouseLeave={onDragEnd}>
-        <MemoResearchInfo info={info} pos={pos} list={list} />
+        <ResearchInfo info={info} pos={pos} list={list} addStructure={addStructure} />
         <MemoResearchWarning pos={pos} warning={warning} setWarning={setWarning} message={message} />
 
         <svg className="basicLine" width={1200} height={1200} viewBox="-50 0 1200 1200">
@@ -324,6 +304,7 @@ export const ResearchMap = () => {
                 setInfo(true);
                 setPos([researchList[item].position[0], researchList[item].position[1]]);
                 setList(researchList[item]);
+                setAddStructure({ ...researchList[item].AddStructure });
               }}
               onMouseLeave={() => {
                 setHovers({
@@ -345,6 +326,13 @@ export const ResearchMap = () => {
                   }
                   if (researchList[item].cost <= allResources.science && check === true) {
                     e.target.parentElement.style.backgroundColor = "#00ce5d";
+                    const productionArray = screenStore.getState().productionArray;
+                    screenStore.setState({
+                      productionArray: [...productionArray, ...Object.keys(researchList[item].AddStructure)],
+                    });
+                    for (let name in researchList[item].AddStructure) {
+                      screenStore.getState().resourcesProduction[name].research = true;
+                    }
                     researchStore.getState().completionList.push(item);
                     researchStore.setState({
                       researchResources: {
@@ -367,6 +355,7 @@ export const ResearchMap = () => {
                 }
               }}
             />
+            <span className="researchName">{researchList[item].name}</span>
           </div>
         ))}
         <span className="widthAndHeight"></span>
