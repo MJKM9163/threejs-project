@@ -41,7 +41,7 @@ export const LeftInfo = (props) => {
       <div className="name">{props.planet}</div>
       <div
         className="food"
-        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "potato"] })}
+        onMouseEnter={() => screenStore.setState({ hoverCheck: "potato" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/corn.png" width={25} height={25} alt="생산하는 식량"></img>
         <span className="foodNum">
@@ -50,7 +50,7 @@ export const LeftInfo = (props) => {
       </div>
       <div
         className="productivity"
-        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "gear"] })}
+        onMouseEnter={() => screenStore.setState({ hoverCheck: "gear" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/gear.png" width={25} height={25} alt="행성의 생산력"></img>
         <span className="productNum">
@@ -59,13 +59,11 @@ export const LeftInfo = (props) => {
       </div>
       <div
         className="science"
-        onMouseEnter={() => screenStore.setState({ hoverCheck: ["images", "science"] })}
+        onMouseEnter={() => screenStore.setState({ hoverCheck: "science" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/flask.png" width={25} height={25} alt="행성의 과학"></img>
         <span className="scienceNum">
-          {resources[props.planet]?.resources.science
-            ? resources[props.planet]?.resources.science
-            : 0}
+          {resources[props.planet]?.resources.science ? resources[props.planet]?.resources.science : 0}
         </span>
       </div>
     </LeftInfoContainer>
