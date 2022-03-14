@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import styled from "styled-components";
 
 const ResearchInfoContainer = styled.span`
@@ -45,37 +45,66 @@ const ResearchInfoContainer = styled.span`
     }
     .addStructure {
       display: flex;
+      margin-left: 5px;
+      flex-direction: column;
+
+      .text {
+        color: black;
+        font-weight: bold;
+      }
+      .item {
+        color: #7b7bff;
+      }
     }
   }
 `;
-
-export const ResearchInfo = ({ info, pos, list }) => {
+//{ color: "DarkGreen", borderBottom: "1px solid DarkGreen" }
+export const ResearchInfo = ({ info, pos, list, addStructure }) => {
   console.log("연구 인포");
   return (
     <ResearchInfoContainer info={info} pos={pos}>
       <span className="flexBox">
         <span className="description">{list.description}</span>
         <span className="addResources">
-          {list?.AddResources["food"] ? (
-            <span className="resources" style={{ color: "DarkGreen", borderBottom: "1px solid DarkGreen" }}>
-              <img className="inImg" src="images/resources/icons/corn.png" alt="추가 식량" />
-              {"+ " + list?.AddResources["food"]}
-            </span>
-          ) : null}
-          {list?.AddResources["gear"] ? (
-            <span className="resources" style={{ color: "DarkOrange", borderBottom: "1px solid DarkOrange" }}>
-              <img className="inImg" src="images/resources/icons/gear.png" alt="추가 생산력" />
-              {"+ " + list?.AddResources["gear"]}
-            </span>
-          ) : null}
-          {list?.AddResources["science"] ? (
-            <span className="resources" style={{ color: "DeepSkyBlue", borderBottom: "1px solid DeepSkyBlue" }}>
-              <img className="inImg" src="images/resources/icons/flask.png" alt="추가 과학" />
-              {"+ " + list?.AddResources["science"]}
-            </span>
-          ) : null}
+          <span
+            className="resources"
+            style={
+              list?.AddResources["food"]
+                ? { color: "DarkGreen", borderBottom: "1px solid DarkGreen" }
+                : { position: "absolute", opacity: "0" }
+            }>
+            <img className="inImg" src="images/resources/icons/corn.png" alt="추가 식량" />
+            {list?.AddResources["food"] ? "+ " + list?.AddResources["food"] : null}
+          </span>
+          <span
+            className="resources"
+            style={
+              list?.AddResources["gear"]
+                ? { color: "DarkOrange", borderBottom: "1px solid DarkOrange" }
+                : { position: "absolute", opacity: "0" }
+            }>
+            <img className="inImg" src="images/resources/icons/gear.png" alt="추가 생산력" />
+            {list?.AddResources["gear"] ? "+ " + list?.AddResources["gear"] : null}
+          </span>
+          <span
+            className="resources"
+            style={
+              list?.AddResources["science"]
+                ? { color: "DeepSkyBlue", borderBottom: "1px solid DeepSkyBlue" }
+                : { position: "absolute", opacity: "0" }
+            }>
+            <img className="inImg" src="images/resources/icons/flask.png" alt="추가 과학" />
+            {list?.AddResources["science"] ? "+ " + list?.AddResources["science"] : null}
+          </span>
         </span>
-        <span className="addStructure">추가되는 건축물(예정)</span>
+        <span className="addStructure">
+          <span className="text">추가되는 건물</span>
+          {Object.values(addStructure).map((item, index) => (
+            <span key={item[1] + index} className="item">
+              {item}
+            </span>
+          ))}
+        </span>
       </span>
     </ResearchInfoContainer>
   );
