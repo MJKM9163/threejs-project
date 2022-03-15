@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
@@ -9,22 +9,12 @@ const ProductionContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   overflow: auto;
-
-  .sprite {
-    background-image: url("images/RRC.png");
-    background-repeat: no-repeat;
-    display: block;
-    width: 450px;
-    height: 253px;
-  }
-  .sprite-planetCurtain {
-    background-position: -5px -1057px;
-  }
+  background-color: #7e10103c;
 
   .productionInfo {
     position: relative;
-    width: 25%;
-    height: 50%;
+    width: 150px;
+    height: 84px;
     transition: 0.2s;
     :hover {
       background-color: #ffffff3d;
@@ -65,6 +55,7 @@ const WaitingContainer = styled.div`
   width: 25%;
   /* display: flex;
   flex-direction: row; */
+  background-color: #4b7e103b;
 
   .waiting {
     position: relative;
@@ -117,11 +108,20 @@ export const Production = ({ allData }) => {
 
   const completion = screenStore((state) => state.completion);
   const allGear = useRef(planetStore.getState().allResources.gear);
+  const allFood = useRef(planetStore.getState().allResources);
+
+  const warningAudio = useMemo(() => new Audio("soundEffects/lackOfResources.mp3"), []);
 
   useEffect(() => {
     planetStore.subscribe(
       (state) => state.allResources.gear,
       (state) => (allGear.current = state)
+    );
+  });
+  useEffect(() => {
+    planetStore.subscribe(
+      (state) => state.allResources,
+      (state) => (allFood.current = state)
     );
   });
 
@@ -168,25 +168,40 @@ export const Production = ({ allData }) => {
             <div
               className="productionInfo"
               key={index}
-              onClick={() => {
-                allData.awaitArray.push([item, allData.production[item].max]);
+              onClick={(e) => {
+                if (
+                  allData.resourcesProduction[item].cost.food <= Math.floor(allFood.current.food) &&
+                  allData.resourcesProduction[item].cost.titanium <= Math.floor(allFood.current.titanium) &&
+                  allData.resourcesProduction[item].cost.orichalcon <= Math.floor(allFood.current.orichalcon)
+                ) {
+                  planetStore.setState({
+                    allResources: {
+                      ...allFood.current,
+                      food: allFood.current.food - allData.resourcesProduction[item].cost.food,
+                      titanium: allFood.current.food - allData.resourcesProduction[item].cost.titanium,
+                      orichalcon: allFood.current.food - allData.resourcesProduction[item].cost.orichalcon,
+                    },
+                  });
+                  allData.awaitArray.push([item, allData.resourcesProduction[item].max]);
 
-                screenStore.setState({
-                  awaitArray: allData.awaitArray,
-                });
-                allData.productionArray.splice(allData.productionArray.indexOf(item), 1);
-                screenStore.setState({
-                  productionArray: allData.productionArray,
-                });
+                  screenStore.setState({
+                    awaitArray: allData.awaitArray,
+                  });
+                  allData.productionArray.splice(allData.productionArray.indexOf(item), 1);
+                  screenStore.setState({
+                    productionArray: allData.productionArray,
+                  });
 
-                setRender(!render);
-                screenStore.setState({ hoverCheck: false });
+                  setRender(!render);
+                  screenStore.setState({ hoverCheck: false });
+                } else {
+                  warningAudio.volume = 0.5;
+                  warningAudio.play();
+                }
               }}
-              //onMouseEnter={() => screenStore.setState({ hoverCheck: ["production", item] })}
               onMouseEnter={() => screenStore.setState({ hoverCheck: item })}
               onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
-              <i className={`${"sprite sprite-" + item}`}></i>
-              {/* <img className="image" src={allData.resourcesProduction[item].img} alt={"건물 이미지"}></img> */}
+              <img className="image" src={allData.resourcesProduction[item].img} alt={"건물 이미지"}></img>
               <div className="imageName">{allData.resourcesProduction[item].name}</div>
             </div>
           ) : null
