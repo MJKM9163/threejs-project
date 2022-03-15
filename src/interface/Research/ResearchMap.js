@@ -107,44 +107,6 @@ const ResearchMapBox = styled.div`
         transition: 0.3s;
       }
     }
-
-    .basic {
-      top: 250px;
-      left: 195px;
-    }
-
-    .planetSystem {
-      top: 55px;
-      left: 605px;
-    }
-    .largeScaleIndustrialization {
-      top: 250px;
-      left: 605px;
-    }
-    .artificialBacteria {
-      top: 450px;
-      left: 605px;
-    }
-    .spaceArchitecture {
-      top: 650px;
-      left: 605px;
-    }
-    .xenology {
-      top: 850px;
-      left: 605px;
-    }
-    .satelliteBoundarySystem {
-      top: 55px;
-      left: 955px;
-    }
-    .interplanetaryTrade {
-      top: 150px;
-      left: 805px;
-    }
-    .titaniumAlloy {
-      top: 250px;
-      left: 955px;
-    }
   }
 `;
 
@@ -291,7 +253,7 @@ export const ResearchMap = () => {
         </svg>
 
         {Object.keys(researchList).map((item, index, array) => (
-          <div className={item} key={item}>
+          <div className={item} key={item} style={researchList[item].inPos}>
             <img
               src={`images/research/${item}.png`}
               alt={`${item} 이미지`}
