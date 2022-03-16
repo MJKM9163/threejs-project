@@ -288,10 +288,7 @@ export const ResearchMap = () => {
                   }
                   if (researchList[item].cost <= allResources.science && check === true) {
                     e.target.parentElement.style.backgroundColor = "#00ce5d";
-                    const productionArray = screenStore.getState().productionArray;
-                    screenStore.setState({
-                      productionArray: [...productionArray, ...Object.keys(researchList[item].AddStructure)],
-                    });
+
                     for (let name in researchList[item].AddStructure) {
                       screenStore.getState().resourcesProduction[name].research = true;
                     }
