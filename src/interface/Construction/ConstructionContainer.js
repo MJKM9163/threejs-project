@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { screenStore } from "../../hooks/stores/screenStore";
-import { MemoProductionControl } from "./ProductionControl";
+import { MemoProductionControl, ProductionControl } from "./ProductionControl";
 
 const HoverInfoContainer = styled.div`
   font-family: "Noto Sans KR", sans-serif;
@@ -84,7 +84,6 @@ const HoverInfoContainer = styled.div`
         }
       }
       .aF {
-        color: #ff5757;
       }
       .aG {
       }
@@ -241,7 +240,7 @@ export const ConstructionContainer = () => {
           </div>
         ))}
       </HoverInfoContainer>
-      <MemoProductionControl />
+      <ProductionControl />
     </>
   );
 };
