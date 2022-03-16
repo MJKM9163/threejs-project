@@ -15,7 +15,7 @@ const ProductionContainer = styled.div`
     position: relative;
     width: 150px;
     height: 84px;
-    transition: 0.2s;
+    transition: background-color 0.2s;
     :hover {
       background-color: #ffffff3d;
     }
@@ -106,36 +106,44 @@ export const Production = ({ allData }) => {
   const [render, setRender] = useState(false);
   const [reload, setReload] = useState(0);
 
-  const completion = screenStore((state) => state.completion);
-  const allGear = useRef(planetStore.getState().allResources.gear);
-  const allFood = useRef(planetStore.getState().allResources);
+  const gear = useRef(planetStore.getState().allResources.gear);
+  const resources = useRef(planetStore.getState().allResources);
 
   const warningAudio = useMemo(() => new Audio("soundEffects/lackOfResources.mp3"), []);
 
   useEffect(() => {
     planetStore.subscribe(
       (state) => state.allResources.gear,
-      (state) => (allGear.current = state)
+      (state) => (gear.current = state)
     );
   });
   useEffect(() => {
     planetStore.subscribe(
       (state) => state.allResources,
-      (state) => (allFood.current = state)
+      (state) => (resources.current = state)
     );
   });
 
-  const numUp = (delay, awaitArray, completion) => {
+  const numUp = (delay, awaitArray, production) => {
     if (check === false) {
       check = true;
       up = setInterval(() => {
-        i += allGear.current;
+        i += gear.current;
         if (awaitArray[0][1] <= i) {
           clearTimeout(up);
-          completion.push(awaitArray[0][0]);
-          screenStore.setState({
-            completion: completion,
-          });
+          production[awaitArray[0][0]].event();
+          if (production[awaitArray[0][0]].repetition) {
+            production[awaitArray[0][0]].completion = false;
+            screenStore.setState({
+              resourcesProduction: allData.resourcesProduction,
+            });
+          } else {
+            production[awaitArray[0][0]].completion = true;
+            screenStore.setState({
+              resourcesProduction: allData.resourcesProduction,
+            });
+          }
+
           awaitArray.shift();
           screenStore.setState({
             awaitArray: awaitArray,
@@ -144,7 +152,7 @@ export const Production = ({ allData }) => {
           setReload(i + 1); // 건설 완료 시점 랜더링 조정
           i = 0;
           if (allData.awaitArray.length > 0) {
-            numUp(delay, awaitArray, completion);
+            numUp(delay, awaitArray, production);
           }
         }
         setReload(i); // Interval이 진행 될 떄 마다 랜더링 발생
@@ -154,7 +162,7 @@ export const Production = ({ allData }) => {
   // 20 / 100 = 0.2
   useEffect(() => {
     if (allData.awaitArray.length > 0) {
-      numUp(delay, allData.awaitArray, completion);
+      numUp(delay, allData.awaitArray, allData.resourcesProduction);
     }
   });
 
@@ -163,23 +171,23 @@ export const Production = ({ allData }) => {
     <>
       <ProductionContainer>
         {allData.awaitArray}
-        {allData.productionArray.map((item, index) =>
-          allData.resourcesProduction[item].research ? (
+        {Object.keys(allData.resourcesProduction).map((item, index) =>
+          allData.resourcesProduction[item].research && !allData.resourcesProduction[item].completion ? (
             <div
               className="productionInfo"
               key={index}
               onClick={(e) => {
                 if (
-                  allData.resourcesProduction[item].cost.food <= Math.floor(allFood.current.food) &&
-                  allData.resourcesProduction[item].cost.titanium <= Math.floor(allFood.current.titanium) &&
-                  allData.resourcesProduction[item].cost.orichalcon <= Math.floor(allFood.current.orichalcon)
+                  allData.resourcesProduction[item].cost.food <= Math.floor(resources.current.food) &&
+                  allData.resourcesProduction[item].cost.titanium <= Math.floor(resources.current.titanium) &&
+                  allData.resourcesProduction[item].cost.orichalcon <= Math.floor(resources.current.orichalcon)
                 ) {
                   planetStore.setState({
                     allResources: {
-                      ...allFood.current,
-                      food: allFood.current.food - allData.resourcesProduction[item].cost.food,
-                      titanium: allFood.current.food - allData.resourcesProduction[item].cost.titanium,
-                      orichalcon: allFood.current.food - allData.resourcesProduction[item].cost.orichalcon,
+                      ...resources.current,
+                      food: resources.current.food - allData.resourcesProduction[item].cost.food,
+                      titanium: resources.current.titanium - allData.resourcesProduction[item].cost.titanium,
+                      orichalcon: resources.current.orichalcon - allData.resourcesProduction[item].cost.orichalcon,
                     },
                   });
                   allData.awaitArray.push([item, allData.resourcesProduction[item].max]);
@@ -187,9 +195,10 @@ export const Production = ({ allData }) => {
                   screenStore.setState({
                     awaitArray: allData.awaitArray,
                   });
-                  allData.productionArray.splice(allData.productionArray.indexOf(item), 1);
+
+                  allData.resourcesProduction[item].completion = "progress";
                   screenStore.setState({
-                    productionArray: allData.productionArray,
+                    resourcesProduction: allData.resourcesProduction,
                   });
 
                   setRender(!render);
@@ -218,10 +227,9 @@ export const Production = ({ allData }) => {
                   if (allData.awaitArray[0][0] === item[0]) {
                     i = 0;
                   }
-                  allData.productionArray.push(item[0]);
-
+                  allData.resourcesProduction[item[0]].completion = false;
                   screenStore.setState({
-                    productionArray: allData.productionArray,
+                    resourcesProduction: allData.resourcesProduction,
                   });
 
                   allData.awaitArray.splice(index, 1);
