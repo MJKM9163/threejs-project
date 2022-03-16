@@ -32,7 +32,7 @@ export const ProductionControl = () => {
   let planetName = useStore.getState().name;
   const resources = planetStore((state) => state.planetResources);
 
-  console.log(" 생산 컨트롤 창");
+  console.log("생산 컨트롤 창");
   return (
     <ConstructionContainerDiv indexnum={resources[planetName]?.hide === undefined ? true : resources[planetName]?.hide}>
       <div className="flexBox">
