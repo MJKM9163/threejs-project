@@ -24,7 +24,10 @@ export const screenStore = create(
     awaitArray: [],
 
     // 위성 수
-    satellite: 0,
+    satellite: 3,
+    satellitePos: [],
+    defenseSatellitePos: [],
+    dustExtractorPos: [],
 
     // 자원 & 건물
     resourcesProduction: {
@@ -171,7 +174,8 @@ export const screenStore = create(
         cost: { food: 10, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 30,
-        description: "대기를 조정해 변칙적인 대기 환경을 제어합니다. 날씨를 거의 정확하게 예측할 수 있습니다.",
+        description:
+          "대기를 조정해 변칙적인 대기 환경을 제어합니다. 날씨를 거의 정확하게 예측할 수 있습니다.",
       },
       multipurposeSatellite: {
         research: false,
@@ -221,7 +225,8 @@ export const screenStore = create(
         cost: { food: 10, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 30,
-        description: "다목적 위성을 방어 위성으로 사용합니다. 주변에 감지된 적대적인 물체를 공격해 파괴합니다.",
+        description:
+          "다목적 위성을 방어 위성으로 사용합니다. 주변에 감지된 적대적인 물체를 공격해 파괴합니다.",
       },
       dustExtractor: {
         research: false,
@@ -233,7 +238,8 @@ export const screenStore = create(
         cost: { food: 10, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 30,
-        description: "다목적 위성을 먼지 추출기로 사용합니다. 우주에 떠도는 먼지를 채집해 사용가능한 자원을 추출합니다.",
+        description:
+          "다목적 위성을 먼지 추출기로 사용합니다. 우주에 떠도는 먼지를 채집해 사용가능한 자원을 추출합니다.",
       },
       planetTrade: {
         research: false,
@@ -245,7 +251,8 @@ export const screenStore = create(
         cost: { food: 10, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 30,
-        description: "행성간 교역이 활성화 됩니다. 다른 행성과 자원을 교환할 수 있으며 관광 산업이 더 성장합니다.",
+        description:
+          "행성간 교역이 활성화 됩니다. 다른 행성과 자원을 교환할 수 있으며 관광 산업이 더 성장합니다.",
       },
       titaniumAlloy: {
         research: false,
