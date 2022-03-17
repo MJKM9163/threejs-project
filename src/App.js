@@ -18,7 +18,8 @@ import { AllResourcesFun } from "./hooks/AllResourcesFun";
 import { ResearchMap } from "./interface/Research/ResearchMap";
 import { FlyingIndex } from "./flyingObjects/FlyingIndex";
 import { RayCasters } from "./hooks/RayCasters";
-import { SatellitePlane } from "./components/space/SatellitePlane";
+import { SatelliteField } from "./satelliteObjects/SatelliteField";
+import { SatelliteIndex } from "./satelliteObjects/SatelliteIndex";
 
 const Light = () => {
   const pointLight = useRef();
@@ -108,7 +109,8 @@ function App() {
               <SpaceIndex />
               <Background />
               <FlyingIndex />
-              <SatellitePlane />
+              <SatelliteField />
+              <SatelliteIndex />
             </Suspense>
           </Debug>
         </Physics>
