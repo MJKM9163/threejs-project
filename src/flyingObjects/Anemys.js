@@ -9,17 +9,18 @@ export const Anemys = () => {
 
   return (
     <group ref={num}>
-      {enemyNum.map((item, index) => (
-        <EnemyFighter
-          key={index}
-          num={index + 1}
-          position={[1800, 0, -3500 + index * -1800]}
-          mPos={[1800, 500, -3500 + index * -1800]}
-          rotation={[0, 0, 0]}
-          args={300}
-          scale={25}
-        />
-      ))}
+      {enemyNum.map((item, index) =>
+        item === true ? (
+          <EnemyFighter
+            key={index}
+            num={index}
+            position={[1800, 0, -3500 + index * -1800]}
+            rotation={[0, 0, 0]}
+            args={0}
+            scale={25}
+          />
+        ) : null
+      )}
     </group>
   );
 };
