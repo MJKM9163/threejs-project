@@ -1,5 +1,6 @@
 import create from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
+import { boundingStore } from "./boundingStore";
 
 export const screenStore = create(
   subscribeWithSelector((set) => ({
@@ -270,7 +271,7 @@ export const screenStore = create(
         research: false,
         completion: false,
         repetition: false,
-        name: "반응로 촉매",
+        name: "양자 반응로",
         img: "/images/production/reactorCatalyst.jpg",
         add: {},
         cost: { food: 10, titanium: 0, orichalcon: 0 },
@@ -278,6 +279,24 @@ export const screenStore = create(
         max: 30,
         description:
           "반응로에 원자단위로 쪼갠 티타늄을 촉매로 사용해 에너지를 반응을 증폭시켰습니다. 미사일의 폭발력이 상승합니다.",
+      },
+      fighterPlane: {
+        research: false,
+        completion: false,
+        repetition: true,
+        name: "전투기 생산",
+        img: "/images/production/basicFighter.jpg",
+        add: {},
+        cost: { food: 10, titanium: 0, orichalcon: 0 },
+        event: () => {
+          let data = boundingStore.getState().friendlyNum;
+          let num = data.findIndex((i) => i === false);
+          data[num] = true;
+          console.log(data);
+          boundingStore.setState({ friendlyNum: [...data] });
+        },
+        max: 30,
+        description: "전투기를 생산합니다.",
       },
     },
   }))
