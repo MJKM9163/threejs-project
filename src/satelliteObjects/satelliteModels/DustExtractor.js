@@ -23,7 +23,7 @@ export function DustExtractor({ position, num }) {
     mass: 1,
     type: "Static",
     position,
-    args: [60],
+    args: [100],
   }));
 
   useFrame(() => {
