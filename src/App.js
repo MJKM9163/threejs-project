@@ -3,7 +3,7 @@ import "./App.css";
 import { Canvas } from "@react-three/fiber";
 import { Debug, Physics } from "@react-three/cannon";
 import { SpaceIndex } from "./components/space/SpaceIndex";
-import { Html, Stars, useHelper } from "@react-three/drei";
+import { Html, Stars, useGLTF, useHelper } from "@react-three/drei";
 import { PointLightHelper } from "three";
 import { Background } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
@@ -132,3 +132,7 @@ export default App;
 //     factor?: number;
 //     saturation?: number;
 //     fade?: boolean;
+
+useGLTF.preload("/multipurposeSatellite/scene.gltf");
+useGLTF.preload("/DefenseSatellite/scene.gltf");
+useGLTF.preload("/dustExtractor/scene.gltf");
