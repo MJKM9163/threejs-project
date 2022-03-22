@@ -4,12 +4,39 @@ import { useBox, useSphere } from "@react-three/cannon";
 import { useFrame, useThree } from "@react-three/fiber";
 import { effectSound } from "../../hooks/stores/effectSound";
 import { boundingStore } from "../../hooks/stores/boundingStore";
-import { Euler, Vector3 } from "three";
+import { Vector3 } from "three";
 
-export const EnemyFighter = ({ args, position, mPos, rotation, num }) => {
+let enemyFighterOption = {
+  0: { R: 0, D: 100 },
+  1: { R: 0, D: 100 },
+  2: { R: 0, D: 100 },
+  3: { R: 0, D: 100 },
+  4: { R: 0, D: 100 },
+  5: { R: 0, D: 100 },
+  6: { R: 0, D: 100 },
+  7: { R: 0, D: 100 },
+  8: { R: 0, D: 100 },
+  9: { R: 0, D: 100 },
+};
+
+export const EnemyFighter = ({ args, position, rotation, num }) => {
+  let FR = false;
   let launch = false;
-  let MTime;
   let a = 0;
+  let run;
+
+  let MTime = () => {
+    run = setTimeout(() => {
+      a += 1;
+      if (a < 3) {
+        MTime(true);
+      }
+    }, 1000);
+  };
+
+  const mPosRef = useRef();
+  const look = useRef();
+  const mlook = useRef();
   const move = useRef();
   const BS = useRef();
   const { clock } = useThree();
@@ -17,30 +44,36 @@ export const EnemyFighter = ({ args, position, mPos, rotation, num }) => {
   const { nodes, materials } = useGLTF("flyingObjects/enemyFighter/scene.gltf");
   const missileModel = useGLTF("flyingObjects/projectiles/explosive/scene.gltf");
 
+  let mPos = new Vector3();
+
   const [collideRef, collideApi] = useSphere(() => ({
     type: "Dynamic",
     mass: 100,
     position,
     rotation,
-    args: [args],
+    args: [args + 75],
     onCollide: (e) => {
+      console.log("타격 입음!");
+      enemyFighterOption[num].D -= 50;
+      console.log(enemyFighterOption[num].D);
+      if (enemyFighterOption[num].D <= 0) {
+        const data = boundingStore.getState().enemyNum;
+        boundingStore.setState({ enemyNum: data.filter((item) => data[num] !== item) });
+      }
       //effectSound.getState().fighter.FlightExplosionSound.action();
     },
   }));
-
+  //[0, 0, 200000 + num * 1000]
   const [missileRef, missilesApi] = useBox(() => ({
     type: "Dynamic",
     mass: 1,
-    position: mPos,
+    position: [500, 0, 0],
     rotation: [0, -Math.PI / 2, 0],
-    args: [10, 10, 50],
+    args: [10, 10, 10],
     onCollide: (e) => {
-      clearInterval(MTime);
-      launch = false;
-      let pos = new Vector3(0, 500, 0);
-      pos.add(BS.current.geometry.boundingSphere.center);
-      //effectSound.getState().fighter.FlightExplosionSound.action();
-      missilesApi.position.set(...Object.values(pos));
+      missileRef.current.userData = true;
+      mPosRef.current.getWorldPosition(mPos);
+      missilesApi.position.set(...Object.values(mPos));
       missilesApi.rotation.set(0, -Math.PI / 2, 0);
     },
   }));
@@ -50,8 +83,9 @@ export const EnemyFighter = ({ args, position, mPos, rotation, num }) => {
     for (let key in boundingArray) {
       const check = BS.current.geometry.boundingSphere?.intersectsSphere(boundingArray[key]);
       if (check === true) {
-        //console.log(boundingArray[key].center);
-        //collideApi.velocity.copy(boundingArray[key].current.geometry.boundingSphere.center);
+        look.current.children[1].rotation.set(0, -Math.PI / 2, 0);
+        look.current.lookAt(boundingArray[key].center);
+        mlook.current.lookAt(boundingArray[key].center);
         return check;
       }
     }
@@ -80,36 +114,41 @@ export const EnemyFighter = ({ args, position, mPos, rotation, num }) => {
     if (BS.current.geometry.boundingSphere) {
       collideRef.current.getWorldPosition(BS.current.geometry.boundingSphere.center);
       collideRef.current.getWorldPosition(move.current.geometry.boundingSphere.center);
-
-      boundingStore.getState().fighter.enemy = { ...fighter.enemy, ["전투기" + num]: move.current.geometry.boundingSphere };
+      mPosRef.current.getWorldPosition(mPos);
+      if (FR === false) {
+        FR = true;
+        missilesApi.position.set(...Object.values(mPos));
+      }
+      boundingStore.getState().fighter.enemy = {
+        ...fighter.enemy,
+        ["전투기" + num]: move.current.geometry.boundingSphere,
+      };
       if (boundingDetect()) {
         let [X, Y, Z] = moveFun();
         collideApi.velocity.set(X / 10, 0, Z / 10);
-        missilesApi.velocity.set(X * 3.5, Y * 3.5, Z * 3.5);
+        missilesApi.velocity.set(X * 1, Y * 1, Z * 1);
 
         BS.current.material.color.set("yellow");
 
         if (launch === false) {
-          MTime = setInterval(() => {
-            a += 1;
-            console.log("인터벌 타임 실행 중...");
-          }, 1000);
           launch = true;
-        }
-        if (a === 3) {
-          clearInterval(MTime);
           a = 0;
+          MTime();
+        }
+
+        if (a === 3) {
+          clearInterval(run);
           launch = false;
-          missilesApi.position.set(
-            ...collideRef.current.getWorldPosition(BS.current.geometry.boundingSphere.center).add(new Vector3(0, 500, 0))
-          );
+          a = 0;
+          missilesApi.position.set(...Object.values(mPos));
+        } else if (missileRef.current.userData === true) {
+          clearInterval(run);
+          missileRef.current.userData = false;
+          launch = false;
+          a = 0;
         }
       } else {
-        //collideApi.velocity.set(0, 0, Math.sin(clock.getElapsedTime() * 1) * 500);
-        //collideApi.velocity.set(0, 0, 0);.
-        missilesApi.position.set(
-          ...collideRef.current.getWorldPosition(BS.current.geometry.boundingSphere.center).add(new Vector3(0, 500, 0))
-        );
+        missilesApi.position.set(...Object.values(mPos));
         BS.current.material.color.set("blue");
       }
     }
@@ -119,17 +158,21 @@ export const EnemyFighter = ({ args, position, mPos, rotation, num }) => {
   return (
     <group>
       <group ref={collideRef} dispose={null}>
-        <axesHelper scale={1500} />
         <mesh ref={move}>
-          <sphereGeometry args={[args + 100]} />
+          <sphereGeometry args={[100]} />
           <meshStandardMaterial wireframe opacity={0.1} transparent />
         </mesh>
         <mesh ref={BS}>
-          <sphereGeometry args={[args + 2500]} />
+          <sphereGeometry args={[800]} />
           <meshStandardMaterial wireframe opacity={0.2} transparent />
         </mesh>
-        <group rotation={[-Math.PI / 2, 0, 0]} scale={100}>
-          <group rotation={[Math.PI / 2, 0, 0]}>
+        <group ref={look} rotation={[-Math.PI / 2, -Math.PI / 2, -Math.PI / 2]} scale={100}>
+          {/* <axesHelper scale={50} /> */}
+          <mesh ref={mPosRef} position={[0, 0, 3]}>
+            <sphereGeometry args={[0]} />
+            <meshStandardMaterial wireframe opacity={1} transparent />
+          </mesh>
+          <group position={[0, 0, 0]} rotation={[0, -Math.PI * 0.5, 0]}>
             <mesh geometry={nodes.defaultMaterial.geometry} material={materials.Northstar_L_chi_bang} />
             <mesh geometry={nodes.defaultMaterial_1.geometry} material={materials.Northstar_L_bo_li} />
             <mesh geometry={nodes.defaultMaterial_2.geometry} material={materials.Northstar_L_ji_cang} />
@@ -139,11 +182,17 @@ export const EnemyFighter = ({ args, position, mPos, rotation, num }) => {
       </group>
 
       <group ref={missileRef} dispose={null}>
-        <group position={[-200, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <group position={[387.34, -175.97, 15.53]} rotation={[1.47, 0.76, 0.07]} />
+        <group position={[-200, 0, 50]} rotation={[-Math.PI / 2, 0, 0]}>
+          <group ref={mlook} position={[387.34, -175.97, 15.53]} rotation={[1.47, 0.76, 0.07]} />
           <mesh geometry={missileModel.nodes.Material2.geometry} material={missileModel.materials.auto_13} />
-          <mesh geometry={missileModel.nodes.Material2_1.geometry} material={missileModel.materials.auto_14} />
-          <mesh geometry={missileModel.nodes.Material2_2.geometry} material={missileModel.materials.auto_16} />
+          <mesh
+            geometry={missileModel.nodes.Material2_1.geometry}
+            material={missileModel.materials.auto_14}
+          />
+          <mesh
+            geometry={missileModel.nodes.Material2_2.geometry}
+            material={missileModel.materials.auto_16}
+          />
           <lineSegments
             geometry={missileModel.nodes.Material2_3.geometry}
             material={missileModel.nodes.Material2_3.material}
