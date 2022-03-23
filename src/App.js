@@ -20,6 +20,7 @@ import { FlyingIndex } from "./flyingObjects/FlyingIndex";
 import { RayCasters } from "./hooks/RayCasters";
 import { SatelliteField } from "./satelliteObjects/SatelliteField";
 import { SatelliteIndex } from "./satelliteObjects/SatelliteIndex";
+import { TestBox } from "./components/TestBox";
 
 const Light = () => {
   const pointLight = useRef();
@@ -111,6 +112,7 @@ function App() {
               <FlyingIndex />
               <SatelliteField />
               <SatelliteIndex />
+              {/* <TestBox /> */}
             </Suspense>
           </Debug>
         </Physics>
