@@ -1,0 +1,11 @@
+Model Information:
+* title:	Vertical Launch Missile
+* source:	https://sketchfab.com/3d-models/vertical-launch-missile-56e7cdd1c14e408990a26aa91fe214b4
+* author:	DenisGLabrecque (https://sketchfab.com/DenisGLabrecque)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Vertical Launch Missile" (https://sketchfab.com/3d-models/vertical-launch-missile-56e7cdd1c14e408990a26aa91fe214b4) by DenisGLabrecque (https://sketchfab.com/DenisGLabrecque) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
