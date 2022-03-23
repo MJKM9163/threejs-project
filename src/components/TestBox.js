@@ -7,22 +7,23 @@ export const TestBox = ({ ...props }) => {
   const [ref, api] = useBox(() => ({
     mass: 1,
     type: "Dynamic",
-    args: [10, 10, 10],
-    position: [0, 5000, 0],
+    args: [100, 100, 100],
+    position: [0, 5000, -8000],
     rotation: [0, 0, 0],
   }));
 
   useEffect(() => {
-    api.position.subscribe((p) =>
+    api.position.subscribe((p) => {
+      console.log(p);
       api.applyForce(
         vec
           .set(...p)
           .normalize()
           .multiplyScalar(-5.5)
           .toArray(),
-        [1, 0, 1]
-      )
-    );
+        [10, 0, 1]
+      );
+    });
   }, [api]);
 
   return (
