@@ -6,7 +6,7 @@ import { EnemyFighter, MemoEnemyFighter } from "./fighters/enemyFighter";
 export const Anemys = () => {
   const num = useRef();
   const enemyNum = boundingStore((state) => state.enemyNum);
-
+  console.log(enemyNum);
   return (
     <group ref={num}>
       {enemyNum.map((item, index) =>
@@ -16,10 +16,11 @@ export const Anemys = () => {
             num={index}
             position={[1800, 0, -3500 + index * -1800]}
             rotation={[0, 0, 0]}
-            args={0}
             scale={25}
           />
-        ) : null
+        ) : (
+          false
+        )
       )}
     </group>
   );
