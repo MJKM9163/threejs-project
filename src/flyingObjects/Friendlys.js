@@ -15,9 +15,8 @@ export const Friendlys = () => {
           <BasicFighter
             key={index}
             num={index}
-            position={[-2500, 0, -3000 + index * -800]}
+            position={[-2500, 0, -3500 + index * -800]}
             rotation={[0, 0, 0]}
-            args={0}
             scale={25}
           />
         ) : null
