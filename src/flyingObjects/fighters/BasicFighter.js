@@ -5,6 +5,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { effectSound } from "../../hooks/stores/effectSound";
 import { boundingStore } from "../../hooks/stores/boundingStore";
 import { Vector3 } from "three";
+import { screenStore } from "../../hooks/stores/screenStore";
 
 let basicFighterOption = {
   0: { R: 0, D: 100 },
@@ -22,6 +23,7 @@ let basicFighterOption = {
 export const BasicFighter = ({ position, rotation, num }) => {
   let FR = false;
   let launch = false;
+  let selectCheck = false;
   let a = 0;
   let run;
 
@@ -39,10 +41,20 @@ export const BasicFighter = ({ position, rotation, num }) => {
   const mlook = useRef();
   const move = useRef();
   const BS = useRef();
+  const selectUnit = useRef();
+  const flyingMovePos = useRef(screenStore.getState().flyingMovePos);
+
   const fighter = boundingStore.getState().fighter;
   const { nodes, materials } = useGLTF("flyingObjects/basicFighter/scene.gltf");
   const missileModel = useGLTF("flyingObjects/projectiles/missile/scene.gltf");
   const { clock } = useThree();
+
+  useEffect(() => {
+    screenStore.subscribe(
+      (state) => (flyingMovePos.current = state.flyingMovePos),
+      (state) => state
+    );
+  });
 
   const [collideRef, collideApi] = useSphere(() => ({
     type: "Dynamic",
@@ -51,7 +63,9 @@ export const BasicFighter = ({ position, rotation, num }) => {
     rotation,
     args: [50],
     onCollide: (e) => {
-      basicFighterOption[num].D -= 50;
+      if (e.body.name === "enemybasic") {
+        basicFighterOption[num].D -= 20;
+      }
       if (basicFighterOption[num].D <= 0) {
         effectSound.getState().fighter.FlightExplosionSound.action();
         const data = boundingStore.getState().friendlyNum;
@@ -91,22 +105,33 @@ export const BasicFighter = ({ position, rotation, num }) => {
     let xPos;
     let yPos;
     let zPos;
-    let boundingArray = boundingStore.getState().fighter.enemy;
-    for (let key in boundingArray) {
-      const check = BS.current.geometry.boundingSphere?.intersectsSphere(boundingArray[key]);
-      if (check === true) {
-        xPos = (BS.current.geometry.boundingSphere.center.x - boundingArray[key].center.x) * -1;
-        yPos = (missileRef.current.position.y - boundingArray[key].center.y) * -1;
-        zPos = (BS.current.geometry.boundingSphere.center.z - boundingArray[key].center.z) * -1;
+    if (flyingMovePos.current !== null) {
+      xPos = (collideRef.current.getWorldPosition(new Vector3()).x - flyingMovePos.current.x) * -1;
+      yPos = 0;
+      zPos = (collideRef.current.getWorldPosition(new Vector3()).z - flyingMovePos.current.z) * -1;
 
-        return [xPos, yPos, zPos];
+      return [xPos, yPos, zPos];
+    } else {
+      let boundingArray = boundingStore.getState().fighter.enemy;
+      for (let key in boundingArray) {
+        const check = BS.current.geometry.boundingSphere?.intersectsSphere(boundingArray[key]);
+        if (check === true) {
+          xPos = (BS.current.geometry.boundingSphere.center.x - boundingArray[key].center.x) * -1;
+          yPos = (missileRef.current.position.y - boundingArray[key].center.y) * -1;
+          zPos = (BS.current.geometry.boundingSphere.center.z - boundingArray[key].center.z) * -1;
+
+          return [xPos, yPos, zPos];
+        }
       }
     }
   };
 
   let speedOnOff = false;
+  let speedOnOffm = false;
   let speed = 0;
+  let speedm = 0;
   let ry = 0;
+  console.log(collideApi);
   useFrame(() => {
     mlook.current.lookAt(collideRef.current.getWorldPosition(new Vector3()));
     if (BS.current.geometry.boundingSphere) {
@@ -114,68 +139,116 @@ export const BasicFighter = ({ position, rotation, num }) => {
       collideRef.current.getWorldPosition(move.current.geometry.boundingSphere.center);
       if (FR === false) {
         FR = true;
+        missileRef.current.name = "friendlybasic";
         missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
       }
       boundingStore.getState().fighter.friendly = {
         ...fighter.friendly,
         ["전투기" + num]: move.current.geometry.boundingSphere,
       };
-      if (boundingDetect()) {
-        let [X, Y, Z] = moveFun();
-        if (speedOnOff === false) {
-          speedOnOff = true;
-          let speedUp = setInterval(() => {
-            speed += 0.03;
-            if (speed >= 3) {
-              clearInterval(speedUp);
+
+      if (flyingMovePos.current !== null) {
+        look.current.lookAt(flyingMovePos.current);
+        missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
+        let [mX, mY, mZ] = moveFun();
+        if (speedOnOffm === false) {
+          speedOnOffm = true;
+          let speedUpm = setInterval(() => {
+            speedm += 0.03;
+            if (speedm >= 3) {
+              clearInterval(speedUpm);
             }
           }, 100);
         }
-        collideApi.velocity.set(X < 1000 ? 0 : (X / 5) * speed, 0, X < 1000 ? 0 : (Z / 5) * speed);
-        missilesApi.velocity.set(X * 2, 0, Z * 2);
+        collideApi.velocity.set(
+          (mX > 2000 || mX < -2000 ? mX / 6 : mX / 3) * speedm,
+          0,
+          (mZ > 2000 || mZ < -2000 ? mZ / 6 : mZ / 3) * speedm
+        );
 
-        BS.current.material.color.set("yellow");
-
-        if (launch === false) {
-          launch = true;
-          a = 0;
-          MTime();
-        }
-
-        if (a === 3) {
-          clearInterval(run);
-          launch = false;
-          a = 0;
-          missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
-        } else if (missileRef.current.userData === true) {
-          clearInterval(run);
-          missileRef.current.userData = false;
-          launch = false;
-          a = 0;
+        if ((mX > 0 ? mX < 500 : mX > -500) && (mZ > 0 ? mZ < 500 : mZ > -500)) {
+          speedm = 0;
+          speedOnOffm = false;
+          screenStore.setState({ flyingMovePos: null });
         }
       } else {
-        missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
-        collideApi.velocity.set(
-          (mPosRef.current.getWorldPosition(new Vector3()).x -
-            collideRef.current.getWorldPosition(new Vector3()).x) *
-            3,
-          0,
-          (mPosRef.current.getWorldPosition(new Vector3()).z -
-            collideRef.current.getWorldPosition(new Vector3()).z) *
-            3
-        );
-        collideApi.rotation.set(0, (ry += 0.01), 0);
-        if (speedOnOff === true) {
-          speedOnOff = false;
+        if (boundingDetect()) {
+          let [X, Y, Z] = moveFun();
+          if (speedOnOff === false) {
+            speedOnOff = true;
+            let speedUp = setInterval(() => {
+              speed += 0.03;
+              if (speed >= 3) {
+                clearInterval(speedUp);
+              }
+            }, 100);
+          }
+          collideApi.velocity.set(X < 1000 ? 0 : (X / 5) * speed, 0, X < 1000 ? 0 : (Z / 5) * speed);
+          missilesApi.velocity.set(X * 2, 0, Z * 2);
+
+          BS.current.material.color.set("yellow");
+
+          if (launch === false) {
+            launch = true;
+            a = 0;
+            MTime();
+          }
+
+          if (a === 3) {
+            clearInterval(run);
+            launch = false;
+            a = 0;
+            missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
+          } else if (missileRef.current.userData === true) {
+            clearInterval(run);
+            missileRef.current.userData = false;
+            launch = false;
+            a = 0;
+          }
+        } else {
+          speedm = 0;
+          missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
+          collideApi.velocity.set(
+            (mPosRef.current.getWorldPosition(new Vector3()).x -
+              collideRef.current.getWorldPosition(new Vector3()).x) *
+              3,
+            0,
+            (mPosRef.current.getWorldPosition(new Vector3()).z -
+              collideRef.current.getWorldPosition(new Vector3()).z) *
+              3
+          );
+          collideApi.rotation.set(0, (ry += 0.01), 0);
+          if (speedOnOff === true) {
+            speedOnOff = false;
+          }
         }
       }
     }
   });
 
-  console.log("비행체");
+  const RightClick = (e) => {
+    if (selectUnit.current !== undefined && selectCheck) {
+      selectCheck = false;
+      console.log(flyingMovePos.current);
+      screenStore.setState({ flyingMoveMapCheck: false });
+      selectUnit.current.material.opacity = 0;
+    }
+  };
+  document.addEventListener("contextmenu", RightClick);
   return (
     <group>
-      <group ref={collideRef} dispose={null}>
+      <group
+        ref={collideRef}
+        dispose={null}
+        onClick={(e) => {
+          selectCheck = true;
+          screenStore.setState({ flyingMoveMapCheck: true });
+          e.eventObject.children[0].material.opacity = 0.3;
+        }}>
+        <mesh ref={selectUnit}>
+          <sphereGeometry args={[150]} />
+          <meshStandardMaterial opacity={0} transparent color={"white"} />
+        </mesh>
         <group ref={look} rotation={[0, 0, 0]} scale={10}>
           <axesHelper scale={50} />
           <mesh ref={mPosRef} position={[0, 0, 8]}>
