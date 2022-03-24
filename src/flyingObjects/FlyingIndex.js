@@ -1,6 +1,7 @@
 import { useGLTF } from "@react-three/drei";
 import React from "react";
 import { Anemys } from "./Anemys";
+import { FlyingMoveField } from "./FlyingMoveField";
 import { Friendlys } from "./Friendlys";
 
 export const FlyingIndex = () => {
@@ -8,6 +9,7 @@ export const FlyingIndex = () => {
     <group>
       <Friendlys />
       <Anemys />
+      <FlyingMoveField />
     </group>
   );
 };
