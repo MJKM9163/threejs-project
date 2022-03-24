@@ -17,6 +17,9 @@ export const screenStore = create(
     researchMapOnOff: false,
     // ---Satellite Map on/off
     satelliteMapOnOff: false,
+    // ---FlyingMove Map on/off
+    flyingMoveMapCheck: false,
+    flyingMovePos: null,
 
     // tap
     tapCheck: false,
