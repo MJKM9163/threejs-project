@@ -3,13 +3,14 @@ import React, { useLayoutEffect, useRef } from "react";
 import { Vector3 } from "three";
 
 export const RayCasters = () => {
-  const directionPos = new Vector3(2, 1, 1).normalize();
-  const originPos = new Vector3(0, 0, -4000);
+  const directionPos = new Vector3(1, 0, 0).normalize();
+  const originPos = new Vector3(0, 0, -5000);
   const { raycaster, camera, mouse, scene, size } = useThree();
   //raycaster.setFromCamera(mouse, Cpo);
-
+  console.log(mouse);
   //raycaster.ray.origin = Cpo;
   raycaster.far = 10000;
+  raycaster.setFromCamera(mouse, camera);
   let intersects = raycaster.intersectObjects(scene.children, true);
   for (let item of intersects) {
     item.object.material.color.set("yellow");
@@ -21,7 +22,11 @@ export const RayCasters = () => {
   //   far : Float
   raycaster.set(originPos, directionPos);
 
-  useFrame(() => {});
+  // useFrame(() => {
+  //   //console.log(camera.position);
 
-  return <arrowHelper scale={50} args={[raycaster.ray.direction, raycaster.ray.origin, 300, "aqua"]} />;
+  //   raycaster.set(camera.position, mouse.normalize());
+  // });
+
+  return <arrowHelper scale={50} args={[raycaster.ray.direction, raycaster.ray.origin, 100, "aqua"]} />;
 };
