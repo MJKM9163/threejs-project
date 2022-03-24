@@ -37,7 +37,7 @@ export const SatelliteField = () => {
                     setPos([...Object.values(e.object.position)]);
                   }}
                   onPointerOut={(e) => {
-                    e.object.material.color.setStyle("white");
+                    e.object.material.color.setStyle("#2d3f52");
                     setPos([0, -5000000, 0]);
                   }}
                   onClick={(e) =>
@@ -55,7 +55,7 @@ export const SatelliteField = () => {
                   position={[4950 + xindex * -550, -10, 4950 + zindex * -550]}
                   rotation={[Math.PI / 0.66666, 0, 0]}>
                   <planeGeometry args={[500, 500]} />
-                  <meshBasicMaterial color="white" opacity={0.1} transparent />
+                  <meshBasicMaterial color="#778899" />
                 </mesh>
               ))}
             </group>
