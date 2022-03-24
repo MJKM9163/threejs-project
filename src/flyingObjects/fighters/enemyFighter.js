@@ -50,9 +50,9 @@ export const EnemyFighter = ({ position, rotation, num }) => {
     rotation,
     args: [50],
     onCollide: (e) => {
-      console.log("타격 입음!");
-      enemyFighterOption[num].D -= 50;
-      console.log(enemyFighterOption[num].D);
+      if (e.body.name === "friendlybasic") {
+        enemyFighterOption[num].D -= 20;
+      }
       if (enemyFighterOption[num].D <= 0) {
         effectSound.getState().fighter.FlightExplosionSound.action();
         const data = boundingStore.getState().enemyNum;
@@ -114,6 +114,7 @@ export const EnemyFighter = ({ position, rotation, num }) => {
       collideRef.current.getWorldPosition(move.current.geometry.boundingSphere.center);
       if (FR === false) {
         FR = true;
+        missileRef.current.name = "enemybasic";
         missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
       }
       boundingStore.getState().fighter.enemy = {
