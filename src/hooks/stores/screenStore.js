@@ -18,8 +18,8 @@ export const screenStore = create(
     // ---Satellite Map on/off
     satelliteMapOnOff: false,
     // ---FlyingMove Map on/off
-    flyingMoveMapCheck: false,
-    flyingMovePos: null,
+    flyingMoveMapCheck: null,
+    flyingMovePos: [null, null, null],
 
     // tap
     tapCheck: false,
@@ -294,7 +294,7 @@ export const screenStore = create(
         event: () => {
           let data = boundingStore.getState().friendlyNum;
           let num = data.findIndex((i) => i === false);
-          data[num] = true;
+          data[num] = { D: 100 };
           console.log(data);
           boundingStore.setState({ friendlyNum: [...data] });
         },
