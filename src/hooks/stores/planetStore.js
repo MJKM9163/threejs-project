@@ -46,6 +46,9 @@ export const planetStore = create(
     },
 
     planetResources: {},
+
+    // 중심부터 카운트
+    planetDurability: [{ D: 1000 }, { D: 500 }, { D: 500 }],
   }))
 );
 //console.log(planetStore.getState().planetResources);
