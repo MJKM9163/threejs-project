@@ -17,10 +17,8 @@ import { Resources } from "./interface/Construction/Resources";
 import { AllResourcesFun } from "./hooks/AllResourcesFun";
 import { ResearchMap } from "./interface/Research/ResearchMap";
 import { FlyingIndex } from "./flyingObjects/FlyingIndex";
-import { RayCasters } from "./hooks/RayCasters";
 import { SatelliteField } from "./satelliteObjects/SatelliteField";
 import { SatelliteIndex } from "./satelliteObjects/SatelliteIndex";
-import { TestBox } from "./components/TestBox";
 
 const Light = () => {
   const pointLight = useRef();
