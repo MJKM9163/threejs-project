@@ -17,6 +17,8 @@ let enemyFighterOption = {
   7: { R: 0, D: 100 },
   8: { R: 0, D: 100 },
   9: { R: 0, D: 100 },
+  10: { R: 0, D: 100 },
+  11: { R: 0, D: 100 },
 };
 
 export const EnemyFighter = ({ position, rotation, num }) => {
@@ -157,15 +159,11 @@ export const EnemyFighter = ({ position, rotation, num }) => {
       } else {
         missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
         collideApi.velocity.set(
-          (mPosRef.current.getWorldPosition(new Vector3()).x -
-            collideRef.current.getWorldPosition(new Vector3()).x) *
-            3,
+          ((BS.current.geometry.boundingSphere.center.x - 0) * -1) / 10,
           0,
-          (mPosRef.current.getWorldPosition(new Vector3()).z -
-            collideRef.current.getWorldPosition(new Vector3()).z) *
-            3
+          ((BS.current.geometry.boundingSphere.center.z - 0) * -1) / 10
         );
-        collideApi.rotation.set(0, (enemyFighterOption[num].R += 0.01), 0);
+        look.current.lookAt(new Vector3(0, 0, 0));
         if (speedOnOff === true) {
           speedOnOff = false;
         }
@@ -182,7 +180,7 @@ export const EnemyFighter = ({ position, rotation, num }) => {
           <meshStandardMaterial opacity={0} transparent />
         </mesh>
         <mesh ref={BS}>
-          <sphereGeometry args={[800]} />
+          <sphereGeometry args={[1500]} />
           <meshStandardMaterial opacity={0} transparent />
         </mesh>
         <group ref={look} rotation={[-Math.PI / 2, -Math.PI / 2, -Math.PI / 2]} scale={50}>
