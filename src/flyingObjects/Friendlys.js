@@ -11,11 +11,11 @@ export const Friendlys = () => {
   return (
     <group ref={num}>
       {friendlyNum.map((item, index) =>
-        item === true ? (
+        item !== false ? (
           <BasicFighter
             key={index}
             num={index}
-            position={[-2500, 0, -3500 + index * -800]}
+            position={[1300 + index * -500, 0, -1000]}
             rotation={[0, 0, 0]}
             scale={25}
           />
