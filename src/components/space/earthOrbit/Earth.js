@@ -3,34 +3,38 @@ import { Html, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { Vector3 } from "three";
+import { PlanetDurabilityBar } from "../../../hooks/DurabilityBar";
 //import { EffectModelSelect } from "../../../hooks/EffectModelSelect"; 잠시 주석처리
 import { EffectSelect } from "../../../hooks/EffectSelect";
 import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
+import { boundingStore } from "../../../hooks/stores/boundingStore";
+import { planetStore } from "../../../hooks/stores/planetStore";
 import { screenStore } from "../../../hooks/stores/screenStore";
 import { useStore } from "../../../hooks/stores/useStore";
 import { TapPlanet } from "../../../interface/CanvasInHTML/TapPlanet";
 import { LeftInfoBox } from "../../../interface/LeftInfo/LeftInfoBox";
 import { OrbitLine } from "../OrbitLine";
 
-let a = 0;
-let Pname = null;
-let effects;
+let earthR = 0;
+let earthPname = null;
+let eartheffects;
 let effectsModels;
 
-let onTimer;
-
-let b = 0;
-let c = -250;
+// let b = 0;
+// let c = -250;
 
 export const Earth = ({ SetUp, ...props }) => {
+  let onTimer;
   const effectRef = useRef();
   const tapRef = useRef();
   const infoRef = useRef();
+  const core = useRef();
   const { nodes, materials } = useGLTF("/mainPlanet/scene.gltf");
 
   const argsSize = useRef(useStore.getState().size);
   const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
   const tap = useRef(screenStore.getState().tapCheck);
+  const fighter = boundingStore.getState().fighter; //임시 저장소
 
   useEffect(() => {
     screenStore.subscribe(
@@ -57,17 +61,32 @@ export const Earth = ({ SetUp, ...props }) => {
     mass: 0,
     type: "Static",
     args: [argsSize.current["middle"]],
+    onCollide: (e) => {
+      const data = planetStore.getState().planetDurability;
+      if (e.body.name === "enemybasic") {
+        data[1].D -= 20;
+        planetStore.setState({ planetDurability: [...data] });
+      }
+    },
   }));
 
-  if (Pname === null) {
-    Pname = PlanetNameSelect();
-    effects = EffectSelect(argsSize.current["middle"]);
+  if (earthPname === null) {
+    earthPname = PlanetNameSelect();
+    eartheffects = EffectSelect(argsSize.current["middle"]);
   }
 
   //const effectModels = EffectModelSelect(effects[0], effects[1]); 잠시 주석처리
-
+  console.log(boundingStore.getState().fighter);
   useFrame(() => {
-    effectRef.current.rotation.set(0, a - 0.002, a - 0.003);
+    if (core.current.geometry.boundingSphere) {
+      earthRef.current.getWorldPosition(core.current.geometry.boundingSphere.center);
+      boundingStore.getState().fighter.friendly = {
+        ...fighter.friendly,
+        [earthPname]: core.current.geometry.boundingSphere,
+      };
+    }
+
+    effectRef.current.rotation.set(0, earthR - 0.002, earthR - 0.003);
     CollisionRef.current?.getWorldPosition(collisionWorldPosition);
     earthApi.position.copy(collisionWorldPosition);
 
@@ -86,17 +105,21 @@ export const Earth = ({ SetUp, ...props }) => {
     <>
       <group position={props.position} dispose={null}>
         <Html ref={tapRef}>
-          <TapPlanet planet={Pname} />
+          <TapPlanet planet={earthPname} />
         </Html>
         <Html ref={infoRef} center distanceFactor={10000}>
-          <LeftInfoBox planet={Pname} />
+          <LeftInfoBox planet={earthPname} />
+        </Html>
+        <Html>
+          <PlanetDurabilityBar num={1} name={"planet"} d={500} />
         </Html>
         <mesh ref={CollisionRef} />
         <group rotation={[-Math.PI / 2, 0, 0]} scale={1.9}>
           <mesh
+            ref={core}
             castShadow
             onClick={(e) => {
-              SetUp(collisionWorldPosition, Pname, "지구형", argsSize.current["middle"], effects);
+              SetUp(collisionWorldPosition, earthPname, "지구형", argsSize.current["middle"], eartheffects);
             }}
             onPointerDown={(e) => {
               timer();

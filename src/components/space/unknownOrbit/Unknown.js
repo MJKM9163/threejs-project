@@ -3,28 +3,32 @@ import { Html, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { Vector3 } from "three";
+import { PlanetDurabilityBar } from "../../../hooks/DurabilityBar";
 import { EffectSelect } from "../../../hooks/EffectSelect";
 import { PlanetNameSelect } from "../../../hooks/planetNameSelect";
+import { boundingStore } from "../../../hooks/stores/boundingStore";
+import { planetStore } from "../../../hooks/stores/planetStore";
 import { screenStore } from "../../../hooks/stores/screenStore";
 import { useStore } from "../../../hooks/stores/useStore";
 import { TapPlanet } from "../../../interface/CanvasInHTML/TapPlanet";
 import { LeftInfoBox } from "../../../interface/LeftInfo/LeftInfoBox";
 import { OrbitLine } from "../OrbitLine";
 
-let onTimer;
-
-let a = 0;
-let Pname = null;
-let effects = [];
+let unknownR = 0;
+let unknownPname = null;
+let unknownEffects = [];
 
 export const Unknown = ({ SetUp, ...props }) => {
+  let onTimer;
   const html = useRef();
   const infoRef = useRef();
+  const core = useRef();
   const { nodes, materials } = useGLTF("/unknown/scene.gltf");
 
   const argsSize = useRef(useStore.getState().size);
   const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
   const tap = useRef(screenStore.getState().tapCheck);
+  const fighter = boundingStore.getState().fighter; //임시 저장소
 
   useEffect(() => {
     screenStore.subscribe(
@@ -45,11 +49,18 @@ export const Unknown = ({ SetUp, ...props }) => {
     mass: 1,
     type: "Static",
     args: [argsSize.current["small"]],
+    onCollide: (e) => {
+      const data = planetStore.getState().planetDurability;
+      if (e.body.name === "enemybasic") {
+        data[2].D -= 20;
+        planetStore.setState({ planetDurability: [...data] });
+      }
+    },
   }));
 
-  if (Pname === null) {
-    Pname = PlanetNameSelect();
-    effects.push(EffectSelect(argsSize.current["small"]));
+  if (unknownPname === null) {
+    unknownPname = PlanetNameSelect();
+    unknownEffects.push(EffectSelect(argsSize.current["small"]));
   }
 
   const timer = () => {
@@ -59,7 +70,15 @@ export const Unknown = ({ SetUp, ...props }) => {
   };
 
   useFrame(() => {
-    unknownApi.rotation.set(0, (a += 0.01), 0);
+    if (core.current.geometry.boundingSphere) {
+      unknownRef.current.getWorldPosition(core.current.geometry.boundingSphere.center);
+      boundingStore.getState().fighter.friendly = {
+        ...fighter.friendly,
+        [unknownPname]: core.current.geometry.boundingSphere,
+      };
+    }
+
+    unknownApi.rotation.set(0, (unknownR += 0.01), 0);
     CollisionRef.current?.getWorldPosition(collisionWorldPosition);
     unknownApi.position.copy(collisionWorldPosition);
 
@@ -81,10 +100,13 @@ export const Unknown = ({ SetUp, ...props }) => {
     <>
       <group position={props.position} dispose={null}>
         <Html ref={html}>
-          <TapPlanet planet={Pname} />
+          <TapPlanet planet={unknownPname} />
         </Html>
         <Html ref={infoRef} center distanceFactor={10000}>
-          <LeftInfoBox planet={Pname} />
+          <LeftInfoBox planet={unknownPname} />
+        </Html>
+        <Html>
+          <PlanetDurabilityBar num={2} name={"planet"} d={500} />
         </Html>
         <mesh ref={CollisionRef} />
         <group rotation={[-Math.PI / 2, 0, 0]}>
@@ -93,9 +115,16 @@ export const Unknown = ({ SetUp, ...props }) => {
               rotation={[-Math.PI / 2, 0, 0]}
               scale={[argsSize.current["small"], argsSize.current["small"], argsSize.current["small"]]}>
               <mesh
+                ref={core}
                 receiveShadow
                 onClick={(e) => {
-                  SetUp(collisionWorldPosition, Pname, "얼음형", argsSize.current["small"], ...effects);
+                  SetUp(
+                    collisionWorldPosition,
+                    unknownPname,
+                    "얼음형",
+                    argsSize.current["small"],
+                    ...unknownEffects
+                  );
                 }}
                 onPointerDown={(e) => {
                   timer();

@@ -1,22 +1,27 @@
 import { useSphere } from "@react-three/cannon";
-import { Html, useAnimations, useGLTF } from "@react-three/drei";
+import { Html, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
+import { PlanetDurabilityBar } from "../../hooks/DurabilityBar";
+import { boundingStore } from "../../hooks/stores/boundingStore";
+import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
 import { TapPlanet } from "../../interface/CanvasInHTML/TapPlanet";
 import { LeftInfoBox } from "../../interface/LeftInfo/LeftInfoBox";
 
-let a = 0.5;
-let onTimer;
+let sunRY = 0.5;
 
 export const Sun = ({ SetUp, ...props }) => {
+  let onTimer;
   const html = useRef();
   const infoRef = useRef();
+  const core = useRef();
 
   const argsSize = useRef(useStore.getState().size);
   const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
   const tap = useRef(screenStore.getState().tapCheck);
+  const fighter = boundingStore.getState().fighter; //임시 저장소
 
   useEffect(() => {
     screenStore.subscribe(
@@ -38,6 +43,13 @@ export const Sun = ({ SetUp, ...props }) => {
     position: [0, 0, 0],
     rotation: [0, 0, 0],
     args: [argsSize.current["large"]],
+    onCollide: (e) => {
+      const data = planetStore.getState().planetDurability;
+      if (e.body.name === "enemybasic") {
+        data[0].D -= 20;
+        planetStore.setState({ planetDurability: [...data] });
+      }
+    },
   }));
 
   const timer = () => {
@@ -45,8 +57,15 @@ export const Sun = ({ SetUp, ...props }) => {
       html.current.style.display = "block";
     }, 300);
   };
+  // fighter 임시 사용
   useFrame(() => {
-    sunApi.rotation.set(0, (a += 0.003), 0);
+    if (core.current !== undefined && fighter.friendly["태양"] === undefined) {
+      boundingStore.getState().fighter.friendly = {
+        ...fighter.friendly,
+        태양: core.current.geometry.boundingSphere,
+      };
+    }
+    sunApi.rotation.set(0, (sunRY += 0.003), 0);
 
     if (tap?.current === false) {
       html.current.style.display = "none";
@@ -68,10 +87,14 @@ export const Sun = ({ SetUp, ...props }) => {
         <Html ref={infoRef} center distanceFactor={10000}>
           <LeftInfoBox planet={"태양"} />
         </Html>
+        <Html>
+          <PlanetDurabilityBar num={0} name={"planet"} d={1000} />
+        </Html>
         <group rotation={[-Math.PI / 2, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]}>
             <group rotation={[-Math.PI / 2, 0, 0]}>
               <mesh
+                ref={core}
                 onClick={(e) => {
                   SetUp(e.object.position, "태양", "주계열성", argsSize.current["large"]);
                 }}
