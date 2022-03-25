@@ -1,23 +1,17 @@
-import React, { useEffect, useRef } from "react";
-import { useGLTF } from "@react-three/drei";
+import React, { useEffect, useRef, useState } from "react";
+import { Html, useGLTF } from "@react-three/drei";
 import { useBox, useSphere } from "@react-three/cannon";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { effectSound } from "../../hooks/stores/effectSound";
 import { boundingStore } from "../../hooks/stores/boundingStore";
 import { Vector3 } from "three";
 import { screenStore } from "../../hooks/stores/screenStore";
+import { FighterDurabilityBar } from "../../hooks/DurabilityBar";
 
-let basicFighterOption = {
-  0: { R: 0, D: 100 },
-  1: { R: 0, D: 100 },
-  2: { R: 0, D: 100 },
-  3: { R: 0, D: 100 },
-  4: { R: 0, D: 100 },
-  5: { R: 0, D: 100 },
-  6: { R: 0, D: 100 },
-  7: { R: 0, D: 100 },
-  8: { R: 0, D: 100 },
-  9: { R: 0, D: 100 },
+let friendlyFighterOption = {
+  0: { R: 0, S: 0, SM: 0, SOO: false, SOOM: false },
+  1: { R: 0, S: 0, SM: 0, SOO: false, SOOM: false },
+  2: { R: 0, S: 0, SM: 0, SOO: false, SOOM: false },
 };
 
 export const BasicFighter = ({ position, rotation, num }) => {
@@ -47,7 +41,6 @@ export const BasicFighter = ({ position, rotation, num }) => {
   const fighter = boundingStore.getState().fighter;
   const { nodes, materials } = useGLTF("flyingObjects/basicFighter/scene.gltf");
   const missileModel = useGLTF("flyingObjects/projectiles/missile/scene.gltf");
-  const { clock } = useThree();
 
   useEffect(() => {
     screenStore.subscribe(
@@ -63,12 +56,13 @@ export const BasicFighter = ({ position, rotation, num }) => {
     rotation,
     args: [50],
     onCollide: (e) => {
+      const data = boundingStore.getState().friendlyNum;
       if (e.body.name === "enemybasic") {
-        basicFighterOption[num].D -= 20;
+        data[num].D -= 20;
+        boundingStore.setState({ friendlyNum: [...data] });
       }
-      if (basicFighterOption[num].D <= 0) {
+      if (data[num].D <= 0) {
         effectSound.getState().fighter.FlightExplosionSound.action();
-        const data = boundingStore.getState().friendlyNum;
         data[num] = false;
         delete boundingStore.getState().fighter.friendly["전투기" + num];
         boundingStore.setState({ friendlyNum: [...data] });
@@ -105,10 +99,10 @@ export const BasicFighter = ({ position, rotation, num }) => {
     let xPos;
     let yPos;
     let zPos;
-    if (flyingMovePos.current !== null) {
-      xPos = (collideRef.current.getWorldPosition(new Vector3()).x - flyingMovePos.current.x) * -1;
+    if (flyingMovePos.current[num] !== null) {
+      xPos = (collideRef.current.getWorldPosition(new Vector3()).x - flyingMovePos.current[num].x) * -1;
       yPos = 0;
-      zPos = (collideRef.current.getWorldPosition(new Vector3()).z - flyingMovePos.current.z) * -1;
+      zPos = (collideRef.current.getWorldPosition(new Vector3()).z - flyingMovePos.current[num].z) * -1;
 
       return [xPos, yPos, zPos];
     } else {
@@ -126,12 +120,6 @@ export const BasicFighter = ({ position, rotation, num }) => {
     }
   };
 
-  let speedOnOff = false;
-  let speedOnOffm = false;
-  let speed = 0;
-  let speedm = 0;
-  let ry = 0;
-  console.log(collideApi);
   useFrame(() => {
     mlook.current.lookAt(collideRef.current.getWorldPosition(new Vector3()));
     if (BS.current.geometry.boundingSphere) {
@@ -147,43 +135,49 @@ export const BasicFighter = ({ position, rotation, num }) => {
         ["전투기" + num]: move.current.geometry.boundingSphere,
       };
 
-      if (flyingMovePos.current !== null) {
-        look.current.lookAt(flyingMovePos.current);
+      if (flyingMovePos.current[num] !== null) {
+        look.current.lookAt(flyingMovePos.current[num]);
         missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
         let [mX, mY, mZ] = moveFun();
-        if (speedOnOffm === false) {
-          speedOnOffm = true;
+        if (friendlyFighterOption[num].SOOM === false) {
+          friendlyFighterOption[num].SOOM = true;
           let speedUpm = setInterval(() => {
-            speedm += 0.03;
-            if (speedm >= 3) {
+            friendlyFighterOption[num].SM += 0.03;
+            if (friendlyFighterOption[num].SM >= 3) {
               clearInterval(speedUpm);
             }
           }, 100);
         }
         collideApi.velocity.set(
-          (mX > 2000 || mX < -2000 ? mX / 6 : mX / 3) * speedm,
+          (mX > 3000 || mX < -3000 ? mX / 10 : mX / 5) * friendlyFighterOption[num].SM,
           0,
-          (mZ > 2000 || mZ < -2000 ? mZ / 6 : mZ / 3) * speedm
+          (mZ > 3000 || mZ < -3000 ? mZ / 10 : mZ / 5) * friendlyFighterOption[num].SM
         );
 
         if ((mX > 0 ? mX < 500 : mX > -500) && (mZ > 0 ? mZ < 500 : mZ > -500)) {
-          speedm = 0;
-          speedOnOffm = false;
-          screenStore.setState({ flyingMovePos: null });
+          friendlyFighterOption[num].SM = 0;
+          friendlyFighterOption[num].SOOM = false;
+          const data = screenStore.getState().flyingMovePos;
+          data[num] = null;
+          screenStore.setState({ flyingMovePos: data });
         }
       } else {
         if (boundingDetect()) {
           let [X, Y, Z] = moveFun();
-          if (speedOnOff === false) {
-            speedOnOff = true;
+          if (friendlyFighterOption[num].SOO === false) {
+            friendlyFighterOption[num].SOO = true;
             let speedUp = setInterval(() => {
-              speed += 0.03;
-              if (speed >= 3) {
+              friendlyFighterOption[num].S += 0.03;
+              if (friendlyFighterOption[num].S >= 3) {
                 clearInterval(speedUp);
               }
             }, 100);
           }
-          collideApi.velocity.set(X < 1000 ? 0 : (X / 5) * speed, 0, X < 1000 ? 0 : (Z / 5) * speed);
+          collideApi.velocity.set(
+            X < 1000 ? 0 : (X / 5) * friendlyFighterOption[num].S,
+            0,
+            X < 1000 ? 0 : (Z / 5) * friendlyFighterOption[num].S
+          );
           missilesApi.velocity.set(X * 2, 0, Z * 2);
 
           BS.current.material.color.set("yellow");
@@ -206,7 +200,7 @@ export const BasicFighter = ({ position, rotation, num }) => {
             a = 0;
           }
         } else {
-          speedm = 0;
+          friendlyFighterOption[num].SM = 0;
           missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
           collideApi.velocity.set(
             (mPosRef.current.getWorldPosition(new Vector3()).x -
@@ -217,9 +211,9 @@ export const BasicFighter = ({ position, rotation, num }) => {
               collideRef.current.getWorldPosition(new Vector3()).z) *
               3
           );
-          collideApi.rotation.set(0, (ry += 0.01), 0);
-          if (speedOnOff === true) {
-            speedOnOff = false;
+          collideApi.rotation.set(0, (friendlyFighterOption[num].R += 0.01), 0);
+          if (friendlyFighterOption[num].SOO === true) {
+            friendlyFighterOption[num].SOO = false;
           }
         }
       }
@@ -229,11 +223,11 @@ export const BasicFighter = ({ position, rotation, num }) => {
   const RightClick = (e) => {
     if (selectUnit.current !== undefined && selectCheck) {
       selectCheck = false;
-      console.log(flyingMovePos.current);
-      screenStore.setState({ flyingMoveMapCheck: false });
+      screenStore.setState({ flyingMoveMapCheck: null });
       selectUnit.current.material.opacity = 0;
     }
   };
+
   document.addEventListener("contextmenu", RightClick);
   return (
     <group>
@@ -242,9 +236,12 @@ export const BasicFighter = ({ position, rotation, num }) => {
         dispose={null}
         onClick={(e) => {
           selectCheck = true;
-          screenStore.setState({ flyingMoveMapCheck: true });
-          e.eventObject.children[0].material.opacity = 0.3;
+          screenStore.setState({ flyingMoveMapCheck: num });
+          e.eventObject.children[1].material.opacity = 0.3;
         }}>
+        <Html>
+          <FighterDurabilityBar num={num} name={"fighter"} />
+        </Html>
         <mesh ref={selectUnit}>
           <sphereGeometry args={[150]} />
           <meshStandardMaterial opacity={0} transparent color={"white"} />
@@ -322,7 +319,7 @@ export const BasicFighter = ({ position, rotation, num }) => {
           <meshStandardMaterial opacity={0} transparent />
         </mesh>
         <mesh ref={BS}>
-          <sphereGeometry args={[800]} />
+          <sphereGeometry args={[1500]} />
           <meshStandardMaterial opacity={0} transparent />
         </mesh>
       </group>
