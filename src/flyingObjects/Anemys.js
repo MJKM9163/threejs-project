@@ -29,20 +29,20 @@ export const Anemys = () => {
   const enemyNum = boundingStore((state) => state.enemyNum);
   const { clock } = useThree();
 
-  useFrame(() => {
-    if (clock.elapsedTime > 5 && levelCheck[1] === false) {
-      levelCheck[1] = true;
-      enemyNum[0] = true;
-      boundingStore.setState({ enemyNum: [...enemyNum] });
-    } else if (clock.elapsedTime > 10 && levelCheck[2] === false) {
-      //const data = boundingStore.getState().enemyNum;
-      levelCheck[2] = true;
-      for (let i = 0; i < 3; i++) {
-        enemyNum[i] = true;
-      }
-      boundingStore.setState({ enemyNum: [...enemyNum] });
-    }
-  });
+  // useFrame(() => {
+  //   if (clock.elapsedTime > 5 && levelCheck[1] === false) {
+  //     levelCheck[1] = true;
+  //     enemyNum[0] = true;
+  //     boundingStore.setState({ enemyNum: [...enemyNum] });
+  //   } else if (clock.elapsedTime > 10 && levelCheck[2] === false) {
+  //     //const data = boundingStore.getState().enemyNum;
+  //     levelCheck[2] = true;
+  //     for (let i = 0; i < 3; i++) {
+  //       enemyNum[i] = true;
+  //     }
+  //     boundingStore.setState({ enemyNum: [...enemyNum] });
+  //   }
+  // });
   return (
     <group ref={num}>
       {enemyNum.map((item, index) =>
