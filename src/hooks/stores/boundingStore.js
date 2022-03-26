@@ -13,7 +13,7 @@ export const boundingStore = create(
     // 적군 비행기 수
     enemyNum: [false, false, false, false, false, false, false, false, false, false, false, false],
     // 아군 비행기 수
-    friendlyNum: [{ D: 100 }, { D: 100 }, false],
+    friendlyNum: [false, false, false],
   }))
 );
 //{ MPos: new Vector3(0, 2000, 0), TPos: new Vector3(1000, 0, 0) }
