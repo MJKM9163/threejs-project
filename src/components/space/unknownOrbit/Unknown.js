@@ -1,5 +1,5 @@
 import { useSphere } from "@react-three/cannon";
-import { Html, useGLTF } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { Vector3 } from "three";
@@ -13,17 +13,17 @@ import { useStore } from "../../../hooks/stores/useStore";
 import { TapPlanet } from "../../../interface/CanvasInHTML/TapPlanet";
 import { LeftInfoBox } from "../../../interface/LeftInfo/LeftInfoBox";
 import { OrbitLine } from "../OrbitLine";
+import { UnknownModel } from "./UnknownModel";
 
 let unknownR = 0;
 let unknownPname = null;
-let unknownEffects = [];
+let unknownEffects;
 
 export const Unknown = ({ SetUp, ...props }) => {
   let onTimer;
   const html = useRef();
   const infoRef = useRef();
-  const core = useRef();
-  const { nodes, materials } = useGLTF("/unknown/scene.gltf");
+  const BS = useRef();
 
   const argsSize = useRef(useStore.getState().size);
   const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
@@ -44,7 +44,6 @@ export const Unknown = ({ SetUp, ...props }) => {
   });
 
   const collisionWorldPosition = new Vector3();
-  const CollisionRef = useRef();
   const [unknownRef, unknownApi] = useSphere(() => ({
     mass: 1,
     type: "Static",
@@ -60,7 +59,7 @@ export const Unknown = ({ SetUp, ...props }) => {
 
   if (unknownPname === null) {
     unknownPname = PlanetNameSelect();
-    unknownEffects.push(EffectSelect(argsSize.current["small"]));
+    unknownEffects = EffectSelect(argsSize.current["small"]);
   }
 
   const timer = () => {
@@ -70,17 +69,17 @@ export const Unknown = ({ SetUp, ...props }) => {
   };
 
   useFrame(() => {
-    if (core.current.geometry.boundingSphere) {
-      unknownRef.current.getWorldPosition(core.current.geometry.boundingSphere.center);
+    if (BS.current.geometry.boundingSphere) {
+      unknownRef.current.getWorldPosition(BS.current.geometry.boundingSphere.center);
       boundingStore.getState().fighter.friendly = {
         ...fighter.friendly,
-        [unknownPname]: core.current.geometry.boundingSphere,
+        [unknownPname]: BS.current.geometry.boundingSphere,
       };
+      BS.current.getWorldPosition(collisionWorldPosition);
+      unknownApi.position.copy(collisionWorldPosition);
     }
 
     unknownApi.rotation.set(0, (unknownR += 0.01), 0);
-    CollisionRef.current?.getWorldPosition(collisionWorldPosition);
-    unknownApi.position.copy(collisionWorldPosition);
 
     if (tap?.current === false) {
       html.current.style.display = "none";
@@ -108,36 +107,21 @@ export const Unknown = ({ SetUp, ...props }) => {
         <Html>
           <PlanetDurabilityBar num={2} name={"planet"} d={500} />
         </Html>
-        <mesh ref={CollisionRef} />
-        <group rotation={[-Math.PI / 2, 0, 0]}>
-          <group rotation={[Math.PI / 2, 0, 0]}>
-            <group
-              rotation={[-Math.PI / 2, 0, 0]}
-              scale={[argsSize.current["small"], argsSize.current["small"], argsSize.current["small"]]}>
-              <mesh
-                ref={core}
-                receiveShadow
-                onClick={(e) => {
-                  SetUp(
-                    collisionWorldPosition,
-                    unknownPname,
-                    "얼음형",
-                    argsSize.current["small"],
-                    ...unknownEffects
-                  );
-                }}
-                onPointerDown={(e) => {
-                  timer();
-                }}
-                onPointerUp={(e) => {
-                  clearTimeout(onTimer);
-                }}
-                geometry={nodes.Sphere_Material002_0.geometry}
-                material={materials["Material.002"]}
-              />
-            </group>
-          </group>
-        </group>
+        <mesh ref={BS} />
+        <mesh
+          onClick={(e) => {
+            SetUp(collisionWorldPosition, unknownPname, "얼음형", argsSize.current["small"], unknownEffects);
+          }}
+          onPointerDown={(e) => {
+            timer();
+          }}
+          onPointerUp={(e) => {
+            clearTimeout(onTimer);
+          }}>
+          <sphereGeometry args={[150]} />
+          <meshBasicMaterial transparent opacity={0.5} />
+        </mesh>
+        <UnknownModel unknownEffects={unknownEffects} />
         <axesHelper scale={500} />
       </group>
       <OrbitLine args={[props.position[0] - 5, props.position[0] + 5, 100]} />
