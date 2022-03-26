@@ -14,7 +14,7 @@ export const EffectModelSelect = (pEffectArray, nEffectArray) => {
       final.push(pEffectModels.current[pEffectArray[i].replace(regex, "")]);
     }
   }
-  console.log(pEffectArray);
+  //console.log(pEffectArray);
 
   return final;
 };
