@@ -1,7 +1,7 @@
 import { useSphere } from "@react-three/cannon";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DoubleSide, Vector3 } from "three";
 import { screenStore } from "../hooks/stores/screenStore";
 
