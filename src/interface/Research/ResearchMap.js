@@ -196,8 +196,23 @@ export const ResearchMap = () => {
           <line x1={0} y1={0} x2={0} y2={800} stroke={hovers.basicLineColor[0]} strokeWidth={8} />
 
           <line x1={300} y1={0} x2={600} y2={0} stroke={hovers.planetSystemLineColor[0]} strokeWidth={15} />
-          <line x1={300} y1={50} x2={300} y2={150} stroke={hovers.planetSystemLineColor[1]} strokeWidth={7} name="행+대" />
-          <line x1={300} y1={102} x2={500} y2={102} stroke={hovers.planetSystemLineColor[1]} strokeWidth={7} />
+          <line
+            x1={300}
+            y1={50}
+            x2={300}
+            y2={150}
+            stroke={hovers.planetSystemLineColor[1]}
+            strokeWidth={7}
+            name="행+대"
+          />
+          <line
+            x1={300}
+            y1={102}
+            x2={500}
+            y2={102}
+            stroke={hovers.planetSystemLineColor[1]}
+            strokeWidth={7}
+          />
 
           <line
             x1={300}
@@ -225,7 +240,14 @@ export const ResearchMap = () => {
             strokeWidth={7}
           />
 
-          <line x1={300} y1={400} x2={600} y2={400} stroke={hovers.artificialBacteriaLineColor[0]} strokeWidth={7} />
+          <line
+            x1={300}
+            y1={400}
+            x2={600}
+            y2={400}
+            stroke={hovers.artificialBacteriaLineColor[0]}
+            strokeWidth={7}
+          />
           <line
             x1={300}
             y1={450}
@@ -235,9 +257,23 @@ export const ResearchMap = () => {
             strokeWidth={7}
             name="인+우"
           />
-          <line x1={300} y1={502} x2={500} y2={502} stroke={hovers.artificialBacteriaLineColor[1]} strokeWidth={7} />
+          <line
+            x1={300}
+            y1={502}
+            x2={500}
+            y2={502}
+            stroke={hovers.artificialBacteriaLineColor[1]}
+            strokeWidth={7}
+          />
 
-          <line x1={300} y1={600} x2={600} y2={600} stroke={hovers.spaceArchitectureLineColor[0]} strokeWidth={7} />
+          <line
+            x1={300}
+            y1={600}
+            x2={600}
+            y2={600}
+            stroke={hovers.spaceArchitectureLineColor[0]}
+            strokeWidth={7}
+          />
           <line
             x1={300}
             y1={650}
@@ -247,7 +283,14 @@ export const ResearchMap = () => {
             strokeWidth={7}
             name="우+외"
           />
-          <line x1={300} y1={702} x2={500} y2={702} stroke={hovers.spaceArchitectureLineColor[1]} strokeWidth={7} />
+          <line
+            x1={300}
+            y1={702}
+            x2={500}
+            y2={702}
+            stroke={hovers.spaceArchitectureLineColor[1]}
+            strokeWidth={7}
+          />
 
           <line x1={300} y1={800} x2={600} y2={800} stroke={hovers.xenologyLineColor[0]} strokeWidth={7} />
         </svg>
@@ -293,17 +336,24 @@ export const ResearchMap = () => {
                       screenStore.getState().resourcesProduction[name].research = true;
                     }
                     researchStore.getState().completionList.push(item);
-                    researchStore.setState({
-                      researchResources: {
-                        ...researchResources,
-                        [researchList[item]?.AddResources["food"] ? `food` : null]:
-                          researchResources.food + researchList[item].AddResources["food"],
-                        [researchList[item]?.AddResources["gear"] ? `gear` : null]:
-                          researchResources.gear + researchList[item].AddResources["gear"],
-                        [researchList[item]?.AddResources["science"] ? `science` : null]:
-                          researchResources.science + researchList[item].AddResources["science"],
-                      },
-                    });
+                    if (researchList[item].AddResources !== null) {
+                      for (let r in researchList[item].AddResources) {
+                        researchStore.setState({
+                          researchResources: {
+                            ...researchStore.getState().researchResources,
+                            [r]:
+                              researchStore.getState().researchResources[r] +
+                              researchList[item].AddResources[r],
+                          },
+                        });
+                        planetStore.setState({
+                          allResources: {
+                            ...planetStore.getState().allResources,
+                            [r]: planetStore.getState().allResources[r] + researchList[item].AddResources[r],
+                          },
+                        });
+                      }
+                    }
                   } else if (check !== true) {
                     setMessage("선행 연구가 완료되지 않았습니다!");
                     setWarning(true);
