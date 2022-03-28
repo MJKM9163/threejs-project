@@ -55,16 +55,21 @@ export const RightOption = () => {
   const researchMapOnOff = screenStore((state) => state.researchMapOnOff);
   const satelliteMapOnOff = screenStore((state) => state.satelliteMapOnOff);
   const satelliteNum = screenStore((state) => state.satellite);
+  const satellitePos = screenStore((state) => state.satellitePos);
+
+  if (satelliteNum + satellitePos.length === 5) {
+    screenStore.setState((set) => (set.resourcesProduction.multipurposeSatellite.repetition = false));
+    screenStore.setState((set) => (set.resourcesProduction.multipurposeSatellite.completion = true));
+  } else {
+    screenStore.setState((set) => (set.resourcesProduction.multipurposeSatellite.repetition = true));
+    screenStore.setState((set) => (set.resourcesProduction.multipurposeSatellite.completion = false));
+  }
 
   return (
     <RightOptionBox satelliteNum={satelliteNum}>
       <img
         onClick={() => {
-          if (leftInfoOnOff === "false") {
-            screenStore.setState({ leftInfoOnOff: true });
-          } else if (leftInfoOnOff === "true") {
-            screenStore.setState({ leftInfoOnOff: false });
-          }
+          screenStore.setState({ leftInfoOnOff: !leftInfoOnOff });
         }}
         src={"images/Html/eye.png"}
         width={50}
