@@ -19,13 +19,13 @@ export const SpaceIndex = () => {
   useEffect(() => {
     useStore.subscribe(
       (state) => (planetName.current = state.name),
-      (state) => state.name
+      (state) => state
     );
   });
   useEffect(() => {
     planetStore.subscribe(
       (state) => (resources.current = state.planetResources),
-      (state) => state.planetResources
+      (state) => state
     );
   });
 
