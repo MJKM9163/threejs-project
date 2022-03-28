@@ -43,6 +43,8 @@ export const planetStore = create(
       science: 0,
       titanium: 0,
       orichalcon: 0,
+      happiness: 50,
+      shield: 0,
     },
 
     planetResources: {},
