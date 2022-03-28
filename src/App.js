@@ -19,6 +19,7 @@ import { ResearchMap } from "./interface/Research/ResearchMap";
 import { FlyingIndex } from "./flyingObjects/FlyingIndex";
 import { SatelliteField } from "./satelliteObjects/SatelliteField";
 import { SatelliteIndex } from "./satelliteObjects/SatelliteIndex";
+import { EventBox } from "./hooks/EventBox";
 
 const Light = () => {
   const pointLight = useRef();
@@ -83,6 +84,7 @@ function App() {
   console.log("메인 랜더링 확인");
   return (
     <>
+      <EventBox />
       <ResearchMap />
       <PlanetInfo />
       <AllResourcesFun />
