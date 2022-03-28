@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { planetStore } from "../../hooks/stores/planetStore";
-import { researchStore } from "../../hooks/stores/researchStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 
 const ResourcesContainer = styled.div`
@@ -51,9 +50,7 @@ const ResourcesContainer = styled.div`
 
 export const Resources = () => {
   const allResources = planetStore((state) => state.allResources);
-  const researchResources = researchStore((state) => state.researchResources);
-
-  console.log("위쪽 통합 자원창 랜더링");
+  //console.log(allResources);
   return (
     <ResourcesContainer>
       <div
@@ -66,13 +63,13 @@ export const Resources = () => {
         onMouseEnter={() => screenStore.setState({ hoverCheck: "gear" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/gear.png" width={25} height={25} alt="생산력"></img>
-        <span>{allResources.gear + researchResources.gear}</span>
+        <span>{allResources.gear}</span>
       </div>
       <div
         onMouseEnter={() => screenStore.setState({ hoverCheck: "science" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/flask.png" width={25} height={25} alt="과학 자원"></img>
-        <span>{allResources.science + researchResources.science}</span>
+        <span>{allResources.science}</span>
       </div>
       <div
         onMouseEnter={() => screenStore.setState({ hoverCheck: "titanium" })}
