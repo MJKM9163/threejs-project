@@ -53,8 +53,6 @@ const ProductionContainer = styled.div`
 
 const WaitingContainer = styled.div`
   width: 25%;
-  /* display: flex;
-  flex-direction: row; */
   background-color: #4b7e103b;
 
   .waiting {
@@ -78,16 +76,12 @@ const WaitingContainer = styled.div`
     }
 
     .waitingImage {
-      //position: absolute;
       z-index: 1;
       width: 160px;
       height: 90px;
     }
     .waitingName {
-      //position: relative;
-      //width: 200px;
       color: #b8b8b8;
-      //margin-right: 10px;
       font-size: 21px;
     }
     .waitingTime {
@@ -97,10 +91,10 @@ const WaitingContainer = styled.div`
   }
 `;
 
-let i = 0;
+let wI = 0;
 let delay = 500;
-let check = false;
-let up;
+let wCheck = false;
+let wUp;
 
 export const Production = ({ allData }) => {
   const [render, setRender] = useState(false);
@@ -113,49 +107,64 @@ export const Production = ({ allData }) => {
 
   useEffect(() => {
     planetStore.subscribe(
-      (state) => state.allResources.gear,
-      (state) => (gear.current = state)
+      (state) => (gear.current = state.allResources.gear),
+      (state) => state
     );
   });
   useEffect(() => {
     planetStore.subscribe(
-      (state) => state.allResources,
-      (state) => (resources.current = state)
+      (state) => (resources.current = state.allResources),
+      (state) => state
     );
   });
 
   const numUp = (delay, awaitArray, production) => {
-    if (check === false) {
-      check = true;
-      up = setInterval(() => {
-        i += gear.current;
-        if (awaitArray[0][1] <= i) {
-          clearTimeout(up);
-          production[awaitArray[0][0]].event();
+    if (wCheck === false) {
+      wCheck = true;
+      wUp = setInterval(() => {
+        wI += gear.current;
+        if (awaitArray[0][1] <= wI) {
+          clearTimeout(wUp);
           if (production[awaitArray[0][0]].repetition) {
             production[awaitArray[0][0]].completion = false;
-            screenStore.setState({
-              resourcesProduction: allData.resourcesProduction,
-            });
           } else {
             production[awaitArray[0][0]].completion = true;
-            screenStore.setState({
-              resourcesProduction: allData.resourcesProduction,
-            });
+          }
+          production[awaitArray[0][0]].event();
+          screenStore.setState({
+            resourcesProduction: allData.resourcesProduction,
+          });
+          for (let r in production[awaitArray[0][0]].add) {
+            if (r === "food") {
+              // 임시 코드
+              for (let item in planetStore.getState().planetResources) {
+                planetStore.getState().planetResources[item].resources.food =
+                  planetStore.getState().planetResources[item].resources.food +
+                  production[awaitArray[0][0]].add[r];
+                break;
+              }
+            } else {
+              planetStore.setState({
+                allResources: {
+                  ...planetStore.getState().allResources,
+                  [r]: planetStore.getState().allResources[r] + production[awaitArray[0][0]].add[r],
+                },
+              });
+            }
           }
 
           awaitArray.shift();
           screenStore.setState({
             awaitArray: awaitArray,
           });
-          check = false;
-          setReload(i + 1); // 건설 완료 시점 랜더링 조정
-          i = 0;
+          wCheck = false;
+          setReload(wI + 1); // 건설 완료 시점 랜더링 조정
+          wI = 0;
           if (allData.awaitArray.length > 0) {
             numUp(delay, awaitArray, production);
           }
         }
-        setReload(i); // Interval이 진행 될 떄 마다 랜더링 발생
+        setReload(wI); // Interval이 진행 될 떄 마다 랜더링 발생
       }, delay);
     }
   };
@@ -180,14 +189,16 @@ export const Production = ({ allData }) => {
                 if (
                   allData.resourcesProduction[item].cost.food <= Math.floor(resources.current.food) &&
                   allData.resourcesProduction[item].cost.titanium <= Math.floor(resources.current.titanium) &&
-                  allData.resourcesProduction[item].cost.orichalcon <= Math.floor(resources.current.orichalcon)
+                  allData.resourcesProduction[item].cost.orichalcon <=
+                    Math.floor(resources.current.orichalcon)
                 ) {
                   planetStore.setState({
                     allResources: {
                       ...resources.current,
                       food: resources.current.food - allData.resourcesProduction[item].cost.food,
                       titanium: resources.current.titanium - allData.resourcesProduction[item].cost.titanium,
-                      orichalcon: resources.current.orichalcon - allData.resourcesProduction[item].cost.orichalcon,
+                      orichalcon:
+                        resources.current.orichalcon - allData.resourcesProduction[item].cost.orichalcon,
                     },
                   });
                   allData.awaitArray.push([item, allData.resourcesProduction[item].max]);
@@ -217,7 +228,9 @@ export const Production = ({ allData }) => {
         )}
       </ProductionContainer>
       <WaitingContainer
-        num={allData.awaitArray.length !== 0 ? Math.floor((i / allData.awaitArray[0][1]) * 100) + "%" : null}>
+        num={
+          allData.awaitArray.length !== 0 ? Math.floor((wI / allData.awaitArray[0][1]) * 100) + "%" : null
+        }>
         {allData.awaitArray.length !== 0
           ? allData.awaitArray.map((item, index) => (
               <div
@@ -225,7 +238,7 @@ export const Production = ({ allData }) => {
                 key={index}
                 onClick={() => {
                   if (allData.awaitArray[0][0] === item[0]) {
-                    i = 0;
+                    wI = 0;
                   }
                   allData.resourcesProduction[item[0]].completion = false;
                   screenStore.setState({
@@ -237,16 +250,19 @@ export const Production = ({ allData }) => {
                     awaitArray: allData.awaitArray,
                   });
 
-                  clearTimeout(up);
-                  check = false;
+                  clearTimeout(wUp);
+                  wCheck = false;
                   setRender(!render);
                   console.log("대기 그림 클릭");
                 }}>
-                <img className="waitingImage" src={allData.resourcesProduction[item[0]].img} alt={"건물 이미지"}></img>
+                <img
+                  className="waitingImage"
+                  src={allData.resourcesProduction[item[0]].img}
+                  alt={"건물 이미지"}></img>
                 <div className="waitingName">{allData.resourcesProduction[item[0]].name}</div>
                 <div className="waitingTime">
                   {allData.awaitArray[0][0] === item[0]
-                    ? Math.floor((i / allData.awaitArray[0][1]) * 100) + " %"
+                    ? Math.floor((wI / allData.awaitArray[0][1]) * 100) + " %"
                     : "대기 중.."}
                 </div>
               </div>

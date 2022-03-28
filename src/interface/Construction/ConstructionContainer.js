@@ -108,7 +108,9 @@ export const ConstructionContainer = () => {
   return (
     <>
       <HoverInfoContainer hoverCheck={hoverCheck !== false ? true : false}>
-        <div className="imageName">{resourcesProduction[hoverCheck === false ? "potato" : hoverCheck].name}</div>
+        <div className="imageName">
+          {resourcesProduction[hoverCheck === false ? "potato" : hoverCheck].name}
+        </div>
         {Object.keys(resourcesProduction).map((item, index) => (
           <div key={item + index + " 박스"} className="imageBox">
             <img
@@ -116,18 +118,26 @@ export const ConstructionContainer = () => {
               className="image"
               src={resourcesProduction[item].img}
               alt={`${item + " 이미지"}`}
-              style={hoverCheck === item ? { opacity: "1", zIndex: "100", display: "block" } : { display: "none" }}></img>
+              style={
+                hoverCheck === item ? { opacity: "1", zIndex: "100", display: "block" } : { display: "none" }
+              }></img>
             <div
               key={item + index + " 설명"}
               className="imageScript"
-              style={hoverCheck === item ? { opacity: "1", zIndex: "100", display: "block" } : { display: "none" }}>
+              style={
+                hoverCheck === item ? { opacity: "1", zIndex: "100", display: "block" } : { display: "none" }
+              }>
               {resourcesProduction[item].description}
               {resourcesProduction[item].cost !== undefined ? (
                 <div className="cost-add">
                   <div className="costTitle">비용</div>
                   <span className="costText cF">
-                    <img src="images/resources/icons/corn.png" width={25} height={25} alt={`${item + " 식량 이미지"}`}></img>
-                    {resourcesProduction[item].cost.food}
+                    <img
+                      src="images/resources/icons/corn.png"
+                      width={25}
+                      height={25}
+                      alt={`${item + " 식량 이미지"}`}></img>
+                    {Math.floor(resourcesProduction[item].cost.food)}
                   </span>
                   {resourcesProduction[item].cost.titanium > 0 ? (
                     <span className="costText cT">
@@ -136,7 +146,7 @@ export const ConstructionContainer = () => {
                         width={25}
                         height={25}
                         alt={`${item + " 티타늄 이미지"}`}></img>
-                      {resourcesProduction[item].cost.titanium}
+                      {Math.floor(resourcesProduction[item].cost.titanium)}
                     </span>
                   ) : null}
                   {resourcesProduction[item].cost.orichalcon > 0 ? (
@@ -146,14 +156,16 @@ export const ConstructionContainer = () => {
                         width={25}
                         height={25}
                         alt={`${item + " 오리하르콘 이미지"}`}></img>
-                      {resourcesProduction[item].cost.orichalcon}
+                      {Math.floor(resourcesProduction[item].cost.orichalcon)}
                     </span>
                   ) : null}
                   {resourcesProduction[item].add !== undefined ? <div className="addTitle">효과</div> : null}
                   {resourcesProduction[item].add.food !== undefined ? (
                     <div
                       className="addText aF"
-                      style={resourcesProduction[item].add.food > 0 ? { color: "#82ff82" } : { color: "#ff5757" }}>
+                      style={
+                        resourcesProduction[item].add.food > 0 ? { color: "#82ff82" } : { color: "#ff5757" }
+                      }>
                       <img
                         src="images/resources/icons/corn.png"
                         width={20}
@@ -165,7 +177,9 @@ export const ConstructionContainer = () => {
                   {resourcesProduction[item].add.gear !== undefined ? (
                     <div
                       className="addText aG"
-                      style={resourcesProduction[item].add.gear > 0 ? { color: "#ffd29a" } : { color: "#ff5757" }}>
+                      style={
+                        resourcesProduction[item].add.gear > 0 ? { color: "#ffd29a" } : { color: "#ff5757" }
+                      }>
                       <img
                         src="images/resources/icons/gear.png"
                         width={20}
@@ -177,9 +191,13 @@ export const ConstructionContainer = () => {
                   {resourcesProduction[item].add.science !== undefined ? (
                     <div
                       className="addText aS"
-                      style={resourcesProduction[item].add.science > 0 ? { color: "#5fc4ff" } : { color: "#ff5757" }}>
+                      style={
+                        resourcesProduction[item].add.science > 0
+                          ? { color: "#5fc4ff" }
+                          : { color: "#ff5757" }
+                      }>
                       <img
-                        src="images/resources/icons/science.png"
+                        src="images/resources/icons/flask.png"
                         width={20}
                         height={20}
                         alt={`${item + " 과학 이미지"}`}></img>
@@ -189,7 +207,11 @@ export const ConstructionContainer = () => {
                   {resourcesProduction[item].add.happiness !== undefined ? (
                     <div
                       className="addText aH"
-                      style={resourcesProduction[item].add.happiness > 0 ? { color: "#f1ffb4" } : { color: "#ff5757" }}>
+                      style={
+                        resourcesProduction[item].add.happiness > 0
+                          ? { color: "#f1ffb4" }
+                          : { color: "#ff5757" }
+                      }>
                       <img
                         src="images/resources/icons/happiness.png"
                         width={18}
@@ -201,7 +223,11 @@ export const ConstructionContainer = () => {
                   {resourcesProduction[item].add.barrier !== undefined ? (
                     <div
                       className="addText aB"
-                      style={resourcesProduction[item].add.barrier > 0 ? { color: "#af68ff" } : { color: "#ff5757" }}>
+                      style={
+                        resourcesProduction[item].add.barrier > 0
+                          ? { color: "#af68ff" }
+                          : { color: "#ff5757" }
+                      }>
                       <img
                         src="images/resources/icons/barrier.png"
                         width={20}
@@ -213,7 +239,11 @@ export const ConstructionContainer = () => {
                   {resourcesProduction[item].add.titanium !== undefined ? (
                     <div
                       className="addText aT"
-                      style={resourcesProduction[item].add.titanium > 0 ? { color: "#1c58ff" } : { color: "#ff5757" }}>
+                      style={
+                        resourcesProduction[item].add.titanium > 0
+                          ? { color: "#1c58ff" }
+                          : { color: "#ff5757" }
+                      }>
                       <img
                         src="images/resources/icons/titanium.png"
                         width={20}
@@ -225,7 +255,11 @@ export const ConstructionContainer = () => {
                   {resourcesProduction[item].add.orichalcon !== undefined ? (
                     <div
                       className="addText aO"
-                      style={resourcesProduction[item].add.orichalcon > 0 ? { color: "#ff6a7d" } : { color: "#ff5757" }}>
+                      style={
+                        resourcesProduction[item].add.orichalcon > 0
+                          ? { color: "#ff6a7d" }
+                          : { color: "#ff5757" }
+                      }>
                       <img
                         src="images/resources/icons/orichalcon.png"
                         width={20}
