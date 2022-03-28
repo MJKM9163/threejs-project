@@ -85,13 +85,6 @@ export const Unknown = ({ SetUp, ...props }) => {
       html.current.style.display = "none";
       screenStore.setState({ tapCheck: true });
     }
-    if (leftInfoOnOff?.current === false) {
-      infoRef.current.style.display = "none";
-      screenStore.getState().leftInfoOnOff = "false";
-    } else if (leftInfoOnOff?.current === true) {
-      infoRef.current.style.display = "block";
-      screenStore.getState().leftInfoOnOff = "true";
-    }
   });
 
   console.log("unknown 랜더링 확인");

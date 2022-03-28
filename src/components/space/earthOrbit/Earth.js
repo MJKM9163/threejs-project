@@ -87,11 +87,6 @@ export const Earth = ({ SetUp, ...props }) => {
     if (tap?.current === false) {
       tapRef.current.style.display = "none";
     }
-    if (leftInfoOnOff?.current === false) {
-      infoRef.current.style.display = "none";
-    } else if (leftInfoOnOff?.current === true) {
-      infoRef.current.style.display = "block";
-    }
   });
 
   console.log("earth 랜더링 확인");

@@ -70,11 +70,6 @@ export const Sun = ({ SetUp, ...props }) => {
     if (tap?.current === false) {
       html.current.style.display = "none";
     }
-    if (leftInfoOnOff?.current === false) {
-      infoRef.current.style.display = "none";
-    } else if (leftInfoOnOff?.current === true) {
-      infoRef.current.style.display = "block";
-    }
   });
 
   console.log("태양 랜더링 확인");
