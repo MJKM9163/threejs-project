@@ -1,5 +1,5 @@
 import { useSphere } from "@react-three/cannon";
-import { Html, useGLTF } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { Vector3 } from "three";
@@ -10,8 +10,8 @@ import { boundingStore } from "../../../hooks/stores/boundingStore";
 import { planetStore } from "../../../hooks/stores/planetStore";
 import { screenStore } from "../../../hooks/stores/screenStore";
 import { useStore } from "../../../hooks/stores/useStore";
-import { TapPlanet } from "../../../interface/CanvasInHTML/TapPlanet";
-import { LeftInfoBox } from "../../../interface/LeftInfo/LeftInfoBox";
+import { TapPlanet } from "../../interface/Infos/TapPlanet";
+import { LeftInfoBox } from "../../interface/Infos/LeftInfoBox";
 import { OrbitLine } from "../OrbitLine";
 import { EarthModel } from "./EarthModel";
 

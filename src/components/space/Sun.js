@@ -7,8 +7,8 @@ import { boundingStore } from "../../hooks/stores/boundingStore";
 import { planetStore } from "../../hooks/stores/planetStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
-import { TapPlanet } from "../../interface/CanvasInHTML/TapPlanet";
-import { LeftInfoBox } from "../../interface/LeftInfo/LeftInfoBox";
+import { TapPlanet } from "../interface/Infos/TapPlanet";
+import { LeftInfoBox } from "../interface/Infos/LeftInfoBox";
 
 let sunRY = 0.5;
 
@@ -48,6 +48,7 @@ export const Sun = ({ SetUp, ...props }) => {
       if (e.body.name === "enemybasic") {
         data[0].D -= 20;
         planetStore.setState({ planetDurability: [...data] });
+        screenStore.setState({ gameOverCheck: true });
       }
     },
   }));
@@ -108,7 +109,6 @@ export const Sun = ({ SetUp, ...props }) => {
             </group>
           </group>
         </group>
-        <axesHelper scale={30} />
       </group>
     </>
   );
