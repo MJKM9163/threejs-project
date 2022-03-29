@@ -7,6 +7,12 @@ export const screenStore = create(
     // 자원
     imagesArray: ["potato", "titanium", "orichalcon", "science", "gear"],
 
+    // game Over Check
+    gameOverCheck: false,
+
+    // event Check
+    eventCheck: false,
+
     // hover Check
     hoverCheck: false,
 
@@ -114,7 +120,7 @@ export const screenStore = create(
         repetition: true,
         name: "탐사",
         img: "/images/production/exploration.jpg",
-        add: {},
+        add: "행성급 이벤트 발생",
         cost: { food: 25, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         // 여기부터 시작 /이벤박스 on하고 배열에서 이벤트 랜덤추첨해서 props로 넣어주기
@@ -190,7 +196,7 @@ export const screenStore = create(
         repetition: true,
         name: "다목적 위성",
         img: "/images/production/multipurposeSatellite.jpg",
-        add: {},
+        add: "다목적 위성 + 1",
         cost: { food: 680, titanium: 0, orichalcon: 0 },
         event: () => {
           //get()
@@ -224,7 +230,7 @@ export const screenStore = create(
         repetition: false,
         name: "우주 탐사",
         img: "/images/production/explorationOfSpace.jpg",
-        add: {},
+        add: "우주급 이벤트 발생",
         cost: { food: 520, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 300,
@@ -236,7 +242,7 @@ export const screenStore = create(
         repetition: false,
         name: "방어 위성",
         img: "/images/production/defenseSatellite.jpg",
-        add: {},
+        add: "다목적 위성을 방어 위성으로 변환 가능",
         cost: { food: 500, titanium: 20, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 600,
@@ -249,7 +255,7 @@ export const screenStore = create(
         repetition: false,
         name: "먼지 추출기",
         img: "/images/production/dustExtractor.jpg",
-        add: {},
+        add: "다목적 위성을 먼지 추출기로 변환 가능",
         cost: { food: 400, titanium: 5, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 500,
@@ -300,7 +306,7 @@ export const screenStore = create(
         repetition: true,
         name: "전투기 생산",
         img: "/images/production/basicFighter.jpg",
-        add: {},
+        add: "기본형 전투기 + 1",
         cost: { food: 750, titanium: 0, orichalcon: 0 },
         event: () => {
           let data = boundingStore.getState().friendlyNum;
