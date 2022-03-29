@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { planetStore } from "./stores/planetStore";
 import { researchStore } from "./stores/researchStore";
-import { screenStore } from "./stores/screenStore";
 
 let cycle;
 let gearArray = [];
