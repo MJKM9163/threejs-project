@@ -7,19 +7,20 @@ import { Html, Stars, useGLTF, useHelper } from "@react-three/drei";
 import { PointLightHelper } from "three";
 import { Background } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
-import { PlanetInfo } from "./interface/PlanetInfo";
+import { PlanetInfo } from "./components/interface/PlanetInfo";
 import { useStore } from "./hooks/stores/useStore";
 import { planetStore } from "./hooks/stores/planetStore";
-import { ConstructionContainer } from "./interface/Construction/ConstructionContainer";
+import { ConstructionContainer } from "./components/interface/Construction/ConstructionContainer";
 import { screenStore } from "./hooks/stores/screenStore";
-import { RightOption } from "./interface/SideTap/RightOption";
-import { Resources } from "./interface/Construction/Resources";
+import { Resources } from "./components/interface/Construction/Resources";
 import { AllResourcesFun } from "./hooks/AllResourcesFun";
-import { ResearchMap } from "./interface/Research/ResearchMap";
+import { ResearchMap } from "./components/interface/Research/ResearchMap";
 import { FlyingIndex } from "./flyingObjects/FlyingIndex";
-import { SatelliteField } from "./satelliteObjects/SatelliteField";
-import { SatelliteIndex } from "./satelliteObjects/SatelliteIndex";
+import { SatelliteField } from "./components/satelliteObjects/SatelliteField";
+import { SatelliteIndex } from "./components/satelliteObjects/SatelliteIndex";
 import { EventBox } from "./hooks/EventBox";
+import { ClockEvents } from "./hooks/clockEvents";
+import { RightOption } from "./components/interface/SideTap/RightOption";
 
 const Light = () => {
   const pointLight = useRef();
@@ -101,7 +102,7 @@ function App() {
           near: 3,
         }}>
         <ambientLight intensity={0.2} />
-
+        <ClockEvents />
         <Light />
         <Physics gravity={[0, 0, 0]} iterations={1}>
           <Debug color="red" scale={1.1}>
