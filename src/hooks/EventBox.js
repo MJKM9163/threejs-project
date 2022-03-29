@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { eventStore } from "./stores/eventStore";
+import { screenStore } from "./stores/screenStore";
 
 const EventContainer = styled.div`
   font-family: "Noto Sans KR", sans-serif;
@@ -11,8 +13,11 @@ const EventContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000050;
+  transition: 0.5s opacity;
+  z-index: ${(props) => (props.check ? 1000050 : -10000)};
+  opacity: ${(props) => (props.check ? 1 : 0)};
   background-color: #b9b9b929;
+  outline: 1px solid Lightblue;
   cursor: default;
 
   .eventName {
@@ -36,14 +41,14 @@ const EventContainer = styled.div`
     width: 100%;
     height: 20%;
     padding: 5px;
+    font-size: 20px;
     color: #d3d3d3;
-    background-color: #ffffff29;
+    background-color: #383838;
   }
 
   .eventButton {
     width: 100%;
     height: 7%;
-    //padding-bottom: 5px;
     font-size: 20px;
     display: flex;
     text-align: center;
@@ -69,17 +74,31 @@ const EventContainer = styled.div`
   }
 `;
 
-export const EventBox = (props) => {
+export const EventBox = () => {
+  const eventCheck = screenStore((state) => state.eventCheck);
+  const preEvent = eventStore((state) => state.preEvent);
+
+  console.log(preEvent);
   return (
-    <EventContainer>
-      <div className="eventName">{"이벤트 발생!"}</div>
+    <EventContainer check={eventCheck}>
+      <div className="eventName">{preEvent.name}</div>
       <div className="eventImage">
-        <img src="#" alt="eventImg" />
+        <img src={preEvent.img} alt="eventImg" />
       </div>
-      <div className="eventDescription">{"냐냥고냥고불라블라냥고"}</div>
+      <div className="eventDescription">{preEvent.description}</div>
       <div className="eventButton">
-        <span>{"긍정"}</span>
-        <span>{"부정"}</span>
+        <span
+          onClick={() => {
+            preEvent.assent();
+          }}>
+          {preEvent.assentText}
+        </span>
+        <span
+          onClick={() => {
+            preEvent.dissent();
+          }}>
+          {preEvent.dissentText}
+        </span>
       </div>
     </EventContainer>
   );
