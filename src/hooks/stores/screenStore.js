@@ -12,6 +12,8 @@ export const screenStore = create(
 
     // event Check
     eventCheck: false,
+    exCheck: false,
+    sExCheck: false,
 
     // hover Check
     hoverCheck: false,
@@ -34,12 +36,11 @@ export const screenStore = create(
     awaitArray: [],
 
     // 위성 수
-    satellite: 3,
+    satellite: 5,
     satellitePos: [],
-    // defenseSatellitePos: [],
-    // dustExtractorPos: [],
-
-    //eventResources: { food: 0, gear:0, science:0},
+    // 위성 변환 check
+    defenseSCheck: false,
+    dustSCheck: false,
 
     // 자원 & 건물
     resourcesProduction: {
@@ -75,6 +76,12 @@ export const screenStore = create(
         name: "생산력",
         img: "/images/resources/images/gear.png",
         description: "생산력을 나타냅니다.",
+      },
+      happiness: {
+        completion: undefined,
+        name: "행복도",
+        img: "/images/resources/images/happiness.jpg",
+        description: "행복도를 나타냅니다. 행복도가 높을수록 자원의 생산 효율이 높아집니다.",
       },
       planetCurtain: {
         research: false,
@@ -122,8 +129,15 @@ export const screenStore = create(
         img: "/images/production/exploration.jpg",
         add: "행성급 이벤트 발생",
         cost: { food: 25, titanium: 0, orichalcon: 0 },
-        event: () => console.log("완료"),
-        // 여기부터 시작 /이벤박스 on하고 배열에서 이벤트 랜덤추첨해서 props로 넣어주기
+        event: () => {
+          set((state) => (state.resourcesProduction.exploration.count += 1));
+          set((state) => (state.exCheck = true));
+          set((state) => (state.resourcesProduction.exploration.cost.food *= 1.3));
+          if (get().resourcesProduction.exploration.count === 3) {
+            set((state) => (state.resourcesProduction.exploration.completion = true));
+          }
+        },
+        count: 0,
         max: 130,
         description: "행성을 탐사합니다.",
       },
@@ -200,13 +214,15 @@ export const screenStore = create(
         cost: { food: 680, titanium: 0, orichalcon: 0 },
         event: () => {
           //get()
+          set((state) => (state.resourcesProduction.multipurposeSatellite.count += 1));
           set((state) => ({ satellite: state.satellite + 1 }));
-          set(
-            (state) =>
-              (state.resourcesProduction.multipurposeSatellite.cost.food =
-                state.resourcesProduction.multipurposeSatellite.cost.food * 1.6)
-          );
+          set((state) => (state.resourcesProduction.multipurposeSatellite.cost.food *= 1.6));
+
+          if (get().resourcesProduction.multipurposeSatellite.count === 5) {
+            set((state) => (state.resourcesProduction.multipurposeSatellite.completion = true));
+          }
         },
+        count: 0,
         max: 550,
         description:
           "다양하게 사용가능한 위성을 생산합니다. 이 위성은 우주 공간에서 사용가능 합니다. 방어나 자원 추출 등 여러 곳에 도움을 줍니다.",
@@ -232,9 +248,17 @@ export const screenStore = create(
         img: "/images/production/explorationOfSpace.jpg",
         add: "우주급 이벤트 발생",
         cost: { food: 520, titanium: 0, orichalcon: 0 },
-        event: () => console.log("완료"),
+        event: () => {
+          set((state) => (state.resourcesProduction.explorationOfSpace.count += 1));
+          set((state) => (state.exCheck = true));
+          set((state) => (state.resourcesProduction.explorationOfSpace.cost.food *= 1.3));
+          if (get().resourcesProduction.explorationOfSpace.count === 3) {
+            set((state) => (state.resourcesProduction.explorationOfSpace.completion = true));
+          }
+        },
+        count: 0,
         max: 300,
-        description: "현재 행성 주위에 있는 다른 행성을 찾습니다.",
+        description: "행성 주변의 우주 공간을 탐사합니다.",
       },
       defenseSatellite: {
         research: false,
@@ -242,9 +266,9 @@ export const screenStore = create(
         repetition: false,
         name: "방어 위성",
         img: "/images/production/defenseSatellite.jpg",
-        add: "다목적 위성을 방어 위성으로 변환 가능",
+        add: "다목적 위성을 방어위성으로 변환 가능",
         cost: { food: 500, titanium: 20, orichalcon: 0 },
-        event: () => console.log("완료"),
+        event: () => set((state) => (state.defenseSCheck = true)),
         max: 600,
         description:
           "다목적 위성을 방어 위성으로 사용합니다. 주변에 감지된 적대적인 물체를 공격해 파괴합니다.",
@@ -255,9 +279,9 @@ export const screenStore = create(
         repetition: false,
         name: "먼지 추출기",
         img: "/images/production/dustExtractor.jpg",
-        add: "다목적 위성을 먼지 추출기로 변환 가능",
+        add: "다목적 위성을 먼지추출기로 변환 가능",
         cost: { food: 400, titanium: 5, orichalcon: 0 },
-        event: () => console.log("완료"),
+        event: () => set((state) => (state.dustSCheck = true)),
         max: 500,
         description:
           "다목적 위성을 먼지 추출기로 사용합니다. 우주에 떠도는 먼지를 채집해 사용가능한 자원을 추출합니다.",
@@ -312,8 +336,14 @@ export const screenStore = create(
           let data = boundingStore.getState().friendlyNum;
           let num = data.findIndex((i) => i === false);
           data[num] = { D: 100 };
-          console.log(data);
           boundingStore.setState({ friendlyNum: [...data] });
+          set((state) => (state.resourcesProduction.fighterPlane.cost.food *= 1.2));
+          if (num === 2) {
+            set((state) => {
+              state.resourcesProduction.fighterPlane.repetition = false;
+              state.resourcesProduction.fighterPlane.completion = true;
+            });
+          }
         },
         max: 672,
         description: "전투기를 생산합니다.",
