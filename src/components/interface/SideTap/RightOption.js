@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { screenStore } from "../../../hooks/stores/screenStore";
 
@@ -49,23 +49,41 @@ const RightOptionBox = styled.div`
   }
 `;
 
+const background = new Audio("soundEffects/background.mp3");
 export const RightOption = () => {
   const leftInfoOnOff = screenStore((state) => state.leftInfoOnOff);
   const researchMapOnOff = screenStore((state) => state.researchMapOnOff);
   const satelliteMapOnOff = screenStore((state) => state.satelliteMapOnOff);
   const satelliteNum = screenStore((state) => state.satellite);
-  const satellitePos = screenStore((state) => state.satellitePos);
+  const eventCheck = screenStore((state) => state.eventCheck);
 
-  if (satelliteNum + satellitePos.length === 5) {
-    screenStore.setState((set) => (set.resourcesProduction.multipurposeSatellite.repetition = false));
-    screenStore.setState((set) => (set.resourcesProduction.multipurposeSatellite.completion = true));
-  } else {
-    screenStore.setState((set) => (set.resourcesProduction.multipurposeSatellite.repetition = true));
-    screenStore.setState((set) => (set.resourcesProduction.multipurposeSatellite.completion = false));
+  const [mcontrol, setMcontrol] = useState(true);
+
+  if (eventCheck === true) {
+    background.muted = true;
+    setTimeout(() => {
+      background.muted = false;
+    }, 8000);
   }
 
+  background.volume = 0.2;
+  background.loop = true;
   return (
     <RightOptionBox satelliteNum={satelliteNum}>
+      <img
+        onClick={() => {
+          if (mcontrol) {
+            background.play();
+            setMcontrol(false);
+          } else {
+            background.pause();
+            setMcontrol(true);
+          }
+        }}
+        src={mcontrol ? "images/Html/musicMute.png" : "images/Html/music.png"}
+        width={50}
+        height={50}
+        alt="music button"></img>
       <img
         onClick={() => {
           screenStore.setState({ leftInfoOnOff: !leftInfoOnOff });
@@ -96,7 +114,7 @@ export const RightOption = () => {
           src={"images/Html/satellite.png"}
           width={20}
           height={20}
-          alt="satellite icon"></img>{" "}
+          alt="satellite icon"></img>
         {satelliteNum}
       </span>
     </RightOptionBox>
