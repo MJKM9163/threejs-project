@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { boundingStore } from "./stores/boundingStore";
 import { planetStore } from "./stores/planetStore";
+import { screenStore } from "./stores/screenStore";
 
 const DurabilityBarComponent = styled.div`
   opacity: ${(props) => (props.D >= 100 ? 0 : 1)};
@@ -32,10 +33,19 @@ export const FighterDurabilityBar = ({ num, name }) => {
 
 export const PlanetDurabilityBar = ({ num, name, d }) => {
   const data = planetStore((state) => state.planetDurability);
-  // data[num].D - data[num].D / data[num].D * 100
 
   return (
     <DurabilityBarComponent D={(data[num].D / d) * 100} name={name}>
+      <div className={name} />
+    </DurabilityBarComponent>
+  );
+};
+
+export const SatelliteDurabilityBar = ({ num, name, d }) => {
+  const data = screenStore((state) => state.satellitePos[num].D);
+
+  return (
+    <DurabilityBarComponent D={(data / d) * 100} name={name}>
       <div className={name} />
     </DurabilityBarComponent>
   );
