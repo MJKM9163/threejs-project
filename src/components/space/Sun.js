@@ -9,6 +9,7 @@ import { screenStore } from "../../hooks/stores/screenStore";
 import { useStore } from "../../hooks/stores/useStore";
 import { TapPlanet } from "../interface/Infos/TapPlanet";
 import { LeftInfoBox } from "../interface/Infos/LeftInfoBox";
+import { effectSound } from "../../hooks/stores/effectSound";
 
 let sunRY = 0.5;
 
@@ -48,6 +49,9 @@ export const Sun = ({ SetUp, ...props }) => {
       if (e.body.name === "enemybasic") {
         data[0].D -= 20;
         planetStore.setState({ planetDurability: [...data] });
+      }
+      if (data[0] <= 0) {
+        effectSound.getState().plantEx.action();
         screenStore.setState({ gameOverCheck: true });
       }
     },
