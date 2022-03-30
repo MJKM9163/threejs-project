@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
+import { effectSound } from "../../../hooks/stores/effectSound";
 import { planetStore } from "../../../hooks/stores/planetStore";
 import { screenStore } from "../../../hooks/stores/screenStore";
 
@@ -125,6 +126,7 @@ export const Production = ({ allData }) => {
         wI += gear.current;
         if (awaitArray[0][1] <= wI) {
           clearTimeout(wUp);
+          effectSound.getState().conCompletion.action();
           if (production[awaitArray[0][0]].repetition) {
             production[awaitArray[0][0]].completion = false;
           } else {

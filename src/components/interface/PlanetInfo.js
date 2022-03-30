@@ -12,9 +12,7 @@ const PlanetInfoDiv = styled.div`
   opacity: ${(props) => (props.zoom ? "1" : "0")};
   transition: 0.5s;
   list-style-type: none;
-  .aaa {
-    background-color: yellow;
-  }
+  cursor: default;
 `;
 
 const Infodiv = styled.div`
@@ -42,6 +40,19 @@ const InfoTextBox = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   color: #d3d3d3;
+  .type:hover,
+  li:hover {
+    background-color: #97979742;
+    animation: ha 0.8s infinite ease-out alternate;
+    @keyframes ha {
+      from {
+        background-color: #97979742;
+      }
+      to {
+        background-color: #929292ca;
+      }
+    }
+  }
   .name {
     font-size: 32px;
     margin-bottom: 10px;

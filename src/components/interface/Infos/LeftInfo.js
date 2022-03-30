@@ -35,7 +35,6 @@ const LeftInfoContainer = styled.div`
 export const LeftInfo = (props) => {
   const resources = planetStore((state) => state.planetResources);
 
-  console.log("왼쪽 정보창 랜더링");
   return (
     <LeftInfoContainer>
       <div className="name">{props.planet}</div>

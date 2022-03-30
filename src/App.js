@@ -21,6 +21,7 @@ import { SatelliteIndex } from "./components/satelliteObjects/SatelliteIndex";
 import { EventBox } from "./hooks/EventBox";
 import { ClockEvents } from "./hooks/clockEvents";
 import { RightOption } from "./components/interface/SideTap/RightOption";
+import { Loading, Over } from "./components/interface/Infos/LoadingOrOver";
 
 const Light = () => {
   const pointLight = useRef();
@@ -85,6 +86,7 @@ function App() {
   console.log("메인 랜더링 확인");
   return (
     <>
+      <Over />
       <EventBox />
       <ResearchMap />
       <PlanetInfo />
@@ -106,7 +108,12 @@ function App() {
         <Light />
         <Physics gravity={[0, 0, 0]} iterations={1}>
           <Debug color="red" scale={1.1}>
-            <Suspense fallback={<Html>loading..</Html>}>
+            <Suspense
+              fallback={
+                <Html>
+                  <Loading />
+                </Html>
+              }>
               {/* <Galaxy /> */}
               <SpaceIndex />
               <Background />

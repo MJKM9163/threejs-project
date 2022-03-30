@@ -15,10 +15,11 @@ const ResourcesContainer = styled.div`
   transform: translate(-50%);
   cursor: default;
   z-index: 50;
+  //background-color: red;
 
   div {
     display: flex;
-    justify-content: space-between;
+    //justify-content: space-between;
     align-items: center;
     width: 20%;
     height: 100%;
@@ -27,30 +28,33 @@ const ResourcesContainer = styled.div`
     transition: 0.3s;
     span {
       font-size: 16px;
-      margin-right: 5px;
+      margin-left: 25px;
     }
   }
 
   div:nth-child(1) {
-    color: #b8b8b8;
+    color: #a4ff98;
   }
   div:nth-child(2) {
-    color: #b8b8b8;
+    color: #ffd689;
   }
   div:nth-child(3) {
-    color: #b8b8b8;
+    color: #8feeff;
   }
   div:nth-child(4) {
-    color: #b8b8b8;
+    color: #909bff;
   }
   div:nth-child(5) {
-    color: #b8b8b8;
+    color: #ff9d9d;
+  }
+  div:nth-child(6) {
+    color: #fff789;
   }
 `;
 
 export const Resources = () => {
   const allResources = planetStore((state) => state.allResources);
-  //console.log(allResources);
+
   return (
     <ResourcesContainer>
       <div
@@ -82,6 +86,12 @@ export const Resources = () => {
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
         <img src="images/resources/icons/orichalcon.png" width={25} height={25} alt="오리하르콘 자원"></img>
         <span>{allResources.orichalcon}</span>
+      </div>
+      <div
+        onMouseEnter={() => screenStore.setState({ hoverCheck: "happiness" })}
+        onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
+        <img src="images/resources/icons/happiness.png" width={25} height={25} alt="오리하르콘 자원"></img>
+        <span>{allResources.happiness}</span>
       </div>
     </ResourcesContainer>
   );
