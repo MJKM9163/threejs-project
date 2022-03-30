@@ -10,9 +10,9 @@ export const boundingStore = create(
       enemy: {},
     },
 
-    // 적군 비행기 수
+    // 적군 정보 max 12
     enemyNum: [false, false, false, false, false, false, false, false, false, false, false, false],
-    // 아군 비행기 수
+    // 아군 정보 max 3
     friendlyNum: [false, false, false],
   }))
 );
