@@ -47,9 +47,15 @@ export const planetStore = create(
       shield: 0,
     },
 
+    // planetResources default
+    // name: {
+    //  resources: { food: 0.5, gear: 5, science: 1 }
+    //  develop: true,
+    //  hide: true,
+    // }
     planetResources: {},
 
-    // 중심부터 카운트
+    // 중심부터 카운트 / 행성 내구도
     planetDurability: [{ D: 1000 }, { D: 500 }, { D: 500 }],
   }))
 );
