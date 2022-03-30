@@ -5,6 +5,9 @@ import { useFrame } from "@react-three/fiber";
 import styled from "styled-components";
 import { boundingStore } from "../../../hooks/stores/boundingStore";
 import { Vector3 } from "three";
+import { SatelliteDurabilityBar } from "../../../hooks/DurabilityBar";
+import { screenStore } from "../../../hooks/stores/screenStore";
+import { effectSound } from "../../../hooks/stores/effectSound";
 
 const SelectSatellite = styled.div`
   position: absolute;
@@ -48,16 +51,11 @@ const SelectSatellite = styled.div`
 `;
 
 let satelliteOption = {
-  0: { R: 0, D: 100, T: "multi" },
-  1: { R: 0, D: 100, T: "multi" },
-  2: { R: 0, D: 100, T: "multi" },
-  3: { R: 0, D: 100, T: "multi" },
-  4: { R: 0, D: 100, T: "multi" },
-  5: { R: 0, D: 100, T: "multi" },
-  6: { R: 0, D: 100, T: "multi" },
-  7: { R: 0, D: 100, T: "multi" },
-  8: { R: 0, D: 100, T: "multi" },
-  9: { R: 0, D: 100, T: "multi" },
+  0: { R: 0, T: "multi" },
+  1: { R: 0, T: "multi" },
+  2: { R: 0, T: "multi" },
+  3: { R: 0, T: "multi" },
+  4: { R: 0, T: "multi" },
 };
 
 export function MultipurposeSatellite({ position, num }) {
@@ -74,8 +72,26 @@ export function MultipurposeSatellite({ position, num }) {
     mass: 1,
     type: "Static",
     position,
-    //args: [100],
+    args: [70],
+    onCollide: (e) => {
+      const data = screenStore.getState().satellitePos;
+      if (e.body.name === "enemybasic") {
+        screenStore.setState((state) => (state.satellitePos[num].D -= 20));
+        console.log(screenStore.getState().satellitePos[num].D);
+      }
+      if (data[num].D <= 0) {
+        //effectSound.getState().fighter.FlightExplosionSound.action();
+        screenStore.setState((state) => (state.resourcesProduction.multipurposeSatellite.count -= 1));
+        delete boundingStore.getState().fighter.friendly["위성" + num];
+        data.splice(num, 1);
+        screenStore.setState({ satellitePos: [...data] });
+      }
+    },
   }));
+  // const dd = [{ a: 1 }, { b: 2 }];
+  // console.log(dd);
+  // dd.splice(1, 1);
+  // console.log(dd);
 
   const [missileRef, missilesApi] = useBox(() => ({
     type: "Dynamic",
@@ -107,7 +123,7 @@ export function MultipurposeSatellite({ position, num }) {
       }
     }
   };
-  console.log(ref);
+
   let boundingUpdate = () => {
     const fighter = boundingStore.getState().fighter;
     boundingStore.getState().fighter.friendly = {
@@ -181,6 +197,9 @@ export function MultipurposeSatellite({ position, num }) {
         onClick={(e) => {
           setOn(!on);
         }}>
+        <Html>
+          <SatelliteDurabilityBar num={num} name={"satellite"} d={200} />
+        </Html>
         <mesh ref={core}>
           <sphereGeometry args={[50]} />
           <meshStandardMaterial wireframe opacity={0} transparent />
