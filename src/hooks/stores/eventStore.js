@@ -85,12 +85,13 @@ export const eventStore = create(
         assentText: "연구한다.",
         assent: () => {
           screenStore.setState({ exCheck: false });
+          planetStore.setState((state) => (state.allResources.science += 10));
           planetStore.setState((state) => (state.allResources.happiness += 5));
         },
         dissentText: "제거한다.",
         dissent: () => {
           screenStore.setState({ exCheck: false });
-          planetStore.setState((state) => (state.allResources.food += 55));
+          planetStore.setState((state) => (state.allResources.food += 255));
         },
         img: "/images/events/coral.jpg",
         check: false,
@@ -103,8 +104,11 @@ export const eventStore = create(
         assentText: "땅을 복구한다.",
         assent: () => {
           screenStore.setState({ exCheck: false });
+          planetStore.setState(
+            (state) => (state.planetResources[Object.keys(state.planetResources)[0]].food += 0.5)
+          );
           planetStore.setState((state) => (state.allResources.gear += 4));
-          planetStore.setState((state) => (state.allResources.happiness += 2));
+          planetStore.setState((state) => (state.allResources.happiness += 7));
         },
         dissentText: "남겨진 기계를 조사한다.",
         dissent: () => {
@@ -121,10 +125,19 @@ export const eventStore = create(
         assentText: "거대한 뿌리를 건설 재료로 사용한다.",
         assent: () => {
           screenStore.setState({ exCheck: false });
+          planetStore.setState((state) => (state.allResources.gear += 11));
         },
         dissentText: "사용하지 않고 모두 제거한다.",
         dissent: () => {
           screenStore.setState({ exCheck: false });
+          planetStore.setState(
+            (state) => (state.planetResources[Object.keys(state.planetResources)[0]].food += 3)
+          );
+          setTimeout(() => {
+            planetStore.setState(
+              (state) => (state.planetResources[Object.keys(state.planetResources)[0]].food -= 3)
+            );
+          }, 20000);
         },
         img: "/images/events/jungle.jpg",
         check: false,

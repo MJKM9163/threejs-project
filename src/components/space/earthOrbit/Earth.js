@@ -14,17 +14,18 @@ import { TapPlanet } from "../../interface/Infos/TapPlanet";
 import { LeftInfoBox } from "../../interface/Infos/LeftInfoBox";
 import { OrbitLine } from "../OrbitLine";
 import { EarthModel } from "./EarthModel";
+import { effectSound } from "../../../hooks/stores/effectSound";
 
 let earthPname = null;
 let eartheffects;
 
-export const Earth = ({ SetUp, ...props }) => {
+export const Earth = ({ position, control }) => {
   let onTimer;
   const tapRef = useRef();
   const infoRef = useRef();
   const BS = useRef();
 
-  const argsSize = useRef(useStore.getState().size);
+  const argsSize = planetStore.getState().size;
   const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
   const tap = useRef(screenStore.getState().tapCheck);
   const fighter = boundingStore.getState().fighter; //임시 저장소
@@ -52,25 +53,24 @@ export const Earth = ({ SetUp, ...props }) => {
   const [earthRef, earthApi] = useSphere(() => ({
     mass: 0,
     type: "Static",
-    args: [argsSize.current["middle"]],
+    args: [argsSize["middle"]],
     onCollide: (e) => {
       const data = planetStore.getState().planetDurability;
       if (e.body.name === "enemybasic") {
-        data[1].D -= 20;
-        planetStore.setState({ planetDurability: [...data] });
+        planetStore.setState((state) => (state.planetDurability[1].D -= 20));
       }
       if (data[1].D <= 0) {
-        //effectSound.getState().fighter.FlightExplosionSound.action();
-        data[1] = false;
-        delete planetStore.getState().fighter.friendly[earthPname];
-        planetStore.setState({ planetDurability: [...data] });
+        effectSound.getState().plantEx.action();
+        delete boundingStore.getState().fighter.friendly[earthPname];
+        delete planetStore.getState().planetResources[earthPname];
+        planetStore.setState((state) => (state.planetDurability[1].ON = false));
       }
     },
   }));
 
   if (earthPname === null) {
     earthPname = PlanetNameSelect();
-    eartheffects = EffectSelect(argsSize.current["middle"]);
+    eartheffects = EffectSelect(argsSize["middle"]);
   }
 
   useFrame(() => {
@@ -92,7 +92,7 @@ export const Earth = ({ SetUp, ...props }) => {
   console.log("earth 랜더링 확인");
   return (
     <>
-      <group position={props.position} dispose={null}>
+      <group position={position} dispose={null}>
         <Html ref={tapRef}>
           <TapPlanet planet={earthPname} />
         </Html>
@@ -105,7 +105,17 @@ export const Earth = ({ SetUp, ...props }) => {
         <mesh ref={BS} />
         <mesh
           onClick={(e) => {
-            SetUp(collisionWorldPosition, earthPname, "지구형", argsSize.current["middle"], eartheffects);
+            planetStore.setState({
+              selectPlanet: {
+                name: earthPname,
+                type: "지구형",
+                size: argsSize["middle"],
+                position: collisionWorldPosition,
+                main: false,
+                effect: eartheffects,
+              },
+            });
+            control(earthPname);
           }}
           onPointerDown={(e) => {
             timer();
@@ -114,12 +124,11 @@ export const Earth = ({ SetUp, ...props }) => {
             clearTimeout(onTimer);
           }}>
           <sphereGeometry args={[300]} />
-          <meshBasicMaterial transparent opacity={0.5} />
+          <meshBasicMaterial transparent opacity={0} />
         </mesh>
         <EarthModel eartheffects={eartheffects} />
-        <axesHelper scale={500} />
       </group>
-      <OrbitLine args={[props.position[0] - 5, props.position[0] + 5, 100]} />
+      <OrbitLine args={[position[0] - 5, position[0] + 5, 100]} />
     </>
   );
 };

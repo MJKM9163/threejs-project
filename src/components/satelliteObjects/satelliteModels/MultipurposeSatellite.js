@@ -80,7 +80,7 @@ export function MultipurposeSatellite({ position, num }) {
         console.log(screenStore.getState().satellitePos[num].D);
       }
       if (data[num].D <= 0) {
-        //effectSound.getState().fighter.FlightExplosionSound.action();
+        effectSound.getState().fighter.FlightExplosionSound.action();
         screenStore.setState((state) => (state.resourcesProduction.multipurposeSatellite.count -= 1));
         delete boundingStore.getState().fighter.friendly["위성" + num];
         data.splice(num, 1);
@@ -88,10 +88,6 @@ export function MultipurposeSatellite({ position, num }) {
       }
     },
   }));
-  // const dd = [{ a: 1 }, { b: 2 }];
-  // console.log(dd);
-  // dd.splice(1, 1);
-  // console.log(dd);
 
   const [missileRef, missilesApi] = useBox(() => ({
     type: "Dynamic",
@@ -344,3 +340,4 @@ export function MultipurposeSatellite({ position, num }) {
     </group>
   );
 }
+useGLTF.preload("/multipurposeSatellite/scene.gltf");

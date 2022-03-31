@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import CameraControls from "camera-controls";
 import * as THREE from "three";
 import { Vector3 } from "three";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useStore } from "../../../hooks/stores/useStore";
 import { KeyboardControls } from "../../../hooks/keyboardControls";
+import { screenStore } from "../../../hooks/stores/screenStore";
+import { planetStore } from "../../../hooks/stores/planetStore";
 
 CameraControls.install({ THREE: THREE });
 let x = 0;
@@ -15,20 +16,19 @@ let posY = 7000;
 let posZ = -10000;
 
 export const SpaceCamera = ({ pos = new Vector3(), look = new Vector3() }) => {
-  console.log("카메라 랜더링 확인");
-  const focus = useRef(useStore.getState().focus);
-  const zoomCheck = useRef(useStore.getState().zoom);
+  const focus = useRef(planetStore.getState().selectPlanet.position);
+  const zoomCheck = useRef(screenStore.getState().zoom);
 
   useEffect(() => {
-    useStore.subscribe(
+    planetStore.subscribe(
       (state) => {
-        focus.current = state.focus;
+        focus.current = state.selectPlanet.position;
       },
-      (state) => state.focus
+      (state) => state.selectPlanet.position
     );
   });
   useEffect(() => {
-    useStore.subscribe(
+    screenStore.subscribe(
       (state) => {
         zoomCheck.current = state.zoom;
       },
@@ -42,7 +42,7 @@ export const SpaceCamera = ({ pos = new Vector3(), look = new Vector3() }) => {
   const { moveForward, moveBackward, moveLeft, moveRight } = KeyboardControls();
 
   return useFrame((state, delta) => {
-    if (moveForward === true && z < 5000) {
+    if (moveForward === true && z < 4000) {
       z += 100;
     } else if (moveBackward === true && z > -3000) {
       z -= 100;
@@ -55,7 +55,9 @@ export const SpaceCamera = ({ pos = new Vector3(), look = new Vector3() }) => {
     zoomCheck.current
       ? pos.set(focus.current.x - 400, focus.current.y + 550, focus.current.z + -1500)
       : pos.set(posX + x, posY, posZ + z);
-    zoomCheck.current ? look.set(focus.current.x, focus.current.y, focus.current.z) : look.set(0 + x, 0, 0 + z);
+    zoomCheck.current
+      ? look.set(focus.current.x, focus.current.y, focus.current.z)
+      : look.set(0 + x, 0, 0 + z);
 
     state.camera.position.lerp(pos, 0.5);
     state.camera.updateProjectionMatrix();

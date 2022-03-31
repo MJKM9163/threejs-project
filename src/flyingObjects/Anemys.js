@@ -6,12 +6,12 @@ import { EnemyFighter } from "./fighters/enemyFighter";
 const posRandomFun = () => {
   const pos = Math.floor(Math.random() * 2);
   if (pos === 1) {
-    let posX = 5000;
-    const posZ = Math.floor(Math.random() * (5000 - -5000) - 5000);
+    let posX = 8000;
+    const posZ = Math.floor(Math.random() * (8000 - -8000) - 8000);
     return [posX, posZ];
   } else if (pos === 0) {
-    let posX = -5000;
-    const posZ = Math.floor(Math.random() * (5000 - -5000) - 5000);
+    let posX = -8000;
+    const posZ = Math.floor(Math.random() * (8000 - -8000) - 8000);
     return [posX, posZ];
   }
 };
@@ -35,9 +35,26 @@ export const Anemys = () => {
   //     enemyNum[0] = true;
   //     boundingStore.setState({ enemyNum: [...enemyNum] });
   //   } else if (clock.elapsedTime > 10 && levelCheck[2] === false) {
-  //     //const data = boundingStore.getState().enemyNum;
   //     levelCheck[2] = true;
   //     for (let i = 0; i < 3; i++) {
+  //       enemyNum[i] = true;
+  //     }
+  //     boundingStore.setState({ enemyNum: [...enemyNum] });
+  //   } else if (clock.elapsedTime > 10 && levelCheck[3] === false) {
+  //     levelCheck[3] = true;
+  //     for (let i = 0; i < 5; i++) {
+  //       enemyNum[i] = true;
+  //     }
+  //     boundingStore.setState({ enemyNum: [...enemyNum] });
+  //   } else if (clock.elapsedTime > 10 && levelCheck[4] === false) {
+  //     levelCheck[4] = true;
+  //     for (let i = 0; i < 8; i++) {
+  //       enemyNum[i] = true;
+  //     }
+  //     boundingStore.setState({ enemyNum: [...enemyNum] });
+  //   } else if (clock.elapsedTime > 10 && levelCheck[5] === false) {
+  //     levelCheck[5] = true;
+  //     for (let i = 0; i < 12; i++) {
   //       enemyNum[i] = true;
   //     }
   //     boundingStore.setState({ enemyNum: [...enemyNum] });

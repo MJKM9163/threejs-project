@@ -11,8 +11,8 @@ const ConstructionContainerDiv = styled.div`
   bottom: 0px;
   width: 100vw;
   height: 200px;
-  z-index: ${(props) => (props.indexnum ? -5 : 20000)};
-  opacity: ${(props) => (props.indexnum ? 0 : 1)};
+  z-index: ${(props) => (props.indexnum ? 20000 : -5)};
+  opacity: ${(props) => (props.indexnum ? 1 : 0)};
   cursor: default;
 
   .flexBox {
@@ -29,13 +29,10 @@ const ConstructionContainerDiv = styled.div`
 
 export const ProductionControl = () => {
   let allData = screenStore.getState();
-  let planetName = useStore.getState().name;
-  const resources = planetStore((state) => state.planetResources);
+  const check = screenStore((state) => state.productionControl);
 
-  console.log("생산 컨트롤 창");
   return (
-    <ConstructionContainerDiv
-      indexnum={resources[planetName]?.hide === undefined ? true : resources[planetName]?.hide}>
+    <ConstructionContainerDiv indexnum={check}>
       <div className="flexBox">
         <Production allData={allData} />
       </div>

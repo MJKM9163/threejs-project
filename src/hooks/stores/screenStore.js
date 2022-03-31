@@ -7,6 +7,10 @@ export const screenStore = create(
     // 자원
     imagesArray: ["potato", "titanium", "orichalcon", "science", "gear"],
 
+    zoom: false,
+    orbit: false,
+    productionControl: false,
+
     // game Over Check
     gameOverCheck: false,
 
@@ -41,6 +45,8 @@ export const screenStore = create(
     // 위성 변환 check
     defenseSCheck: false,
     dustSCheck: false,
+    // 방어막 check
+    planetCurtainCheck: false,
 
     // 자원 & 건물
     resourcesProduction: {
@@ -90,11 +96,11 @@ export const screenStore = create(
         name: "행성 차폐막",
         img: "/images/production/planetCurtain.jpg",
         add: { happiness: 10, shield: 300 },
-        cost: { food: 243, titanium: 10, orichalcon: 0 },
-        event: () => console.log("완료"),
-        max: 690,
+        cost: { food: 10, titanium: 0, orichalcon: 0 },
+        event: () => set((state) => (state.planetCurtainCheck = true)),
+        max: 50,
         description:
-          "행성을 중심으로 에너지 차폐막을 만듭니다. 에너지 무기를 효과적으로 막을 수 있으며 행성의 거주민들의 불안감을 줄일 수 있습니다.",
+          "거주 가능한 행성을 중심으로 에너지 차폐막을 만듭니다. 에너지 무기를 효과적으로 막을 수 있으며 행성의 거주민들의 불안감을 줄일 수 있습니다.",
       },
       giantMiner: {
         research: false,
@@ -103,7 +109,7 @@ export const screenStore = create(
         name: "거대 채굴기",
         img: "/images/production/giantMiner.jpg",
         add: { food: -2.5, gear: 30, happiness: -5 },
-        cost: { food: 268, titanium: 0, orichalcon: 0 },
+        cost: { food: 450, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 840,
         description:
@@ -324,6 +330,45 @@ export const screenStore = create(
         description:
           "반응로에 원자단위로 쪼갠 티타늄을 촉매로 사용해 에너지를 반응을 증폭시켰습니다. 미사일의 폭발력이 상승합니다.",
       },
+      bioconnector: {
+        research: false,
+        completion: false,
+        repetition: false,
+        name: "생체 연결 장치",
+        img: "/images/production/bioconnector.jpg",
+        add: { happiness: 10 },
+        cost: { food: 870, titanium: 30, orichalcon: 0 },
+        event: () => console.log("완료"),
+        max: 1550,
+        description:
+          "기계와 신체를 연결할 수 있는 장치입니다. 생체 거부 반응이 없으며 원래 신체인 것처럼 느껴집니다. 이 장치를 통해서 부족했던 능력을 인위적으로 상승시킬 수 있게 되었습니다.",
+      },
+      adaptiveBody: {
+        research: false,
+        completion: false,
+        repetition: false,
+        name: "적응형 신체",
+        img: "/images/production/adaptiveBody.jpg",
+        add: { science: 26, happiness: 3 },
+        cost: { food: 1000, titanium: 15, orichalcon: 0 },
+        event: () => console.log("완료"),
+        max: 1350,
+        description:
+          "적대적인 환경에서도 살아남을 수 있는 강화형 신체로 변경합니다. 어떤 상황에서도 빠르게 적응하며 신체 능력 또한 전체적으로 상승합니다.",
+      },
+      nanobiotechnology: {
+        research: false,
+        completion: false,
+        repetition: false,
+        name: "나노 회복기",
+        img: "/images/production/nanobiotechnology.jpg",
+        add: { science: 15, happiness: 15 },
+        cost: { food: 1800, titanium: 10, orichalcon: 0 },
+        event: () => console.log("완료"),
+        max: 1750,
+        description:
+          "혈류를 타고 이동하는 나노 치료기를 개발합니다. 몸에 이상이 생기면 몸속에서 즉시 반응하며 아주 섬세한 조직까지 복원해 흉터조차 남지 않습니다.",
+      },
       fighterPlane: {
         research: false,
         completion: false,
@@ -347,6 +392,56 @@ export const screenStore = create(
         },
         max: 672,
         description: "전투기를 생산합니다.",
+      },
+      multipleControlCenter: {
+        research: false,
+        completion: false,
+        repetition: false,
+        name: "다중 컨트롤 센터",
+        img: "/images/production/multipleControlCenter.jpg",
+        add: { science: 15, happiness: 15 },
+        cost: { food: 1800, titanium: 10, orichalcon: 0 },
+        event: () => console.log("완료"),
+        max: 1750,
+        description:
+          "행성과 주변 우주에 존재하는 구조물을 컨트롤 하는 것은 생각보다 힘듭니다. 하지만 컨트롤 신호가 증폭된 새로운 다중 컨트롤 센터라면 우주 외곽까지 컨트롤 신호를 보낼 수 있을지도 모릅니다. ",
+      },
+      matrixExtension: {
+        research: false,
+        completion: false,
+        repetition: false,
+        name: "매트릭스 확장",
+        img: "/images/production/matrixExtension.jpg",
+        add: { science: 15, happiness: 15 },
+        cost: { food: 1800, titanium: 10, orichalcon: 0 },
+        event: () => console.log("완료"),
+        max: 1750,
+        description: "매트릭스를 확장해 우주에서 정밀한 위치 조정이 가능해집니다.",
+      },
+      ultraScaleWork: {
+        research: false,
+        completion: false,
+        repetition: false,
+        name: "초규모 작업",
+        img: "/images/production/ultraScaleWork.jpg",
+        add: { food: -5, gear: 55, happiness: -13 },
+        cost: { food: 1800, titanium: 10, orichalcon: 0 },
+        event: () => console.log("완료"),
+        max: 1750,
+        description:
+          "행성 대부분을 거대한 공장지대로 만듭니다. 상상도 할 수 없는 엄청난 생산력을 보여주지만 환경에 부정적인 영향을 미칩니다.",
+      },
+      friendlyAgreement: {
+        research: false,
+        completion: false,
+        repetition: false,
+        name: "친화적 협정",
+        img: "/images/production/friendlyAgreement.jpg",
+        add: { food: -5, gear: 55, happiness: -13 },
+        cost: { food: 1800, titanium: 10, orichalcon: 0 },
+        event: () => console.log("완료"),
+        max: 1750,
+        description: "외계 문명과 우호적인 협정을 맺습니다. 적대적인 문명의 전투기 내구도가 하락합니다.",
       },
     },
   }))

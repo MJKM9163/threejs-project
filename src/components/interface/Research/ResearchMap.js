@@ -135,7 +135,7 @@ export const ResearchMap = () => {
   const [info, setInfo] = useState(false);
   const [pos, setPos] = useState([0, 0]);
   const [addStructure, setAddStructure] = useState([]);
-  const [list, setList] = useState({ AddResources: { food: 0, gear: 0, science: 0 } });
+  const [list, setList] = useState({ AddResources: { food: 0, gear: 0, science: 0 }, cost: () => null });
 
   const onDragStart = useCallback((e) => {
     e.preventDefault();
@@ -327,7 +327,7 @@ export const ResearchMap = () => {
                       break;
                     }
                   }
-                  if (researchList[item].cost <= allResources.science && check === true) {
+                  if (researchList[item].cost() <= allResources.science && check === true) {
                     e.target.parentElement.style.backgroundColor = "#00ce5d";
 
                     for (let name in researchList[item].AddStructure) {
@@ -335,6 +335,8 @@ export const ResearchMap = () => {
                     }
                     researchStore.getState().completionList.push(item);
                     if (researchList[item].AddResources !== null) {
+                      researchStore.setState((state) => (state.costTier[researchList[item].tier] *= 1.32));
+
                       for (let r in researchList[item].AddResources) {
                         researchStore.setState({
                           researchResources: {

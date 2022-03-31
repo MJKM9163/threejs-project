@@ -31,10 +31,27 @@ export const planetStore = create(
     },
 
     types: {
-      지구형: { climate: "온대", resources: { food: 7, gear: 5, science: 1 } },
-      얼음형: { climate: "한랭", resources: { food: 1, gear: 2, science: 5 } },
+      지구형: { climate: "온대", resources: { food: 2, gear: 5, science: 1 } },
+      얼음형: { climate: "한랭", resources: { food: 0.2, gear: 2, science: 7 } },
+      용암형: { climate: "고온", resources: { food: 0.5, gear: 12, science: 1 } },
       주계열성: { climate: "없음" },
-      "???": { climate: null },
+    },
+    size: { small: 70, middle: 180, large: 550 },
+
+    selectPlanet: {},
+    // default: {
+    //   name: earthPname,
+    //   type: "지구형",
+    //   size: argsSize.current["middle"],
+    //   position: collisionWorldPosition,
+    //   main: false,
+    //   effect: eartheffects,
+    // },
+
+    typeResearchCheck: {
+      rava: false,
+      ice: false,
+      earth: true,
     },
 
     allResources: {
@@ -56,9 +73,10 @@ export const planetStore = create(
     planetResources: {},
 
     // 중심부터 카운트 / 행성 내구도
-    planetDurability: [{ D: 1000 }, { D: 500 }, { D: 500 }],
+    planetDurability: [
+      { D: 1000, ON: true },
+      { D: 500, ON: true },
+      { D: 500, ON: true },
+    ],
   }))
 );
-//console.log(planetStore.getState().planetResources);
-// 찾기
-//const dramaIndex = draft.planetResources.find((el) => el[name]);

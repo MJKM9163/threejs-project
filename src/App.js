@@ -9,7 +9,6 @@ import { Background } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
 import { PlanetInfo } from "./components/interface/PlanetInfo";
 import { useStore } from "./hooks/stores/useStore";
-import { planetStore } from "./hooks/stores/planetStore";
 import { ConstructionContainer } from "./components/interface/Construction/ConstructionContainer";
 import { screenStore } from "./hooks/stores/screenStore";
 import { Resources } from "./components/interface/Construction/Resources";
@@ -46,26 +45,18 @@ const Light = () => {
 };
 
 const RightClick = (e) => {
-  let zoom = useStore.getState().zoom;
-  let planetName = useStore.getState().name;
-  let resources = planetStore.getState().planetResources;
+  let zoom = screenStore.getState().zoom;
   let researchMapOnOff = screenStore.getState().researchMapOnOff;
+  let productionControl = screenStore.getState().productionControl;
 
   if (zoom === true) {
     setTimeout(() => {
       useStore.setState({ mainPlanet: false });
     }, 500);
-    useStore.setState({ zoom: false });
-    useStore.setState({ orbitHide: false });
-  } else if (resources[planetName]?.hide === false) {
-    for (let item in resources) {
-      planetStore.getState().planetResources[item].hide = true;
-    }
-    planetStore.setState({
-      planetResources: {
-        ...resources,
-      },
-    });
+    screenStore.setState({ zoom: false });
+    screenStore.setState({ orbit: false });
+  } else if (productionControl === true) {
+    screenStore.setState((state) => (state.productionControl = false));
   } else if (researchMapOnOff === true) {
     screenStore.setState({ researchMapOnOff: false });
   } else {
@@ -107,42 +98,27 @@ function App() {
         <ClockEvents />
         <Light />
         <Physics gravity={[0, 0, 0]} iterations={1}>
-          <Debug color="red" scale={1.1}>
-            <Suspense
-              fallback={
-                <Html>
-                  <Loading />
-                </Html>
-              }>
-              {/* <Galaxy /> */}
-              <SpaceIndex />
-              <Background />
-              <FlyingIndex />
-              <SatelliteField />
-              <SatelliteIndex />
-              {/* <TestBox /> */}
-            </Suspense>
-          </Debug>
+          {/* <Debug color="red" scale={1.1}> */}
+          <Suspense
+            fallback={
+              <Html>
+                <Loading />
+              </Html>
+            }>
+            <SpaceIndex />
+            <Background />
+            <FlyingIndex />
+            <SatelliteField />
+            <SatelliteIndex />
+          </Suspense>
+          {/* </Debug> */}
         </Physics>
-        <axesHelper scale={5000} />
+        {/* <axesHelper scale={5000} /> */}
         <Stars radius={5000} depth={5000} count={500} />
-        {/* <OrbitControls /> */}
         <SpaceCamera />
-        {/* <RayCasters /> */}
       </Canvas>
     </>
   );
 }
 
 export default App;
-
-// radius?: number;
-//     depth?: number;
-//     count?: number;
-//     factor?: number;
-//     saturation?: number;
-//     fade?: boolean;
-
-useGLTF.preload("/multipurposeSatellite/scene.gltf");
-useGLTF.preload("/DefenseSatellite/scene.gltf");
-useGLTF.preload("/dustExtractor/scene.gltf");

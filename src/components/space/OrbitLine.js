@@ -1,10 +1,9 @@
 import React from "react";
-import { useStore } from "../../hooks/stores/useStore";
+import { screenStore } from "../../hooks/stores/screenStore";
 
 export const OrbitLine = ({ ...props }) => {
-  const hide = useStore((state) => state.orbitHide);
+  const hide = screenStore((state) => state.orbit);
 
-  console.log("궤도 선 랜더링");
   return (
     <>
       {hide ? null : (

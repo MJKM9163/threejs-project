@@ -42,7 +42,8 @@ const ResearchInfoContainer = styled.span`
         vertical-align: top;
       }
     }
-    .addStructure {
+
+    .addAndCost {
       display: flex;
       margin-left: 5px;
       flex-direction: column;
@@ -54,12 +55,26 @@ const ResearchInfoContainer = styled.span`
       .item {
         color: #7b7bff;
       }
+      .cost {
+        margin-left: 5px;
+        .costText {
+          font-size: 18px;
+          color: #ff7b7b;
+        }
+      }
+      img {
+        width: 25px;
+        height: 25px;
+        margin-right: 7px;
+        vertical-align: top;
+      }
     }
   }
 `;
 
 export const ResearchInfo = ({ info, pos, list, addStructure }) => {
   console.log("연구 인포");
+  console.log(list);
   return (
     <ResearchInfoContainer info={info} pos={pos}>
       <span className="flexBox">
@@ -95,12 +110,29 @@ export const ResearchInfo = ({ info, pos, list, addStructure }) => {
             <img className="inImg" src="images/resources/icons/flask.png" alt="추가 과학" />
             {list?.AddResources["science"] ? "+ " + list?.AddResources["science"] : null}
           </span>
+          <span
+            className="resources"
+            style={
+              list?.AddResources["happiness"]
+                ? { color: "DarkOrange", borderBottom: "1px solid DarkOrange" }
+                : { position: "absolute", opacity: "0" }
+            }>
+            <img className="inImg" src="images/resources/icons/happiness.png" alt="추가 행복도" />
+            {list?.AddResources["happiness"] ? "+ " + list?.AddResources["happiness"] : null}
+          </span>
         </span>
-        <span className="addStructure">
+        <span className="addAndCost">
+          <span className="text">비용</span>
+          <span className="cost">
+            <img className="inImg" src="images/resources/icons/flask.png" alt="추가 과학" />
+            <span className="costText">{list.cost()}</span>
+          </span>
+        </span>
+        <span className="addAndCost">
           <span className="text">추가되는 건물</span>
           {Object.values(addStructure).map((item, index) => (
             <span key={item[1] + index} className="item">
-              {item}
+              {"- " + item}
             </span>
           ))}
         </span>

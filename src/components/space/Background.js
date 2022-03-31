@@ -24,17 +24,17 @@ export const Background = () => {
 
   console.log("배경 랜더링");
   useFrame(() => {
-    if (moveLeft === true && camera.position.x < 3000) {
-      x -= 150;
+    if (moveLeft && x > -5000) {
+      x -= 100;
       x2 += 10;
-    } else if (moveRight === true && camera.position.x > -2500) {
-      x += 150;
+    } else if (moveRight && x < 1000) {
+      x += 100;
       x2 -= 10;
     }
-    if (moveForward === true && camera.position.z < -2100) {
+    if (moveForward && z > -7000) {
       z -= 100;
       z2 += 20;
-    } else if (moveBackward === true && camera.position.z > -9800) {
+    } else if (moveBackward && z < 0) {
       z += 100;
       z2 -= 20;
     }

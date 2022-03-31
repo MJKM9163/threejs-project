@@ -13,13 +13,13 @@ import { effectSound } from "../../hooks/stores/effectSound";
 
 let sunRY = 0.5;
 
-export const Sun = ({ SetUp, ...props }) => {
+export const Sun = () => {
   let onTimer;
   const html = useRef();
   const infoRef = useRef();
   const core = useRef();
 
-  const argsSize = useRef(useStore.getState().size);
+  const argsSize = planetStore.getState().size;
   const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
   const tap = useRef(screenStore.getState().tapCheck);
   const fighter = boundingStore.getState().fighter; //임시 저장소
@@ -43,14 +43,13 @@ export const Sun = ({ SetUp, ...props }) => {
     type: "Static",
     position: [0, 0, 0],
     rotation: [0, 0, 0],
-    args: [argsSize.current["large"]],
+    args: [argsSize["large"] + 500],
     onCollide: (e) => {
       const data = planetStore.getState().planetDurability;
       if (e.body.name === "enemybasic") {
-        data[0].D -= 20;
-        planetStore.setState({ planetDurability: [...data] });
+        planetStore.setState((state) => (state.planetDurability[0].D -= 20));
       }
-      if (data[0] <= 0) {
+      if (data[0].D <= 0) {
         effectSound.getState().plantEx.action();
         screenStore.setState({ gameOverCheck: true });
       }
@@ -80,7 +79,7 @@ export const Sun = ({ SetUp, ...props }) => {
   console.log("태양 랜더링 확인");
   return (
     <>
-      <group ref={sunRef} scale={argsSize.current["large"] / 10} {...props} dispose={null}>
+      <group ref={sunRef} scale={(argsSize["large"] + 500) / 10} dispose={null}>
         <Html ref={html}>
           <TapPlanet planet={"태양"} />
         </Html>
@@ -96,7 +95,17 @@ export const Sun = ({ SetUp, ...props }) => {
               <mesh
                 ref={core}
                 onClick={(e) => {
-                  SetUp(e.object.position, "태양", "주계열성", argsSize.current["large"]);
+                  planetStore.setState({
+                    selectPlanet: {
+                      name: "태양",
+                      type: "주계열성",
+                      size: argsSize["large"],
+                      position: e.object.position,
+                      main: true,
+                    },
+                  });
+                  screenStore.setState({ zoom: true });
+                  screenStore.setState({ orbit: true });
                 }}
                 onPointerDown={(e) => {
                   timer();

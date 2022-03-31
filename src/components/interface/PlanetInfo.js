@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useStore } from "../../hooks/stores/useStore";
 import { planetStore } from "../../hooks/stores/planetStore";
-import { effectStore } from "../../hooks/stores/effectStore";
+import { screenStore } from "../../hooks/stores/screenStore";
 
 const PlanetInfoDiv = styled.div`
   position: absolute;
@@ -145,139 +144,89 @@ const InfoTextBox = styled.div`
 `;
 
 export const PlanetInfo = () => {
-  const zoomCheck = useStore((state) => state.zoom);
-  const effects = effectStore((state) => state.effects);
-  const mainPlanet = useStore(useCallback((state) => state.mainPlanet, []));
+  const zoom = screenStore((state) => state.zoom);
+  const typeData = planetStore.getState().types;
+  const planetNameDList = planetStore.getState().explanation;
+  const resources = planetStore((state) => state.planetResources);
+  const planetData = planetStore((state) => state.selectPlanet);
 
-  const selectSize = useRef(useStore.getState().selectSize);
-  const infoName = useRef(useStore.getState().name);
-  const typeName = useRef(useStore.getState().type);
-
-  const explanation = useRef(planetStore.getState().explanation);
-  const resources = useRef(planetStore.getState().planetResources);
-
-  useEffect(() => {
-    useStore.subscribe(
-      (state) => (infoName.current = state.name),
-      (state) => state
-    );
-  });
-
-  useEffect(() => {
-    useStore.subscribe(
-      (state) => (typeName.current = state.type),
-      (state) => state
-    );
-  });
-
-  useEffect(() => {
-    useStore.subscribe(
-      (state) => (selectSize.current = state.selectSize),
-      (state) => state
-    );
-  });
-
-  useEffect(() => {
-    planetStore.subscribe(
-      (state) => (explanation.current = state.explanation),
-      (state) => state
-    );
-  });
-
-  useEffect(() => {
-    planetStore.subscribe(
-      (state) => (resources.current = state.planetResources),
-      (state) => state
-    );
-  });
-
-  const types = {
-    지구형: { climate: "온대", resources: { food: 0.5, gear: 5, science: 1 } },
-    얼음형: { climate: "한랭", resources: { food: 0.1, gear: 2, science: 5 } },
-    주계열성: { climate: "없음" },
-    "???": { climate: null },
-  };
-
-  console.log("info 랜더링 됨");
   return (
-    <PlanetInfoDiv zoom={zoomCheck}>
+    <PlanetInfoDiv zoom={zoom}>
       <Infodiv>
         <InfoTextBox>
           <div className="name">
-            {infoName.current}
-            &nbsp;<span className="type">{typeName.current}</span>
+            {planetData.name}
+            &nbsp;<span className="type">{planetData.type}</span>
           </div>
           <div className="explanation">
-            {infoName.current in explanation.current
-              ? explanation.current[infoName.current]
-              : explanation.current["etc"]}
+            {planetData.name in planetNameDList ? planetNameDList[planetData.name] : planetNameDList["etc"]}
           </div>
           <div className="state">
             <li>
               상태: &nbsp;
-              <span className={resources.current[infoName.current] ? "develop" : "unDevelop"}>
-                {resources.current[infoName.current] ? "개척" : "미개척"}
+              <span className={resources[planetData.name] ? "develop" : "unDevelop"}>
+                {resources[planetData.name] ? "개척" : "미개척"}
               </span>
             </li>
             <li>
               크기: &nbsp;
               <span className="selectSize">
-                {selectSize.current >= 550 ? "대형" : selectSize.current >= 180 ? "중형" : "소형"}
+                {planetData.size >= 550 ? "대형" : planetData.size >= 180 ? "중형" : "소형"}
               </span>
             </li>
-            {mainPlanet ? null : (
+            {planetData.main ? null : (
               <li>
                 기후: &nbsp;
-                <span className="climate">{types[typeName.current].climate}</span>
+                <span className="climate">
+                  {typeData[planetData.type] ? typeData[planetData.type].climate : null}
+                </span>
               </li>
             )}
           </div>
-          {mainPlanet ? null : (
+          {planetData.main ? null : (
             <div className="special">
               특이 사항
               <div className="positive">
-                {effects ? effects[0].map((item, index) => <li key={index}>{item}</li>) : null}
+                {planetData.effect !== undefined
+                  ? planetData.effect[0].map((item, index) => <li key={index}>{item}</li>)
+                  : null}
               </div>
               <div className="negative">
-                {effects ? effects[1].map((item, index) => <li key={index}>{item}</li>) : null}
+                {planetData.effect !== undefined
+                  ? planetData.effect[1].map((item, index) => <li key={index}>{item}</li>)
+                  : null}
               </div>
             </div>
           )}
-          <div className="buttons" style={{ height: mainPlanet ? "430px" : "80px" }}>
-            {resources.current[infoName.current] ? null : (
+          <div className="buttons" style={{ height: planetData.main ? "430px" : "80px" }}>
+            {resources[planetData.name] ? null : (
               <button
                 className="start"
-                style={{ display: mainPlanet ? "none" : "block" }}
+                style={{ display: planetData.main ? "none" : "block" }}
                 onClick={() => {
                   planetStore.setState({
                     planetResources: {
-                      ...resources.current,
-                      [infoName.current]: {
-                        resources: types[typeName.current].resources,
+                      ...resources,
+                      [planetData.name]: {
+                        resources: typeData[planetData.type].resources,
                         develop: true,
                         hide: true,
                       },
                     },
                   });
+                  planetStore.setState((state) => state.planetDurability);
 
-                  useStore.setState({ zoom: false });
-                  useStore.setState({ orbitHide: false });
+                  screenStore.setState({ zoom: false });
+                  screenStore.setState({ orbit: false });
                 }}>
                 개척 시작
               </button>
             )}
-
             <button
               className="cancel"
               onClick={() => {
-                useStore.setState({ zoom: false });
-                useStore.setState({ orbitHide: false });
-
-                if (mainPlanet === true) {
-                  setTimeout(() => {
-                    useStore.setState({ mainPlanet: false });
-                  }, 500);
-                }
+                screenStore.setState({ zoom: false });
+                screenStore.setState({ orbit: false });
               }}>
               돌아가기
             </button>

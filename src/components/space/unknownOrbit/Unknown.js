@@ -14,18 +14,19 @@ import { TapPlanet } from "../../interface/Infos/TapPlanet";
 import { LeftInfoBox } from "../../interface/Infos/LeftInfoBox";
 import { OrbitLine } from "../OrbitLine";
 import { UnknownModel } from "./UnknownModel";
+import { effectSound } from "../../../hooks/stores/effectSound";
 
 let unknownR = 0;
 let unknownPname = null;
 let unknownEffects;
 
-export const Unknown = ({ SetUp, ...props }) => {
+export const Unknown = ({ position, control }) => {
   let onTimer;
   const html = useRef();
   const infoRef = useRef();
   const BS = useRef();
 
-  const argsSize = useRef(useStore.getState().size);
+  const argsSize = planetStore.getState().size;
   const leftInfoOnOff = useRef(screenStore.getState().leftInfoOnOff);
   const tap = useRef(screenStore.getState().tapCheck);
   const fighter = boundingStore.getState().fighter; //임시 저장소
@@ -47,19 +48,24 @@ export const Unknown = ({ SetUp, ...props }) => {
   const [unknownRef, unknownApi] = useSphere(() => ({
     mass: 1,
     type: "Static",
-    args: [argsSize.current["small"]],
+    args: [argsSize["small"]],
     onCollide: (e) => {
       const data = planetStore.getState().planetDurability;
       if (e.body.name === "enemybasic") {
-        data[2].D -= 20;
-        planetStore.setState({ planetDurability: [...data] });
+        planetStore.setState((state) => (state.planetDurability[2].D -= 20));
+      }
+      if (data[2].D <= 0) {
+        effectSound.getState().plantEx.action();
+        delete boundingStore.getState().fighter.friendly[unknownPname];
+        delete planetStore.getState().planetResources[unknownPname];
+        planetStore.setState((state) => (state.planetDurability[2].ON = false));
       }
     },
   }));
 
   if (unknownPname === null) {
     unknownPname = PlanetNameSelect();
-    unknownEffects = EffectSelect(argsSize.current["small"]);
+    unknownEffects = EffectSelect(argsSize["small"]);
   }
 
   const timer = () => {
@@ -90,7 +96,7 @@ export const Unknown = ({ SetUp, ...props }) => {
   console.log("unknown 랜더링 확인");
   return (
     <>
-      <group position={props.position} dispose={null}>
+      <group position={position} dispose={null}>
         <Html ref={html}>
           <TapPlanet planet={unknownPname} />
         </Html>
@@ -103,7 +109,17 @@ export const Unknown = ({ SetUp, ...props }) => {
         <mesh ref={BS} />
         <mesh
           onClick={(e) => {
-            SetUp(collisionWorldPosition, unknownPname, "얼음형", argsSize.current["small"], unknownEffects);
+            planetStore.setState({
+              selectPlanet: {
+                name: unknownPname,
+                type: "얼음형",
+                size: argsSize["small"],
+                position: collisionWorldPosition,
+                main: false,
+                effect: unknownEffects,
+              },
+            });
+            control(unknownPname);
           }}
           onPointerDown={(e) => {
             timer();
@@ -112,12 +128,11 @@ export const Unknown = ({ SetUp, ...props }) => {
             clearTimeout(onTimer);
           }}>
           <sphereGeometry args={[150]} />
-          <meshBasicMaterial transparent opacity={0.5} />
+          <meshBasicMaterial transparent opacity={0} />
         </mesh>
         <UnknownModel unknownEffects={unknownEffects} />
-        <axesHelper scale={500} />
       </group>
-      <OrbitLine args={[props.position[0] - 5, props.position[0] + 5, 100]} />
+      <OrbitLine args={[position[0] - 5, position[0] + 5, 100]} />
     </>
   );
 };
