@@ -1,7 +1,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { boundingStore } from "../hooks/stores/boundingStore";
-import { EnemyFighter } from "./fighters/enemyFighter";
+import { EnemyFighter } from "./fighters/EnemyFighter";
 
 const posRandomFun = () => {
   const pos = Math.floor(Math.random() * 2);
@@ -26,50 +26,52 @@ const levelCheck = {
 
 export const Anemys = () => {
   const num = useRef();
-  const enemyNum = boundingStore((state) => state.enemyNum);
+  const enemyLive = boundingStore((state) => state.enemyLive);
+  const enemyData = boundingStore((state) => state.enemyData);
   const { clock } = useThree();
 
-  // useFrame(() => {
-  //   if (clock.elapsedTime > 5 && levelCheck[1] === false) {
-  //     levelCheck[1] = true;
-  //     enemyNum[0] = true;
-  //     boundingStore.setState({ enemyNum: [...enemyNum] });
-  //   } else if (clock.elapsedTime > 10 && levelCheck[2] === false) {
-  //     levelCheck[2] = true;
-  //     for (let i = 0; i < 3; i++) {
-  //       enemyNum[i] = true;
-  //     }
-  //     boundingStore.setState({ enemyNum: [...enemyNum] });
-  //   } else if (clock.elapsedTime > 10 && levelCheck[3] === false) {
-  //     levelCheck[3] = true;
-  //     for (let i = 0; i < 5; i++) {
-  //       enemyNum[i] = true;
-  //     }
-  //     boundingStore.setState({ enemyNum: [...enemyNum] });
-  //   } else if (clock.elapsedTime > 10 && levelCheck[4] === false) {
-  //     levelCheck[4] = true;
-  //     for (let i = 0; i < 8; i++) {
-  //       enemyNum[i] = true;
-  //     }
-  //     boundingStore.setState({ enemyNum: [...enemyNum] });
-  //   } else if (clock.elapsedTime > 10 && levelCheck[5] === false) {
-  //     levelCheck[5] = true;
-  //     for (let i = 0; i < 12; i++) {
-  //       enemyNum[i] = true;
-  //     }
-  //     boundingStore.setState({ enemyNum: [...enemyNum] });
-  //   }
-  // });
+  useFrame(() => {
+    if (clock.elapsedTime > 320 && levelCheck[1] === false) {
+      levelCheck[1] = true;
+      enemyLive[0] = enemyData.basic;
+      boundingStore.setState({ enemyLive: [...enemyLive] });
+    } else if (clock.elapsedTime > 550 && levelCheck[2] === false) {
+      levelCheck[2] = true;
+      for (let i = 0; i < 3; i++) {
+        enemyLive[i] = enemyData.basic;
+      }
+      boundingStore.setState({ enemyLive: [...enemyLive] });
+    } else if (clock.elapsedTime > 800 && levelCheck[3] === false) {
+      levelCheck[3] = true;
+      for (let i = 0; i < 5; i++) {
+        enemyLive[i] = enemyData.basic;
+      }
+      boundingStore.setState({ enemyLive: [...enemyLive] });
+    } else if (clock.elapsedTime > 1130 && levelCheck[4] === false) {
+      levelCheck[4] = true;
+      for (let i = 0; i < 8; i++) {
+        enemyLive[i] = enemyData.basic;
+      }
+      boundingStore.setState({ enemyLive: [...enemyLive] });
+    } else if (clock.elapsedTime > 1400 && levelCheck[5] === false) {
+      levelCheck[5] = true;
+      for (let i = 0; i < 12; i++) {
+        enemyLive[i] = enemyData.basic;
+      }
+      boundingStore.setState({ enemyLive: [...enemyLive] });
+    }
+  });
   return (
     <group ref={num}>
-      {enemyNum.map((item, index) =>
-        item === true ? (
+      {enemyLive.map((item, index) =>
+        item.type === "공격함" ? (
           <EnemyFighter
             key={index}
             num={index}
             position={[posRandomFun()[0], 0, posRandomFun()[1]]}
             rotation={[0, 0, 0]}
             scale={25}
+            adjust={item.adjust}
           />
         ) : (
           false

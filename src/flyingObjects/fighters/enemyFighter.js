@@ -5,23 +5,9 @@ import { useFrame } from "@react-three/fiber";
 import { effectSound } from "../../hooks/stores/effectSound";
 import { boundingStore } from "../../hooks/stores/boundingStore";
 import { Vector3 } from "three";
+import { enemyDamageCalculation } from "../../hooks/damageCalculation";
 
-let enemyFighterOption = {
-  0: { R: 0, D: 40 },
-  1: { R: 0, D: 40 },
-  2: { R: 0, D: 40 },
-  3: { R: 0, D: 100 },
-  4: { R: 0, D: 100 },
-  5: { R: 0, D: 100 },
-  6: { R: 0, D: 100 },
-  7: { R: 0, D: 100 },
-  8: { R: 0, D: 100 },
-  9: { R: 0, D: 100 },
-  10: { R: 0, D: 100 },
-  11: { R: 0, D: 100 },
-};
-
-export const EnemyFighter = ({ position, rotation, num }) => {
+export const EnemyFighter = ({ position, rotation, num, adjust }) => {
   let FR = false;
   let launch = false;
   let a = 0;
@@ -42,6 +28,7 @@ export const EnemyFighter = ({ position, rotation, num }) => {
   const move = useRef();
   const BS = useRef();
   const fighter = boundingStore.getState().fighter;
+  const weapons = boundingStore.getState().weapons;
   const { nodes, materials } = useGLTF("flyingObjects/enemyFighter/scene.gltf");
   const missileModel = useGLTF("flyingObjects/projectiles/missile/scene.gltf");
 
@@ -52,15 +39,14 @@ export const EnemyFighter = ({ position, rotation, num }) => {
     rotation,
     args: [50],
     onCollide: (e) => {
-      if (e.body.name === "friendlybasic") {
-        enemyFighterOption[num].D -= 20;
-      }
-      if (enemyFighterOption[num].D <= 0) {
+      enemyDamageCalculation(num, e.body.name);
+      const data = boundingStore.getState().enemyLive;
+
+      if (data[num].durability <= 0) {
         effectSound.getState().fighter.FlightExplosionSound.action();
-        const data = boundingStore.getState().enemyNum;
         data[num] = false;
         delete boundingStore.getState().fighter.enemy["전투기" + num];
-        boundingStore.setState({ enemyNum: [...data] });
+        boundingStore.setState({ enemyLive: [...data] });
       }
     },
   }));
@@ -116,7 +102,7 @@ export const EnemyFighter = ({ position, rotation, num }) => {
       collideRef.current.getWorldPosition(move.current.geometry.boundingSphere.center);
       if (FR === false) {
         FR = true;
-        missileRef.current.name = "enemybasic";
+        missileRef.current.name = { weapon: weapons.missile, source: "enemy", adjust: adjust };
         missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
       }
       boundingStore.getState().fighter.enemy = {

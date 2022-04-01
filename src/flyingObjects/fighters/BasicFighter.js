@@ -7,6 +7,7 @@ import { boundingStore } from "../../hooks/stores/boundingStore";
 import { Vector3 } from "three";
 import { screenStore } from "../../hooks/stores/screenStore";
 import { FighterDurabilityBar } from "../../hooks/DurabilityBar";
+import { friendlyDamageCalculation } from "../../hooks/damageCalculation";
 
 let friendlyFighterOption = {
   0: { R: 0, S: 0, SM: 0, SOO: false, SOOM: false },
@@ -14,7 +15,7 @@ let friendlyFighterOption = {
   2: { R: 0, S: 0, SM: 0, SOO: false, SOOM: false },
 };
 
-export const BasicFighter = ({ position, rotation, num }) => {
+export const BasicFighter = ({ position, rotation, num, adjust }) => {
   let FR = false;
   let launch = false;
   let selectCheck = false;
@@ -37,7 +38,7 @@ export const BasicFighter = ({ position, rotation, num }) => {
   const BS = useRef();
   const selectUnit = useRef();
   const flyingMovePos = useRef(screenStore.getState().flyingMovePos);
-
+  const weapons = boundingStore.getState().weapons;
   const fighter = boundingStore.getState().fighter;
   const { nodes, materials } = useGLTF("flyingObjects/basicFighter/scene.gltf");
   const missileModel = useGLTF("flyingObjects/projectiles/missile/scene.gltf");
@@ -56,16 +57,18 @@ export const BasicFighter = ({ position, rotation, num }) => {
     rotation,
     args: [50],
     onCollide: (e) => {
-      const data = boundingStore.getState().friendlyNum;
-      if (e.body.name === "enemybasic") {
-        data[num].D -= 20;
-        boundingStore.setState({ friendlyNum: [...data] });
-      }
-      if (data[num].D <= 0) {
+      friendlyDamageCalculation(num, e.body.name);
+      const data = boundingStore.getState().friendlyLive;
+
+      if (data[num].durability <= 0) {
         effectSound.getState().fighter.FlightExplosionSound.action();
         data[num] = false;
         delete boundingStore.getState().fighter.friendly["전투기" + num];
-        boundingStore.setState({ friendlyNum: [...data] });
+        screenStore.setState((state) => {
+          state.resourcesProduction.fighterPlane.completion = false;
+          state.resourcesProduction.fighterPlane.repetition = true;
+        });
+        boundingStore.setState({ friendlyLive: [...data] });
       }
     },
   }));
@@ -127,7 +130,7 @@ export const BasicFighter = ({ position, rotation, num }) => {
       collideRef.current.getWorldPosition(move.current.geometry.boundingSphere.center);
       if (FR === false) {
         FR = true;
-        missileRef.current.name = "friendlybasic";
+        missileRef.current.name = { weapon: weapons.missile, source: "friendly", adjust: adjust };
         missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
       }
       boundingStore.getState().fighter.friendly = {
