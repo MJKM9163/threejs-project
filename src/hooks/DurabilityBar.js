@@ -22,7 +22,7 @@ const DurabilityBarComponent = styled.div`
 `;
 
 export const FighterDurabilityBar = ({ num, name }) => {
-  const data = boundingStore((state) => state.friendlyNum);
+  const data = boundingStore((state) => state.friendlyLive);
 
   return (
     <DurabilityBarComponent D={data[num].D} name={name}>
