@@ -40,7 +40,7 @@ export const screenStore = create(
     awaitArray: [],
 
     // 위성 수
-    satellite: 5,
+    satellite: 0,
     satellitePos: [],
     // 위성 변환 check
     defenseSCheck: false,
@@ -378,12 +378,14 @@ export const screenStore = create(
         add: "기본형 전투기 + 1",
         cost: { food: 750, titanium: 0, orichalcon: 0 },
         event: () => {
-          let data = boundingStore.getState().friendlyNum;
+          let live = boundingStore.getState().friendlyLive;
+          let data = boundingStore.getState().friendlyData;
           let num = data.findIndex((i) => i === false);
-          data[num] = { D: 100 };
-          boundingStore.setState({ friendlyNum: [...data] });
+          live[num] = data.basic;
+          boundingStore.setState({ friendlyLive: [...live] });
           set((state) => (state.resourcesProduction.fighterPlane.cost.food *= 1.2));
-          if (num === 2) {
+          let check = data.findIndex((i) => i === false);
+          if (check === -1) {
             set((state) => {
               state.resourcesProduction.fighterPlane.repetition = false;
               state.resourcesProduction.fighterPlane.completion = true;
