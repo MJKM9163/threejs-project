@@ -3,24 +3,17 @@ import "./App.css";
 import { Canvas } from "@react-three/fiber";
 import { Debug, Physics } from "@react-three/cannon";
 import { SpaceIndex } from "./components/space/SpaceIndex";
-import { Html, Stars, useGLTF, useHelper } from "@react-three/drei";
+import { Html, Stars, useHelper } from "@react-three/drei";
 import { PointLightHelper } from "three";
 import { Background } from "./components/space/Background";
 import { SpaceCamera } from "./components/space/controls/SpaceCamera";
-import { PlanetInfo } from "./components/interface/PlanetInfo";
-import { useStore } from "./hooks/stores/useStore";
-import { ConstructionContainer } from "./components/interface/Construction/ConstructionContainer";
 import { screenStore } from "./hooks/stores/screenStore";
-import { Resources } from "./components/interface/Construction/Resources";
-import { AllResourcesFun } from "./hooks/AllResourcesFun";
-import { ResearchMap } from "./components/interface/Research/ResearchMap";
 import { FlyingIndex } from "./flyingObjects/FlyingIndex";
 import { SatelliteField } from "./components/satelliteObjects/SatelliteField";
 import { SatelliteIndex } from "./components/satelliteObjects/SatelliteIndex";
-import { EventBox } from "./hooks/EventBox";
 import { ClockEvents } from "./hooks/clockEvents";
-import { RightOption } from "./components/interface/SideTap/RightOption";
-import { Loading, Over } from "./components/interface/Infos/LoadingOrOver";
+import { Loading } from "./components/interface/Infos/LoadingOrOver";
+import { InterfaceIndex } from "./components/interface/InterfaceIndex";
 
 const Light = () => {
   const pointLight = useRef();
@@ -50,9 +43,6 @@ const RightClick = (e) => {
   let productionControl = screenStore.getState().productionControl;
 
   if (zoom === true) {
-    setTimeout(() => {
-      useStore.setState({ mainPlanet: false });
-    }, 500);
     screenStore.setState({ zoom: false });
     screenStore.setState({ orbit: false });
   } else if (productionControl === true) {
@@ -77,14 +67,8 @@ function App() {
   console.log("메인 랜더링 확인");
   return (
     <>
-      <Over />
-      <EventBox />
-      <ResearchMap />
-      <PlanetInfo />
-      <AllResourcesFun />
-      <Resources />
-      <ConstructionContainer />
-      <RightOption />
+      <InterfaceIndex />
+
       <Canvas
         shadows
         colorManagement
