@@ -1,8 +1,6 @@
 import React, { memo } from "react";
 import styled from "styled-components";
-import { planetStore } from "../../../hooks/stores/planetStore";
 import { screenStore } from "../../../hooks/stores/screenStore";
-import { useStore } from "../../../hooks/stores/useStore";
 import { Production } from "./Production";
 
 const ConstructionContainerDiv = styled.div`
