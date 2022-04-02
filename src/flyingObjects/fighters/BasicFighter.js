@@ -65,8 +65,8 @@ export const BasicFighter = ({ position, rotation, num, adjust }) => {
         data[num] = false;
         delete boundingStore.getState().fighter.friendly["전투기" + num];
         screenStore.setState((state) => {
-          state.resourcesProduction.fighterPlane.completion = false;
-          state.resourcesProduction.fighterPlane.repetition = true;
+          state.dataList.fighterPlane.completion = false;
+          state.dataList.fighterPlane.repetition = true;
         });
         boundingStore.setState({ friendlyLive: [...data] });
       }

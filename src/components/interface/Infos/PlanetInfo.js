@@ -52,6 +52,7 @@ const InfoTextBox = styled.div`
       }
     }
   }
+
   .name {
     font-size: 32px;
     margin-bottom: 10px;
@@ -102,6 +103,28 @@ const InfoTextBox = styled.div`
     .negative {
       color: #ff8989;
     }
+
+    .effectHoverBox {
+      .effectHoverD {
+      }
+      .effectHoverR {
+        width: 150px;
+        height: 50px;
+        background-color: gray;
+        .EHF {
+          color: #94ff90;
+        }
+        .EHG {
+          color: #ffd45d;
+        }
+        .EHS {
+          color: #88bbff;
+        }
+        .EHH {
+          color: #f6ffa4;
+        }
+      }
+    }
   }
 
   .buttons {
@@ -143,8 +166,32 @@ const InfoTextBox = styled.div`
   }
 `;
 
+const EffectHoverBox = () => {
+  const effectHoverCheck = screenStore((state) => state.effectHoverCheck);
+  return (
+    <div className="effectHoverBox">
+      <div className="effectHoverD">{effectHoverCheck[0]}</div>
+      <div className="effectHoverR">
+        {effectHoverCheck[1].food !== undefined ? (
+          <span className="EHF">{effectHoverCheck[1].food}</span>
+        ) : null}
+        {effectHoverCheck[1].gear !== undefined ? (
+          <span className="EHG">{effectHoverCheck[1].gear}</span>
+        ) : null}
+        {effectHoverCheck[1].science !== undefined ? (
+          <span className="EHS">{effectHoverCheck[1].science}</span>
+        ) : null}
+        {effectHoverCheck[1].happiness !== undefined ? (
+          <span className="EHH">{effectHoverCheck[1].happiness}</span>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
 export const PlanetInfo = () => {
   const zoom = screenStore((state) => state.zoom);
+  const effectHoverCheck = screenStore((state) => state.effectHoverCheck);
   const typeData = planetStore.getState().types;
   const planetNameDList = planetStore.getState().explanation;
   const resources = planetStore((state) => state.planetResources);
@@ -175,7 +222,9 @@ export const PlanetInfo = () => {
               </span>
             </li>
             {planetData.main ? null : (
-              <li>
+              <li
+                onMouseEnter={() => screenStore.setState({ hoverCheck: typeData[planetData.type].climate })}
+                onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
                 기후: &nbsp;
                 <span className="climate">
                   {typeData[planetData.type] ? typeData[planetData.type].climate : null}
@@ -188,12 +237,36 @@ export const PlanetInfo = () => {
               특이 사항
               <div className="positive">
                 {planetData.effect !== undefined
-                  ? planetData.effect[0].map((item, index) => <li key={index}>{item}</li>)
+                  ? planetData.effect[0].map((item, index) => (
+                      <li
+                        key={index}
+                        onMouseEnter={() =>
+                          screenStore.setState({
+                            effectHoverCheck: [item.description, item.resources, item.name],
+                          })
+                        }
+                        onMouseLeave={() => screenStore.setState({ effectHoverCheck: false })}>
+                        {item.name}
+                        {effectHoverCheck[2] === item.name ? <EffectHoverBox /> : null}
+                      </li>
+                    ))
                   : null}
               </div>
               <div className="negative">
                 {planetData.effect !== undefined
-                  ? planetData.effect[1].map((item, index) => <li key={index}>{item}</li>)
+                  ? planetData.effect[1].map((item, index) => (
+                      <li
+                        key={index}
+                        onMouseEnter={() =>
+                          screenStore.setState({
+                            effectHoverCheck: [item.description, item.resources, item.name],
+                          })
+                        }
+                        onMouseLeave={() => screenStore.setState({ effectHoverCheck: false })}>
+                        {item.name}
+                        {effectHoverCheck[2] === item.name ? <EffectHoverBox /> : null}
+                      </li>
+                    ))
                   : null}
               </div>
             </div>

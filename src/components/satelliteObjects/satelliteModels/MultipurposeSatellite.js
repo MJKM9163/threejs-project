@@ -81,7 +81,7 @@ export function MultipurposeSatellite({ position, num }) {
       }
       if (data[num].D <= 0) {
         effectSound.getState().fighter.FlightExplosionSound.action();
-        screenStore.setState((state) => (state.resourcesProduction.multipurposeSatellite.count -= 1));
+        screenStore.setState((state) => (state.dataList.multipurposeSatellite.count -= 1));
         delete boundingStore.getState().fighter.friendly["위성" + num];
         data.splice(num, 1);
         screenStore.setState({ satellitePos: [...data] });

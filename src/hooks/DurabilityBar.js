@@ -25,7 +25,7 @@ export const FighterDurabilityBar = ({ num, name }) => {
   const data = boundingStore((state) => state.friendlyLive);
 
   return (
-    <DurabilityBarComponent D={data[num].D} name={name}>
+    <DurabilityBarComponent D={data[num].durability} name={name}>
       <div className={name} />
     </DurabilityBarComponent>
   );
@@ -35,7 +35,7 @@ export const PlanetDurabilityBar = ({ num, name, d }) => {
   const data = planetStore((state) => state.planetDurability);
 
   return (
-    <DurabilityBarComponent D={(data[num].D / d) * 100} name={name}>
+    <DurabilityBarComponent D={(data[num].durability / d) * 100} name={name}>
       <div className={name} />
     </DurabilityBarComponent>
   );

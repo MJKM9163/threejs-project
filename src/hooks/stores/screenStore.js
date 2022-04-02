@@ -21,6 +21,7 @@ export const screenStore = create(
 
     // hover Check
     hoverCheck: false,
+    effectHoverCheck: false,
 
     // right Options
     // ---left Info on/off
@@ -48,14 +49,14 @@ export const screenStore = create(
     // 방어막 check
     planetCurtainCheck: false,
 
-    // 자원 & 건물
-    resourcesProduction: {
+    // 자원 & 건물 & 효과 등
+    dataList: {
       potato: {
         completion: undefined,
         name: "식량",
         img: "/images/resources/images/potato.png",
         description:
-          "가장 기본적인 자원입니다. 생존에 필수적이며 다양한 곳에 사용됩니다. 만약 식량이 부족하다면 정상적인 운영을 할 수 없을 것입니다.",
+          "가장 기본적인 자원입니다. 모든 생산 작업에 사용됩니다. 식량 생산량은 연구, 건물 건설, 행복도의 영향을 받아 증가하거나 감소합니다.",
       },
       titanium: {
         completion: undefined,
@@ -69,7 +70,7 @@ export const screenStore = create(
         name: "오리하르콘",
         img: "/images/resources/images/orichalcon.png",
         description:
-          "매우 보기 드문 광석입니다. 오리하르콘은 알 수 없는 강한 힘을 방출하곤 합니다. 이런 특징을 이용하면 발전에 도움이 될지도 모릅니다. ",
+          "매우 보기 드문 광석입니다. 오리하르콘은 알 수 없는 강한 힘을 방출합니다. 이런 특징을 이용하면 발전에 도움이 될지도 모릅니다. ",
       },
       science: {
         completion: undefined,
@@ -88,6 +89,27 @@ export const screenStore = create(
         name: "행복도",
         img: "/images/resources/images/happiness.jpg",
         description: "행복도를 나타냅니다. 행복도가 높을수록 자원의 생산 효율이 높아집니다.",
+      },
+      온대: {
+        completion: undefined,
+        name: "온대",
+        img: "/images/resources/images/ordinary.jpg",
+        description:
+          "우주에서 보기드문 기후입니다. 생명체가 살아가는데 특별한 어려움이 없으며 다양한 자원이 균형있게 존재합니다.",
+      },
+      한랭: {
+        completion: undefined,
+        name: "한랭",
+        img: "/images/resources/images/coldness.jpg",
+        description:
+          "모성과 멀리 떨어져 있어 이 행성은 항상 얼어있습니다. 생명체가 살기엔 힘들어 보이지만 과거부터 모든 것이 얼어붙어 보존되어 있기에 연구 가치가 충분합니다.",
+      },
+      고온: {
+        completion: undefined,
+        name: "고온",
+        img: "/images/resources/images/hotness.jpg",
+        description:
+          "높은 온도와 강한 중력의 영향으로 격렬한 활동을 하는 행성입니다. 여기서 살아가는 생명체는 항상 자신의 안전을 위협받습니다.",
       },
       planetCurtain: {
         research: false,
@@ -136,11 +158,11 @@ export const screenStore = create(
         add: "행성급 이벤트 발생",
         cost: { food: 25, titanium: 0, orichalcon: 0 },
         event: () => {
-          set((state) => (state.resourcesProduction.exploration.count += 1));
+          set((state) => (state.dataList.exploration.count += 1));
           set((state) => (state.exCheck = true));
-          set((state) => (state.resourcesProduction.exploration.cost.food *= 1.3));
-          if (get().resourcesProduction.exploration.count === 3) {
-            set((state) => (state.resourcesProduction.exploration.completion = true));
+          set((state) => (state.dataList.exploration.cost.food *= 1.3));
+          if (get().dataList.exploration.count === 3) {
+            set((state) => (state.dataList.exploration.completion = true));
           }
         },
         count: 0,
@@ -220,12 +242,12 @@ export const screenStore = create(
         cost: { food: 680, titanium: 0, orichalcon: 0 },
         event: () => {
           //get()
-          set((state) => (state.resourcesProduction.multipurposeSatellite.count += 1));
+          set((state) => (state.dataList.multipurposeSatellite.count += 1));
           set((state) => ({ satellite: state.satellite + 1 }));
-          set((state) => (state.resourcesProduction.multipurposeSatellite.cost.food *= 1.6));
+          set((state) => (state.dataList.multipurposeSatellite.cost.food *= 1.6));
 
-          if (get().resourcesProduction.multipurposeSatellite.count === 5) {
-            set((state) => (state.resourcesProduction.multipurposeSatellite.completion = true));
+          if (get().dataList.multipurposeSatellite.count === 5) {
+            set((state) => (state.dataList.multipurposeSatellite.completion = true));
           }
         },
         count: 0,
@@ -255,11 +277,11 @@ export const screenStore = create(
         add: "우주급 이벤트 발생",
         cost: { food: 520, titanium: 0, orichalcon: 0 },
         event: () => {
-          set((state) => (state.resourcesProduction.explorationOfSpace.count += 1));
+          set((state) => (state.dataList.explorationOfSpace.count += 1));
           set((state) => (state.exCheck = true));
-          set((state) => (state.resourcesProduction.explorationOfSpace.cost.food *= 1.3));
-          if (get().resourcesProduction.explorationOfSpace.count === 3) {
-            set((state) => (state.resourcesProduction.explorationOfSpace.completion = true));
+          set((state) => (state.dataList.explorationOfSpace.cost.food *= 1.3));
+          if (get().dataList.explorationOfSpace.count === 3) {
+            set((state) => (state.dataList.explorationOfSpace.completion = true));
           }
         },
         count: 0,
@@ -383,12 +405,12 @@ export const screenStore = create(
           let num = data.findIndex((i) => i === false);
           live[num] = data.basic;
           boundingStore.setState({ friendlyLive: [...live] });
-          set((state) => (state.resourcesProduction.fighterPlane.cost.food *= 1.2));
+          set((state) => (state.dataList.fighterPlane.cost.food *= 1.2));
           let check = data.findIndex((i) => i === false);
           if (check === -1) {
             set((state) => {
-              state.resourcesProduction.fighterPlane.repetition = false;
-              state.resourcesProduction.fighterPlane.completion = true;
+              state.dataList.fighterPlane.repetition = false;
+              state.dataList.fighterPlane.completion = true;
             });
           }
         },

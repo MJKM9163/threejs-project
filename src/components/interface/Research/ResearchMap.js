@@ -331,7 +331,7 @@ export const ResearchMap = () => {
                     e.target.parentElement.style.backgroundColor = "#00ce5d";
 
                     for (let name in researchList[item].AddStructure) {
-                      screenStore.getState().resourcesProduction[name].research = true;
+                      screenStore.getState().dataList[name].research = true;
                     }
                     researchStore.getState().completionList.push(item);
                     if (researchList[item].AddResources !== null) {

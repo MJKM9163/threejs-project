@@ -14,6 +14,7 @@ import { LeftInfoBox } from "../../interface/Infos/LeftInfoBox";
 import { OrbitLine } from "../OrbitLine";
 import { UnknownModel } from "./UnknownModel";
 import { effectSound } from "../../../hooks/stores/effectSound";
+import { planetDamageCalculation } from "../../../hooks/damageCalculation";
 
 let unknownR = 0;
 let unknownPname = null;
@@ -49,10 +50,9 @@ export const Unknown = ({ position, control }) => {
     type: "Static",
     args: [argsSize["small"]],
     onCollide: (e) => {
+      planetDamageCalculation(2, e.body.name);
       const data = planetStore.getState().planetDurability;
-      if (e.body.name === "enemybasic") {
-        planetStore.setState((state) => (state.planetDurability[2].D -= 20));
-      }
+
       if (data[2].D <= 0) {
         effectSound.getState().plantEx.action();
         delete boundingStore.getState().fighter.friendly[unknownPname];

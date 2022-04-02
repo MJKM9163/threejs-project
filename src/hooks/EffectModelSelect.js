@@ -7,11 +7,13 @@ export const EffectModelSelect = (pEffectArray, nEffectArray) => {
   const regex = / /gi;
   const pEffectModels = useRef(effectStore.getState().positiveEffectModels);
   //const nEffectModels = useRef(effectStore.getState().negativeEffectModels);
-
   const final = [];
+  console.log(pEffectArray);
   for (let i = 0; i < pEffectArray.length; i++) {
-    if (pEffectArray[i].replace(regex, "") in pEffectModels.current === true) {
-      final.push(pEffectModels.current[pEffectArray[i].replace(regex, "")]);
+    console.log(pEffectArray[i]);
+    console.log(pEffectArray[i].name);
+    if (pEffectArray[i].name.replace(regex, "") in pEffectModels.current === true) {
+      final.push(pEffectModels.current[pEffectArray[i].name.replace(regex, "")]);
     }
   }
   //console.log(pEffectArray);

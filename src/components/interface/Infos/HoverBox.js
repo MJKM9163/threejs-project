@@ -104,19 +104,18 @@ const HoverInfoContainer = styled.div`
 `;
 
 export const HoverBox = () => {
-  const resourcesProduction = screenStore.getState().resourcesProduction;
+  const dataList = screenStore.getState().dataList;
   const hoverCheck = screenStore((state) => state.hoverCheck);
+
   return (
     <HoverInfoContainer hoverCheck={hoverCheck !== false ? true : false}>
-      <div className="imageName">
-        {resourcesProduction[hoverCheck === false ? "potato" : hoverCheck].name}
-      </div>
-      {Object.keys(resourcesProduction).map((item, index) => (
+      <div className="imageName">{dataList[hoverCheck === false ? "potato" : hoverCheck].name}</div>
+      {Object.keys(dataList).map((item, index) => (
         <div key={item + index + " 박스"} className="imageBox">
           <img
             key={item + index + " 이미지"}
             className="image"
-            src={resourcesProduction[item].img}
+            src={dataList[item].img}
             alt={`${item + " 이미지"}`}
             style={
               hoverCheck === item ? { opacity: "1", zIndex: "100", display: "block" } : { display: "none" }
@@ -127,8 +126,8 @@ export const HoverBox = () => {
             style={
               hoverCheck === item ? { opacity: "1", zIndex: "100", display: "block" } : { display: "none" }
             }>
-            {resourcesProduction[item].description}
-            {resourcesProduction[item].cost !== undefined ? (
+            {dataList[item].description}
+            {dataList[item].cost !== undefined ? (
               <div className="cost-add">
                 <div className="costTitle">비용</div>
                 <span className="costText cF">
@@ -137,144 +136,124 @@ export const HoverBox = () => {
                     width={25}
                     height={25}
                     alt={`${item + " 식량 이미지"}`}></img>
-                  {Math.floor(resourcesProduction[item].cost.food)}
+                  {Math.floor(dataList[item].cost.food)}
                 </span>
-                {resourcesProduction[item].cost.titanium > 0 ? (
+                {dataList[item].cost.titanium > 0 ? (
                   <span className="costText cT">
                     <img
                       src="images/resources/icons/titanium.png"
                       width={25}
                       height={25}
                       alt={`${item + " 티타늄 이미지"}`}></img>
-                    {Math.floor(resourcesProduction[item].cost.titanium)}
+                    {Math.floor(dataList[item].cost.titanium)}
                   </span>
                 ) : null}
-                {resourcesProduction[item].cost.orichalcon > 0 ? (
+                {dataList[item].cost.orichalcon > 0 ? (
                   <span className="costText cO">
                     <img
                       src="images/resources/icons/orichalcon.png"
                       width={25}
                       height={25}
                       alt={`${item + " 오리하르콘 이미지"}`}></img>
-                    {Math.floor(resourcesProduction[item].cost.orichalcon)}
+                    {Math.floor(dataList[item].cost.orichalcon)}
                   </span>
                 ) : null}
-                {typeof resourcesProduction[item].add === "object" ? (
+                {typeof dataList[item].add === "object" ? (
                   <div>
                     <div className="addTitle">효과</div>
-                    {resourcesProduction[item].add.food !== undefined ? (
+                    {dataList[item].add.food !== undefined ? (
                       <div
                         className="addText aF"
-                        style={
-                          resourcesProduction[item].add.food > 0 ? { color: "#82ff82" } : { color: "#ff5757" }
-                        }>
+                        style={dataList[item].add.food > 0 ? { color: "#82ff82" } : { color: "#ff5757" }}>
                         <img
                           src="images/resources/icons/corn.png"
                           width={20}
                           height={20}
                           alt={`${item + " 초당 식량 이미지"}`}></img>
-                        {resourcesProduction[item].add.food} /s
+                        {dataList[item].add.food} /s
                       </div>
                     ) : null}
-                    {resourcesProduction[item].add.gear !== undefined ? (
+                    {dataList[item].add.gear !== undefined ? (
                       <div
                         className="addText aG"
-                        style={
-                          resourcesProduction[item].add.gear > 0 ? { color: "#ffd29a" } : { color: "#ff5757" }
-                        }>
+                        style={dataList[item].add.gear > 0 ? { color: "#ffd29a" } : { color: "#ff5757" }}>
                         <img
                           src="images/resources/icons/gear.png"
                           width={20}
                           height={20}
                           alt={`${item + " 생산력 이미지"}`}></img>
-                        {resourcesProduction[item].add.gear}
+                        {dataList[item].add.gear}
                       </div>
                     ) : null}
-                    {resourcesProduction[item].add.science !== undefined ? (
+                    {dataList[item].add.science !== undefined ? (
                       <div
                         className="addText aS"
-                        style={
-                          resourcesProduction[item].add.science > 0
-                            ? { color: "#5fc4ff" }
-                            : { color: "#ff5757" }
-                        }>
+                        style={dataList[item].add.science > 0 ? { color: "#5fc4ff" } : { color: "#ff5757" }}>
                         <img
                           src="images/resources/icons/flask.png"
                           width={20}
                           height={20}
                           alt={`${item + " 과학 이미지"}`}></img>
-                        {resourcesProduction[item].add.science}
+                        {dataList[item].add.science}
                       </div>
                     ) : null}
-                    {resourcesProduction[item].add.happiness !== undefined ? (
+                    {dataList[item].add.happiness !== undefined ? (
                       <div
                         className="addText aH"
                         style={
-                          resourcesProduction[item].add.happiness > 0
-                            ? { color: "#f1ffb4" }
-                            : { color: "#ff5757" }
+                          dataList[item].add.happiness > 0 ? { color: "#f1ffb4" } : { color: "#ff5757" }
                         }>
                         <img
                           src="images/resources/icons/happiness.png"
                           width={18}
                           height={18}
                           alt={`${item + " 행복도 이미지"}`}></img>
-                        {resourcesProduction[item].add.happiness}
+                        {dataList[item].add.happiness}
                       </div>
                     ) : null}
-                    {resourcesProduction[item].add.barrier !== undefined ? (
+                    {dataList[item].add.barrier !== undefined ? (
                       <div
                         className="addText aB"
-                        style={
-                          resourcesProduction[item].add.barrier > 0
-                            ? { color: "#af68ff" }
-                            : { color: "#ff5757" }
-                        }>
+                        style={dataList[item].add.barrier > 0 ? { color: "#af68ff" } : { color: "#ff5757" }}>
                         <img
                           src="images/resources/icons/barrier.png"
                           width={20}
                           height={20}
                           alt={`${item + " 방어막 이미지"}`}></img>
-                        {resourcesProduction[item].add.barrier}
+                        {dataList[item].add.barrier}
                       </div>
                     ) : null}
-                    {resourcesProduction[item].add.titanium !== undefined ? (
+                    {dataList[item].add.titanium !== undefined ? (
                       <div
                         className="addText aT"
-                        style={
-                          resourcesProduction[item].add.titanium > 0
-                            ? { color: "#1c58ff" }
-                            : { color: "#ff5757" }
-                        }>
+                        style={dataList[item].add.titanium > 0 ? { color: "#1c58ff" } : { color: "#ff5757" }}>
                         <img
                           src="images/resources/icons/titanium.png"
                           width={20}
                           height={20}
                           alt={`${item + " 티타늄 이미지"}`}></img>
-                        {resourcesProduction[item].add.titanium} /s
+                        {dataList[item].add.titanium} /s
                       </div>
                     ) : null}
-                    {resourcesProduction[item].add.orichalcon !== undefined ? (
+                    {dataList[item].add.orichalcon !== undefined ? (
                       <div
                         className="addText aO"
                         style={
-                          resourcesProduction[item].add.orichalcon > 0
-                            ? { color: "#ff6a7d" }
-                            : { color: "#ff5757" }
+                          dataList[item].add.orichalcon > 0 ? { color: "#ff6a7d" } : { color: "#ff5757" }
                         }>
                         <img
                           src="images/resources/icons/orichalcon.png"
                           width={20}
                           height={20}
                           alt={`${item + " 오리하르콘 이미지"}`}></img>
-                        {resourcesProduction[item].add.orichalcon} /s
+                        {dataList[item].add.orichalcon} /s
                       </div>
                     ) : null}
                   </div>
                 ) : (
                   <div>
                     <div className="addTitle">추가</div>
-                    <div className="addText aTT">{resourcesProduction[item].add}</div>
+                    <div className="addText aTT">{dataList[item].add}</div>
                   </div>
                 )}
               </div>

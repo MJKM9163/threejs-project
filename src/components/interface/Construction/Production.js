@@ -103,6 +103,7 @@ export const Production = ({ allData }) => {
 
   const gear = useRef(planetStore.getState().allResources.gear);
   const resources = useRef(planetStore.getState().allResources);
+  const productionList = screenStore((state) => state.dataList);
 
   const warningAudio = useMemo(() => new Audio("soundEffects/lackOfResources.mp3"), []);
 
@@ -119,7 +120,7 @@ export const Production = ({ allData }) => {
     );
   });
 
-  const numUp = (delay, awaitArray, production) => {
+  const numUp = (delay, awaitArray, productionList) => {
     if (wCheck === false) {
       wCheck = true;
       wUp = setInterval(() => {
@@ -127,29 +128,28 @@ export const Production = ({ allData }) => {
         if (awaitArray[0][1] <= wI) {
           clearTimeout(wUp);
           effectSound.getState().conCompletion.action();
-          if (production[awaitArray[0][0]].repetition) {
-            production[awaitArray[0][0]].completion = false;
+          if (productionList[awaitArray[0][0]].repetition) {
+            productionList[awaitArray[0][0]].completion = false;
           } else {
-            production[awaitArray[0][0]].completion = true;
+            productionList[awaitArray[0][0]].completion = true;
           }
-          production[awaitArray[0][0]].event();
-          screenStore.setState({
-            resourcesProduction: allData.resourcesProduction,
-          });
-          for (let r in production[awaitArray[0][0]].add) {
+          productionList[awaitArray[0][0]].event();
+          screenStore.setState((state) => (state.dataList.productionList = productionList));
+
+          for (let r in productionList[awaitArray[0][0]].add) {
             if (r === "food") {
               // 임시 코드
               for (let item in planetStore.getState().planetResources) {
                 planetStore.getState().planetResources[item].resources.food =
                   planetStore.getState().planetResources[item].resources.food +
-                  production[awaitArray[0][0]].add[r];
+                  productionList[awaitArray[0][0]].add[r];
                 break;
               }
             } else {
               planetStore.setState({
                 allResources: {
                   ...planetStore.getState().allResources,
-                  [r]: planetStore.getState().allResources[r] + production[awaitArray[0][0]].add[r],
+                  [r]: planetStore.getState().allResources[r] + productionList[awaitArray[0][0]].add[r],
                 },
               });
             }
@@ -163,7 +163,7 @@ export const Production = ({ allData }) => {
           setReload(wI + 1); // 건설 완료 시점 랜더링 조정
           wI = 0;
           if (allData.awaitArray.length > 0) {
-            numUp(delay, awaitArray, production);
+            numUp(delay, awaitArray, productionList);
           }
         }
         setReload(wI); // Interval이 진행 될 떄 마다 랜더링 발생
@@ -173,7 +173,7 @@ export const Production = ({ allData }) => {
   // 20 / 100 = 0.2
   useEffect(() => {
     if (allData.awaitArray.length > 0) {
-      numUp(delay, allData.awaitArray, allData.resourcesProduction);
+      numUp(delay, allData.awaitArray, productionList);
     }
   });
 
@@ -182,37 +182,33 @@ export const Production = ({ allData }) => {
     <>
       <ProductionContainer>
         {allData.awaitArray}
-        {Object.keys(allData.resourcesProduction).map((item, index) =>
-          allData.resourcesProduction[item].research && !allData.resourcesProduction[item].completion ? (
+        {Object.keys(productionList).map((item, index) =>
+          productionList[item].research && !productionList[item].completion ? (
             <div
               className="productionInfo"
               key={index}
               onClick={(e) => {
                 if (
-                  allData.resourcesProduction[item].cost.food <= Math.floor(resources.current.food) &&
-                  allData.resourcesProduction[item].cost.titanium <= Math.floor(resources.current.titanium) &&
-                  allData.resourcesProduction[item].cost.orichalcon <=
-                    Math.floor(resources.current.orichalcon)
+                  productionList[item].cost.food <= Math.floor(resources.current.food) &&
+                  productionList[item].cost.titanium <= Math.floor(resources.current.titanium) &&
+                  productionList[item].cost.orichalcon <= Math.floor(resources.current.orichalcon)
                 ) {
                   planetStore.setState({
                     allResources: {
                       ...resources.current,
-                      food: resources.current.food - allData.resourcesProduction[item].cost.food,
-                      titanium: resources.current.titanium - allData.resourcesProduction[item].cost.titanium,
-                      orichalcon:
-                        resources.current.orichalcon - allData.resourcesProduction[item].cost.orichalcon,
+                      food: resources.current.food - productionList[item].cost.food,
+                      titanium: resources.current.titanium - productionList[item].cost.titanium,
+                      orichalcon: resources.current.orichalcon - productionList[item].cost.orichalcon,
                     },
                   });
-                  allData.awaitArray.push([item, allData.resourcesProduction[item].max]);
+                  allData.awaitArray.push([item, productionList[item].max]);
 
                   screenStore.setState({
                     awaitArray: allData.awaitArray,
                   });
 
-                  allData.resourcesProduction[item].completion = "progress";
-                  screenStore.setState({
-                    resourcesProduction: allData.resourcesProduction,
-                  });
+                  productionList[item].completion = "progress";
+                  screenStore.setState((state) => (state.dataList.productionList = productionList));
 
                   setRender(!render);
                   screenStore.setState({ hoverCheck: false });
@@ -223,8 +219,8 @@ export const Production = ({ allData }) => {
               }}
               onMouseEnter={() => screenStore.setState({ hoverCheck: item })}
               onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
-              <img className="image" src={allData.resourcesProduction[item].img} alt={"건물 이미지"}></img>
-              <div className="imageName">{allData.resourcesProduction[item].name}</div>
+              <img className="image" src={productionList[item].img} alt={"건물 이미지"}></img>
+              <div className="imageName">{productionList[item].name}</div>
             </div>
           ) : null
         )}
@@ -242,10 +238,8 @@ export const Production = ({ allData }) => {
                   if (allData.awaitArray[0][0] === item[0]) {
                     wI = 0;
                   }
-                  allData.resourcesProduction[item[0]].completion = false;
-                  screenStore.setState({
-                    resourcesProduction: allData.resourcesProduction,
-                  });
+                  productionList[item[0]].completion = false;
+                  screenStore.setState((state) => (state.dataList.productionList = productionList));
 
                   allData.awaitArray.splice(index, 1);
                   screenStore.setState({
@@ -257,11 +251,8 @@ export const Production = ({ allData }) => {
                   setRender(!render);
                   console.log("대기 그림 클릭");
                 }}>
-                <img
-                  className="waitingImage"
-                  src={allData.resourcesProduction[item[0]].img}
-                  alt={"건물 이미지"}></img>
-                <div className="waitingName">{allData.resourcesProduction[item[0]].name}</div>
+                <img className="waitingImage" src={productionList[item[0]].img} alt={"건물 이미지"}></img>
+                <div className="waitingName">{productionList[item[0]].name}</div>
                 <div className="waitingTime">
                   {allData.awaitArray[0][0] === item[0]
                     ? Math.floor((wI / allData.awaitArray[0][1]) * 100) + " %"

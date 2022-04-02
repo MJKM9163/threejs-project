@@ -1,21 +1,21 @@
-import react, { useRef } from "react";
+import { useRef } from "react";
 import { effectStore } from "./stores/effectStore";
 
 export const EffectSelect = (sizeNum) => {
   const pEffect = useRef(effectStore.getState().positiveEffects);
-  const nEffect = useRef(effectStore.getState().negativeEffect);
+  const nEffect = useRef(effectStore.getState().negativeEffects);
   const pArray = [];
   const nArray = [];
   const pResult = [];
   const NResult = [];
   const final = [];
-  //   const sizeCheck = sizeNum.current.geometry.parameters.radius;
-  const sizeCheck = sizeNum;
-  const max = sizeCheck >= 350 ? 4 : sizeCheck >= 180 ? 2 : 1;
+  const max = sizeNum >= 350 ? 4 : sizeNum >= 180 ? 2 : 1;
 
   for (let i = 0; i < max; i++) {
     const pNum = Math.floor(Math.random() * pEffect.current.length);
     if (pArray.indexOf(pNum) === -1) {
+      console.log(pArray);
+      console.log(pNum);
       pArray.push(pNum);
     } else {
       i--;

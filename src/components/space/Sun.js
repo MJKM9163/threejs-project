@@ -9,6 +9,7 @@ import { screenStore } from "../../hooks/stores/screenStore";
 import { TapPlanet } from "../interface/Infos/TapPlanet";
 import { LeftInfoBox } from "../interface/Infos/LeftInfoBox";
 import { effectSound } from "../../hooks/stores/effectSound";
+import { planetDamageCalculation } from "../../hooks/damageCalculation";
 
 let sunRY = 0.5;
 
@@ -44,11 +45,10 @@ export const Sun = () => {
     rotation: [0, 0, 0],
     args: [argsSize["large"] + 500],
     onCollide: (e) => {
+      planetDamageCalculation(0, e.body.name);
       const data = planetStore.getState().planetDurability;
-      if (e.body.name === "enemybasic") {
-        planetStore.setState((state) => (state.planetDurability[0].D -= 20));
-      }
-      if (data[0].D <= 0) {
+
+      if (data[0].durability <= 0) {
         effectSound.getState().plantEx.action();
         screenStore.setState({ gameOverCheck: true });
       }

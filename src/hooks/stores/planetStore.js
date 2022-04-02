@@ -49,7 +49,7 @@ export const planetStore = create(
     // },
 
     typeResearchCheck: {
-      rava: false,
+      lava: false,
       ice: false,
       earth: true,
     },
@@ -74,9 +74,9 @@ export const planetStore = create(
 
     // 중심부터 카운트 / 행성 내구도
     planetDurability: [
-      { D: 1000, ON: true },
-      { D: 500, ON: true },
-      { D: 500, ON: true },
+      { durability: 1000, ON: true },
+      { durability: 500, ON: true },
+      { durability: 500, ON: true },
     ],
   }))
 );
