@@ -100,7 +100,7 @@ export const eventStore = create(
       rainbow: {
         name: "문명의 흔적",
         description:
-          "알 수 없는 문명의 흔적을 발견했습니다. 계단식 농업과 거대한 구조물을 보니 상당한 농지라는걸 알 수 있습니다. 지금은 생명체를 찾기 힘들고 땅이 오염되어 사용할 수도 없습니다.",
+          "알 수 없는 문명의 흔적을 발견했습니다. 계단식 형태과 거대한 구조물을 보니 상당한 농업지대였음을 알 수 있습니다. 지금은 이 땅에선 생명체를 찾기 힘들며 토지가 오염되어 사용할 수도 없습니다.",
         assentText: "땅을 복구한다.",
         assent: () => {
           screenStore.setState({ exCheck: false });
@@ -166,10 +166,12 @@ export const eventStore = create(
         description: "우리의 행성계에서 새로운 행성을 발견했습니다.",
         assentText: "행성에 조사대를 먼저 보낸다.",
         assent: () => {
+          planetStore.setState((state) => (state.typeResearchCheck.ice = true));
           screenStore.setState({ sExCheck: false });
         },
         dissentText: "행성 환경을 먼저 확인한다.",
         dissent: () => {
+          planetStore.setState((state) => (state.typeResearchCheck.ice = true));
           screenStore.setState({ sExCheck: false });
         },
         img: "/images/events/newPlanet.jpg",
