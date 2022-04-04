@@ -9,31 +9,27 @@ let earthRY = 0;
 let earthRZ = 0;
 
 export const EarthModel = ({ eartheffects }) => {
-  const { nodes, materials } = useGLTF("/mainPlanet/scene.gltf");
-  const force = useGLTF("/sphereForce/scene.gltf");
+  const { nodes, materials } = useGLTF("/space/mainPlanet/scene.gltf");
+  const force = useGLTF("/space/sphereForce/scene.gltf");
   const check = planetStore((state) => state.planetDurability);
   const pCCheck = screenStore((state) => state.planetCurtainCheck);
   const effectRef = useRef();
   const effectModels = EffectModelSelect(eartheffects[0], eartheffects[1]);
 
   useFrame(() => {
-    effectRef.current.rotation.set(0, (earthRY += 0.005), (earthRZ -= 0.007));
+    effectRef.current.rotation.set(0, 0, (earthRZ += 0.005));
   });
 
   return (
     <group>
-      {check[1].D <= 0 ? null : (
+      {check[1].durability <= 0 ? null : (
         <group>
           <group rotation={[-Math.PI / 2, 0, 0]} scale={1.9}>
             <mesh castShadow geometry={nodes.mesh_0.geometry} material={materials.Material__25} />
             <mesh geometry={nodes.mesh_1.geometry} material={materials.Material__65} />
             <group ref={effectRef}>
               {effectModels.map((model, index) => (
-                <group
-                  rotation={[Math.PI / 1, 0.3, -Math.PI / 2]}
-                  position={[150, 50, 0]}
-                  scale={0.5}
-                  key={index}>
+                <group rotation={[Math.PI / 1, 0.3, -Math.PI / 2]} scale={0.5} key={index}>
                   {model}
                 </group>
               ))}

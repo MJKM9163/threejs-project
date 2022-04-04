@@ -59,9 +59,9 @@ let satelliteOption = {
 };
 
 export function MultipurposeSatellite({ position, num }) {
-  const { nodes } = useGLTF("/multipurposeSatellite/scene.gltf");
-  const defense = useGLTF("/DefenseSatellite/scene.gltf");
-  const dust = useGLTF("/dustExtractor/scene.gltf");
+  const { nodes } = useGLTF("/space/multipurposeSatellite/scene.gltf");
+  const defense = useGLTF("/space/DefenseSatellite/scene.gltf");
+  const dust = useGLTF("/space/dustExtractor/scene.gltf");
   const missileModel = useGLTF("flyingObjects/projectiles/explosive/scene.gltf");
 
   let launch = false;
@@ -77,7 +77,6 @@ export function MultipurposeSatellite({ position, num }) {
       const data = screenStore.getState().satellitePos;
       if (e.body.name === "enemybasic") {
         screenStore.setState((state) => (state.satellitePos[num].D -= 20));
-        console.log(screenStore.getState().satellitePos[num].D);
       }
       if (data[num].D <= 0) {
         effectSound.getState().fighter.FlightExplosionSound.action();
@@ -100,7 +99,7 @@ export function MultipurposeSatellite({ position, num }) {
       launch = false;
       let pos = new Vector3(0, 300, 0);
       pos.add(BS.current.geometry.boundingSphere.center);
-      //effectSound.getState().fighter.FlightExplosionSound.action();
+      effectSound.getState().fighter.FlightExplosionSound.action();
       missilesApi.position.set(...Object.values(pos));
       missilesApi.rotation.set(0, -Math.PI / 2, 0);
     },
@@ -153,7 +152,6 @@ export function MultipurposeSatellite({ position, num }) {
       boundingUpdate();
 
       if (boundingDetect() && satelliteOption[num].T === "defense") {
-        //console.log("감지 통과");
         let [X, Y, Z] = moveFun();
         missilesApi.velocity.set(X * 3.5, Y * 3.5, Z * 3.5);
         if (launch === false) {
@@ -340,4 +338,4 @@ export function MultipurposeSatellite({ position, num }) {
     </group>
   );
 }
-useGLTF.preload("/multipurposeSatellite/scene.gltf");
+useGLTF.preload("/space/multipurposeSatellite/scene.gltf");

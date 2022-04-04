@@ -2,7 +2,6 @@ import { useSphere } from "@react-three/cannon";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useState } from "react";
-import { boundingStore } from "../../hooks/stores/boundingStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 
 export const SatelliteField = () => {
@@ -10,7 +9,7 @@ export const SatelliteField = () => {
   const satelliteMapCheck = screenStore((state) => state.satelliteMapOnOff);
   const satelliteNum = screenStore((state) => state.satellite);
   const satellitePos = screenStore((state) => state.satellitePos);
-  const { nodes } = useGLTF("/multipurposeSatellite/scene.gltf");
+  const { nodes } = useGLTF("/space/multipurposeSatellite/scene.gltf");
   const [pos, setPos] = useState([0, -5000000, 0]);
 
   const [ref, api] = useSphere(() => ({
@@ -23,7 +22,6 @@ export const SatelliteField = () => {
     api.position.set(...pos);
   });
 
-  console.log("위성 필드");
   return (
     <group>
       {satelliteMapCheck === true ? (

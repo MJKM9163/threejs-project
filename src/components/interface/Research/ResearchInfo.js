@@ -73,8 +73,6 @@ const ResearchInfoContainer = styled.span`
 `;
 
 export const ResearchInfo = ({ info, pos, list, addStructure }) => {
-  console.log("연구 인포");
-  console.log(list);
   return (
     <ResearchInfoContainer info={info} pos={pos}>
       <span className="flexBox">

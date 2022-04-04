@@ -4,7 +4,7 @@ import starField3 from "../../images/starField3.jpg";
 import starField2 from "../../images/starField2.jpg";
 import starField1 from "../../images/starField1.jpg";
 import { KeyboardControls } from "../../hooks/keyboardControls";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 
 let x = -2000;
 let z = -3000;
@@ -18,11 +18,8 @@ export const Background = () => {
   const textureStarField1 = useMemo(() => new TextureLoader().load(starField1), []);
   const textureStarField2 = useMemo(() => new TextureLoader().load(starField2), []);
   const textureStarField3 = useMemo(() => new TextureLoader().load(starField3), []);
-
-  const { camera } = useThree();
   const { moveForward, moveBackward, moveLeft, moveRight } = KeyboardControls();
 
-  console.log("배경 랜더링");
   useFrame(() => {
     if (moveLeft && x > -5000) {
       x -= 100;

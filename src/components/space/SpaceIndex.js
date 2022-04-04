@@ -12,6 +12,7 @@ export const SpaceIndex = () => {
   const earthOrbitRef = useRef();
   const unknownOrbitRef = useRef();
 
+  const check1 = planetStore((state) => state.planetDurability[0].ON);
   const check2 = planetStore((state) => state.planetDurability[1].ON);
   const check3 = planetStore((state) => state.planetDurability[2].ON);
 
@@ -31,7 +32,7 @@ export const SpaceIndex = () => {
 
   return (
     <group>
-      <Sun />
+      {check1 === true ? <Sun /> : null}
       <group ref={earthOrbitRef}>
         {check2 === true ? <Earth position={[3000, 0, 0]} control={control} /> : null}
       </group>

@@ -35,7 +35,6 @@ export const ResearchWarning = ({ pos, warning, setWarning, message }) => {
   effet = setTimeout(() => {
     setWarning(false);
   }, 1500);
-  //console.log("연구 경고");
   return (
     <WarningBox pos={pos} warning={warning}>
       {message}

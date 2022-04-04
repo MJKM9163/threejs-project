@@ -158,7 +158,6 @@ export const ResearchMap = () => {
     [isDrag]
   );
 
-  console.log("연구창 실행");
   return (
     <ResearchMapBox check={researchMapOnOff}>
       <span className="resourcesInfo">

@@ -58,7 +58,7 @@ export const Earth = ({ position, control }) => {
       planetDamageCalculation(1, e.body.name);
       const data = planetStore.getState().planetDurability;
 
-      if (data[1].D <= 0) {
+      if (data[1].durability <= 0) {
         effectSound.getState().plantEx.action();
         delete boundingStore.getState().fighter.friendly[earthPname];
         delete planetStore.getState().planetResources[earthPname];
@@ -88,7 +88,6 @@ export const Earth = ({ position, control }) => {
     }
   });
 
-  console.log("earth 랜더링 확인");
   return (
     <>
       <group position={position} dispose={null}>

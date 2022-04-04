@@ -37,7 +37,7 @@ export const Sun = () => {
     );
   });
 
-  const { nodes, materials } = useGLTF("/sun/scene.gltf");
+  const { nodes, materials } = useGLTF("/space/sun/scene.gltf");
   const [sunRef, sunApi] = useSphere(() => ({
     mass: 100,
     type: "Static",
@@ -51,6 +51,8 @@ export const Sun = () => {
       if (data[0].durability <= 0) {
         effectSound.getState().plantEx.action();
         screenStore.setState({ gameOverCheck: true });
+        delete boundingStore.getState().fighter.friendly["태양"];
+        planetStore.setState((state) => (state.planetDurability[0].ON = false));
       }
     },
   }));
@@ -75,7 +77,6 @@ export const Sun = () => {
     }
   });
 
-  console.log("태양 랜더링 확인");
   return (
     <>
       <group ref={sunRef} scale={(argsSize["large"] + 500) / 10} dispose={null}>
