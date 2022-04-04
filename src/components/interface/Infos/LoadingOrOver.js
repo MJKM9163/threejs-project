@@ -78,7 +78,7 @@ export const Loading = () => {
 
 export const Over = () => {
   const check = screenStore((state) => state.gameOverCheck);
-  console.log(check);
+
   return (
     <OBox check={check}>
       <div className="ot">중심 행성이 파괴되었습니다!</div>

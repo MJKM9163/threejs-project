@@ -177,7 +177,6 @@ export const Production = ({ allData }) => {
     }
   });
 
-  console.log("생산 선택창 랜더링");
   return (
     <>
       <ProductionContainer>
@@ -249,7 +248,6 @@ export const Production = ({ allData }) => {
                   clearTimeout(wUp);
                   wCheck = false;
                   setRender(!render);
-                  console.log("대기 그림 클릭");
                 }}>
                 <img className="waitingImage" src={productionList[item[0]].img} alt={"건물 이미지"}></img>
                 <div className="waitingName">{productionList[item[0]].name}</div>

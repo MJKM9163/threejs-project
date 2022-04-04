@@ -8,8 +8,6 @@ const TapPlanetDiv = styled.div`
   height: 200px;
   color: white;
   transform: translate(10%, -50%);
-  //background-color: red;
-  //pointer-events: none;
 
   .imageBox {
     pointer-events: none;
@@ -35,7 +33,6 @@ const TapPlanetDiv = styled.div`
   svg {
     width: 100px;
     height: 200px;
-    //background-color: #a17676;
     circle {
       transition: 0.2s;
     }
@@ -45,7 +42,6 @@ const TapPlanetDiv = styled.div`
 export const TapPlanet = ({ planet }) => {
   const [opacity, setOpacity] = useState({ top: 0.8, buttom: 0.8 });
 
-  console.log("tap 창 랜더링");
   return (
     <TapPlanetDiv>
       <div className="imageBox">

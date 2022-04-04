@@ -99,31 +99,10 @@ const InfoTextBox = styled.div`
 
     .positive {
       color: #899eff;
+      //background-color: #e63232;
     }
     .negative {
       color: #ff8989;
-    }
-
-    .effectHoverBox {
-      .effectHoverD {
-      }
-      .effectHoverR {
-        width: 150px;
-        height: 50px;
-        background-color: gray;
-        .EHF {
-          color: #94ff90;
-        }
-        .EHG {
-          color: #ffd45d;
-        }
-        .EHS {
-          color: #88bbff;
-        }
-        .EHH {
-          color: #f6ffa4;
-        }
-      }
     }
   }
 
@@ -166,32 +145,150 @@ const InfoTextBox = styled.div`
   }
 `;
 
-const EffectHoverBox = () => {
+const EffectHover = styled.div`
+  position: absolute;
+  top: 0px;
+  left: -125%;
+  width: 450px;
+  height: 500px;
+  background-color: #252525c1;
+  color: white;
+  opacity: 1;
+  z-index: 5000000;
+  display: ${(props) => (props.check ? "block" : "none")};
+  outline: 1px solid black;
+
+  .effectHoverD {
+    margin: 1px 0px 5px 2px;
+  }
+
+  .effectHoverR {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid #97979742;
+    padding-top: 5px;
+
+    .icon {
+      vertical-align: top;
+      margin: 0px 9px 0px 3px;
+    }
+    .eText {
+      margin: 0px 0px 5px 5px;
+    }
+    .EE {
+      margin: 0px 0px 5px 5px;
+    }
+    .EHF {
+      color: #94ff90;
+    }
+    .EHG {
+      color: #ffd45d;
+    }
+    .EHS {
+      color: #88bbff;
+    }
+    .EHH {
+      color: #f6ffa4;
+    }
+  }
+`;
+
+const EffectHoverBox = ({ data, allData }) => {
+  const { name, resources, description } = data;
   const effectHoverCheck = screenStore((state) => state.effectHoverCheck);
   return (
-    <div className="effectHoverBox">
-      <div className="effectHoverD">{effectHoverCheck[0]}</div>
+    <EffectHover
+      check={effectHoverCheck.name === name ? true : false}
+      className="effectHoverBox"
+      onMouseEnter={() => screenStore.setState({ effectHoverCheck: false })}>
+      {allData.map((item, index) => (
+        <img
+          className="effectImg"
+          src={item.img}
+          alt={item}
+          width="450px"
+          height="253px"
+          key={"effectImg" + index}
+          style={
+            item.name === name ? { opacity: "1", zIndex: "100", display: "block" } : { display: "none" }
+          }></img>
+      ))}
+      <div className="effectHoverD">{description}</div>
       <div className="effectHoverR">
-        {effectHoverCheck[1].food !== undefined ? (
-          <span className="EHF">{effectHoverCheck[1].food}</span>
+        <span className="eText">효과</span>
+        {resources.food !== undefined ? (
+          <span className="EHF EE" style={resources.food > 0 ? { color: "#82ff82" } : { color: "#ff5757" }}>
+            <img
+              className="icon"
+              src="images/resources/icons/corn.png"
+              width={25}
+              height={25}
+              alt="식량"></img>
+            {resources.food} /s
+          </span>
         ) : null}
-        {effectHoverCheck[1].gear !== undefined ? (
-          <span className="EHG">{effectHoverCheck[1].gear}</span>
+        {resources.gear !== undefined ? (
+          <span className="EHG EE" style={resources.gear > 0 ? { color: "#ffd29a" } : { color: "#ff5757" }}>
+            <img
+              className="icon"
+              src="images/resources/icons/gear.png"
+              width={25}
+              height={25}
+              alt="생산력"></img>
+            {resources.gear}
+          </span>
         ) : null}
-        {effectHoverCheck[1].science !== undefined ? (
-          <span className="EHS">{effectHoverCheck[1].science}</span>
+        {resources.science !== undefined ? (
+          <span
+            className="EHS EE"
+            style={resources.science > 0 ? { color: "#5fc4ff" } : { color: "#ff5757" }}>
+            <img
+              className="icon"
+              src="images/resources/icons/flask.png"
+              width={25}
+              height={25}
+              alt="과학"></img>
+            {resources.science}
+          </span>
         ) : null}
-        {effectHoverCheck[1].happiness !== undefined ? (
-          <span className="EHH">{effectHoverCheck[1].happiness}</span>
+        {resources.happiness !== undefined ? (
+          <span
+            className="EHH EE"
+            style={resources.happiness > 0 ? { color: "#f1ffb4" } : { color: "#ff5757" }}>
+            <img
+              className="icon"
+              src="images/resources/icons/happiness.png"
+              width={25}
+              height={25}
+              alt="행복도"></img>
+            {resources.happiness}
+          </span>
         ) : null}
       </div>
-    </div>
+    </EffectHover>
   );
 };
 
+const effectOn = (effectData) => {
+  for (let pAndn = 0; pAndn < effectData.effect.length; pAndn++) {
+    for (let e = 0; e < effectData.effect[pAndn].length; e++) {
+      for (let [resourcesName, resourcesValue] of Object.entries(effectData.effect[pAndn][e].resources)) {
+        if (resourcesName === "food") {
+          planetStore.setState(
+            (state) => (state.planetResources[effectData.name].resources[resourcesName] += resourcesValue)
+          );
+        } else {
+          planetStore.setState((state) => (state.allResources[resourcesName] += resourcesValue));
+        }
+      }
+    }
+  }
+};
+
+let pCost = 0;
 export const PlanetInfo = () => {
   const zoom = screenStore((state) => state.zoom);
-  const effectHoverCheck = screenStore((state) => state.effectHoverCheck);
   const typeData = planetStore.getState().types;
   const planetNameDList = planetStore.getState().explanation;
   const resources = planetStore((state) => state.planetResources);
@@ -242,12 +339,12 @@ export const PlanetInfo = () => {
                         key={index}
                         onMouseEnter={() =>
                           screenStore.setState({
-                            effectHoverCheck: [item.description, item.resources, item.name],
+                            effectHoverCheck: item,
                           })
                         }
                         onMouseLeave={() => screenStore.setState({ effectHoverCheck: false })}>
                         {item.name}
-                        {effectHoverCheck[2] === item.name ? <EffectHoverBox /> : null}
+                        <EffectHoverBox data={item} allData={planetData.effect[0]} />
                       </li>
                     ))
                   : null}
@@ -259,12 +356,12 @@ export const PlanetInfo = () => {
                         key={index}
                         onMouseEnter={() =>
                           screenStore.setState({
-                            effectHoverCheck: [item.description, item.resources, item.name],
+                            effectHoverCheck: item,
                           })
                         }
                         onMouseLeave={() => screenStore.setState({ effectHoverCheck: false })}>
                         {item.name}
-                        {effectHoverCheck[2] === item.name ? <EffectHoverBox /> : null}
+                        <EffectHoverBox data={item} allData={planetData.effect[1]} />
                       </li>
                     ))
                   : null}
@@ -277,21 +374,30 @@ export const PlanetInfo = () => {
                 className="start"
                 style={{ display: planetData.main ? "none" : "block" }}
                 onClick={() => {
-                  planetStore.setState({
-                    planetResources: {
-                      ...resources,
-                      [planetData.name]: {
-                        resources: typeData[planetData.type].resources,
-                        develop: true,
-                        hide: true,
+                  if (planetStore.getState().allResources.food >= pCost) {
+                    pCost += 1500;
+                    planetStore.setState({
+                      planetResources: {
+                        ...resources,
+                        [planetData.name]: {
+                          resources: typeData[planetData.type].resources,
+                          develop: true,
+                          hide: true,
+                        },
                       },
-                    },
-                  });
-                  planetStore.setState((state) => state.planetDurability);
-
-                  screenStore.setState({ zoom: false });
-                  screenStore.setState({ orbit: false });
-                }}>
+                    });
+                    //planetStore.setState((state) => state.planetDurability);
+                    effectOn(planetData);
+                    screenStore.setState({ zoom: false });
+                    screenStore.setState({ orbit: false });
+                  }
+                }}
+                onMouseOver={(e) =>
+                  planetStore.getState().allResources.food < pCost
+                    ? (e.target.innerText = Math.floor(pCost) + " 식량이 필요!")
+                    : null
+                }
+                onMouseOut={(e) => (e.target.innerText = "개척 시작")}>
                 개척 시작
               </button>
             )}
