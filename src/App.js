@@ -64,11 +64,9 @@ document.addEventListener("contextmenu", RightClick);
 document.addEventListener("mouseup", mouseUpEventAllScreen);
 
 function App() {
-  console.log("메인 랜더링 확인");
   return (
     <>
       <InterfaceIndex />
-
       <Canvas
         shadows
         colorManagement
