@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { planetStore } from "./stores/planetStore";
 import { researchStore } from "./stores/researchStore";
 
@@ -83,7 +83,6 @@ export const AllResourcesFun = () => {
       }
       planetStore.getState().allResources.science = allResources.current.science + science;
     }
-    //console.log("과학 랜더링");
   };
 
   const TitaniumRresources = () => {
@@ -91,7 +90,6 @@ export const AllResourcesFun = () => {
     for (let item in planetResources) {
       planetStore.getState().allResources.titanium += planetResources[item].resources.titanium;
     }
-    console.log("티타늄 랜더링");
   };
 
   const OrichalconRresources = () => {
@@ -99,7 +97,6 @@ export const AllResourcesFun = () => {
     for (let item in planetResources) {
       planetStore.getState().allResources.orichalcon += planetResources[item].resources.orichalcon;
     }
-    console.log("오리하르콘 랜더링");
   };
 
   FoodResources();
@@ -107,7 +104,6 @@ export const AllResourcesFun = () => {
   ScienceRresources();
   //TitaniumRresources();
   //OrichalconRresources();
-  //console.log("자원 업데이트 함수");
   return null;
 };
 
