@@ -7,7 +7,7 @@ import { screenStore } from "./stores/screenStore";
 const DurabilityBarComponent = styled.div`
   opacity: ${(props) => (props.D >= 100 ? 0 : 1)};
   position: relative;
-  top: ${(props) => (props.name === "planet" ? "-30px" : "-15px")};
+  top: ${(props) => (props.name === "planet" ? "-50px" : "-15px")};
   left: -50%;
   width: 50px;
   height: 5px;
@@ -21,21 +21,30 @@ const DurabilityBarComponent = styled.div`
   }
 `;
 
-export const FighterDurabilityBar = ({ num, name }) => {
-  const data = boundingStore((state) => state.friendlyLive);
+export const FighterDurabilityBar = ({ num, name, d }) => {
+  const data = boundingStore((state) => state.friendlyLive[num].durability);
 
   return (
-    <DurabilityBarComponent D={data[num].durability} name={name}>
+    <DurabilityBarComponent D={(data / d) * 100} name={name}>
+      <div className={name} />
+    </DurabilityBarComponent>
+  );
+};
+
+export const EnemyDurabilityBar = ({ num, name, d }) => {
+  const data = boundingStore((state) => state.enemyLive[num].durability);
+
+  return (
+    <DurabilityBarComponent D={(data / d) * 100} name={name}>
       <div className={name} />
     </DurabilityBarComponent>
   );
 };
 
 export const PlanetDurabilityBar = ({ num, name, d }) => {
-  const data = planetStore((state) => state.planetDurability);
-
+  const data = planetStore((state) => state.planetDurability[num].durability);
   return (
-    <DurabilityBarComponent D={(data[num].durability / d) * 100} name={name}>
+    <DurabilityBarComponent D={(data / d) * 100} name={name}>
       <div className={name} />
     </DurabilityBarComponent>
   );

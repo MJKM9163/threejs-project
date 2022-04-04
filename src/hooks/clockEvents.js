@@ -24,7 +24,6 @@ export const ClockEvents = () => {
         clockN++;
         clockR = Number((Math.random() * (1.5 - 0.8) + 0.8).toFixed(2));
         eventStore.setState({ preEvent: eventSelect });
-        console.log("이벤트 실행");
         eventStore.setState((set) => (set.eventList[eventName].check = true));
         screenStore.setState({ eventCheck: true });
         effectSound.getState().event.basicEvent.action();

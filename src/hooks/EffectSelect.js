@@ -14,8 +14,6 @@ export const EffectSelect = (sizeNum) => {
   for (let i = 0; i < max; i++) {
     const pNum = Math.floor(Math.random() * pEffect.current.length);
     if (pArray.indexOf(pNum) === -1) {
-      console.log(pArray);
-      console.log(pNum);
       pArray.push(pNum);
     } else {
       i--;
