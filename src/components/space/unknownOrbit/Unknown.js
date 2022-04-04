@@ -53,7 +53,7 @@ export const Unknown = ({ position, control }) => {
       planetDamageCalculation(2, e.body.name);
       const data = planetStore.getState().planetDurability;
 
-      if (data[2].D <= 0) {
+      if (data[2].durability <= 0) {
         effectSound.getState().plantEx.action();
         delete boundingStore.getState().fighter.friendly[unknownPname];
         delete planetStore.getState().planetResources[unknownPname];
@@ -92,7 +92,6 @@ export const Unknown = ({ position, control }) => {
     }
   });
 
-  console.log("unknown 랜더링 확인");
   return (
     <>
       <group position={position} dispose={null}>

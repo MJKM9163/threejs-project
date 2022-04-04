@@ -1,11 +1,12 @@
 import React, { memo, useRef } from "react";
-import { useGLTF } from "@react-three/drei";
+import { Html, useGLTF } from "@react-three/drei";
 import { useBox, useSphere } from "@react-three/cannon";
 import { useFrame } from "@react-three/fiber";
 import { effectSound } from "../../hooks/stores/effectSound";
 import { boundingStore } from "../../hooks/stores/boundingStore";
 import { Vector3 } from "three";
 import { enemyDamageCalculation } from "../../hooks/damageCalculation";
+import { EnemyDurabilityBar } from "../../hooks/DurabilityBar";
 
 export const EnemyFighter = ({ position, rotation, num, adjust }) => {
   let FR = false;
@@ -29,6 +30,7 @@ export const EnemyFighter = ({ position, rotation, num, adjust }) => {
   const BS = useRef();
   const fighter = boundingStore.getState().fighter;
   const weapons = boundingStore.getState().weapons;
+  const durabilityDefault = boundingStore.getState().enemyData.basic.durability;
   const { nodes, materials } = useGLTF("flyingObjects/enemyFighter/scene.gltf");
   const missileModel = useGLTF("flyingObjects/projectiles/missile/scene.gltf");
 
@@ -157,10 +159,12 @@ export const EnemyFighter = ({ position, rotation, num, adjust }) => {
     }
   });
 
-  console.log("적 비행기");
   return (
     <group>
       <group ref={collideRef} dispose={null}>
+        <Html>
+          <EnemyDurabilityBar num={num} name={"fighter"} d={durabilityDefault} />
+        </Html>
         <mesh ref={move}>
           <sphereGeometry args={[100]} />
           <meshStandardMaterial opacity={0} transparent />

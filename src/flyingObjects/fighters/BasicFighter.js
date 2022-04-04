@@ -40,6 +40,7 @@ export const BasicFighter = ({ position, rotation, num, adjust }) => {
   const flyingMovePos = useRef(screenStore.getState().flyingMovePos);
   const weapons = boundingStore.getState().weapons;
   const fighter = boundingStore.getState().fighter;
+  const durabilityDefault = boundingStore.getState().friendlyData.basic.durability;
   const { nodes, materials } = useGLTF("flyingObjects/basicFighter/scene.gltf");
   const missileModel = useGLTF("flyingObjects/projectiles/missile/scene.gltf");
 
@@ -243,7 +244,7 @@ export const BasicFighter = ({ position, rotation, num, adjust }) => {
           e.eventObject.children[1].material.opacity = 0.3;
         }}>
         <Html>
-          <FighterDurabilityBar num={num} name={"fighter"} />
+          <FighterDurabilityBar num={num} name={"fighter"} d={durabilityDefault} />
         </Html>
         <mesh ref={selectUnit}>
           <sphereGeometry args={[150]} />

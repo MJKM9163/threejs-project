@@ -9,20 +9,20 @@ let unknownRY = 0;
 let unknownRZ = 0;
 
 export const UnknownModel = ({ unknownEffects }) => {
-  const { nodes, materials } = useGLTF("/iceSphere/scene.gltf");
-  const force = useGLTF("/sphereForce/scene.gltf");
+  const { nodes, materials } = useGLTF("/space/iceSphere/scene.gltf");
+  const force = useGLTF("/space/sphereForce/scene.gltf");
   const check = planetStore((state) => state.planetDurability);
   const pCCheck = screenStore((state) => state.planetCurtainCheck);
   const effectRef = useRef();
   const unknownModels = EffectModelSelect(unknownEffects[0], unknownEffects[1]);
 
   useFrame(() => {
-    effectRef.current.rotation.set(0, (unknownRY += 0.005), (unknownRZ -= 0.007));
+    effectRef.current.rotation.set(0, 0, (unknownRZ -= 0.007));
   });
 
   return (
     <group>
-      {check[2].D <= 0 ? null : (
+      {check[2].durability <= 0 ? null : (
         <group>
           <group dispose={null}>
             <group rotation={[-Math.PI / 2, 0, 0]}>
@@ -38,11 +38,7 @@ export const UnknownModel = ({ unknownEffects }) => {
             </group>
             <group ref={effectRef}>
               {unknownModels.map((model, index) => (
-                <group
-                  rotation={[Math.PI / 1, 0.3, -Math.PI / 2]}
-                  position={[150, 50, 0]}
-                  scale={0.5}
-                  key={index}>
+                <group rotation={[Math.PI / 1, 0.3, -Math.PI / 2]} scale={0.5} key={index}>
                   {model}
                 </group>
               ))}
