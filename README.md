@@ -9,6 +9,8 @@
 <img src="https://img.shields.io/badge/React+Three정리-000000?style=flat-square&logo=Notion&logoColor=white" width="180" height="35"/></a>
 <br/><br/>
   
+####  <a href="https://mjkm9163.github.io/index.html">게임 플레이!</a>
+  
 ## 시작 방법
   #### 행성을 클릭하고 개척하기를 누르세요!
   <img src="https://user-images.githubusercontent.com/78360207/162148238-d473c008-515b-4198-bf85-2a8980867804.gif"  width="297.5" height="172.55">
