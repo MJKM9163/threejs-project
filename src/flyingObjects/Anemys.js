@@ -31,29 +31,29 @@ export const Anemys = () => {
   const { clock } = useThree();
 
   useFrame(() => {
-    if (clock.elapsedTime > 650 && levelCheck[1] === false) {
+    if (clock.elapsedTime > 430 && levelCheck[1] === false) {
       levelCheck[1] = true;
       enemyLive[0] = enemyData.basic;
       boundingStore.setState({ enemyLive: [...enemyLive] });
-    } else if (clock.elapsedTime > 850 && levelCheck[2] === false) {
+    } else if (clock.elapsedTime > 750 && levelCheck[2] === false) {
       levelCheck[2] = true;
       for (let i = 0; i < 3; i++) {
         enemyLive[i] = enemyData.basic;
       }
       boundingStore.setState({ enemyLive: [...enemyLive] });
-    } else if (clock.elapsedTime > 1140 && levelCheck[3] === false) {
+    } else if (clock.elapsedTime > 1020 && levelCheck[3] === false) {
       levelCheck[3] = true;
       for (let i = 0; i < 5; i++) {
         enemyLive[i] = enemyData.basic;
       }
       boundingStore.setState({ enemyLive: [...enemyLive] });
-    } else if (clock.elapsedTime > 1500 && levelCheck[4] === false) {
+    } else if (clock.elapsedTime > 1400 && levelCheck[4] === false) {
       levelCheck[4] = true;
       for (let i = 0; i < 8; i++) {
         enemyLive[i] = enemyData.basic;
       }
       boundingStore.setState({ enemyLive: [...enemyLive] });
-    } else if (clock.elapsedTime > 1950 && levelCheck[5] === false) {
+    } else if (clock.elapsedTime > 1850 && levelCheck[5] === false) {
       levelCheck[5] = true;
       for (let i = 0; i < 12; i++) {
         enemyLive[i] = enemyData.basic;

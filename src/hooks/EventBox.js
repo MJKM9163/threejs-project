@@ -123,14 +123,14 @@ const ExEvent = () => {
         <span
           onClick={() => {
             eventSelect.assent();
-            eventStore.setState((set) => (set.exEventList[eventName].check = true));
+            eventStore.setState((state) => (state.exEventList[eventName].check = true));
           }}>
           {eventSelect.assentText}
         </span>
         <span
           onClick={() => {
             eventSelect.dissent();
-            eventStore.setState((set) => (set.exEventList[eventName].check = true));
+            eventStore.setState((state) => (state.exEventList[eventName].check = true));
           }}>
           {eventSelect.dissentText}
         </span>
@@ -143,7 +143,7 @@ const SExEvent = () => {
   const sExCheck = screenStore((state) => state.sExCheck);
   const [eventSelect, eventName] = eventStore.getState().eventR("sEx");
   if (sExCheck === true) {
-    effectSound.getState().event.sExEvent.action();
+    effectSound.getState().event.exEvent.action();
   }
 
   return (

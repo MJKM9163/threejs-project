@@ -8,7 +8,12 @@ export const SatelliteIndex = () => {
   return (
     <group>
       {satellitePos.map((item, index) => (
-        <MultipurposeSatellite key={"satellite" + index} position={item.position} num={index} />
+        <MultipurposeSatellite
+          key={"satellite" + index}
+          position={item.position}
+          num={index}
+          adjust={item.data.adjust}
+        />
       ))}
     </group>
   );

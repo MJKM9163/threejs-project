@@ -375,6 +375,7 @@ export const PlanetInfo = () => {
                 style={{ display: planetData.main ? "none" : "block" }}
                 onClick={() => {
                   if (planetStore.getState().allResources.food >= pCost) {
+                    planetStore.setState((state) => (state["allResources"]["food"] -= pCost));
                     pCost += 1500;
                     planetStore.setState({
                       planetResources: {

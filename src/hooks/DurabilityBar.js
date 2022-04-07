@@ -51,7 +51,7 @@ export const PlanetDurabilityBar = ({ num, name, d }) => {
 };
 
 export const SatelliteDurabilityBar = ({ num, name, d }) => {
-  const data = screenStore((state) => state.satellitePos[num].D);
+  const data = screenStore((state) => state.satellitePos[num].data.durability);
 
   return (
     <DurabilityBarComponent D={(data / d) * 100} name={name}>

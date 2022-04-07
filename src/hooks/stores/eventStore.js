@@ -3,17 +3,24 @@ import { subscribeWithSelector } from "zustand/middleware";
 import { planetStore } from "./planetStore";
 import { screenStore } from "./screenStore";
 
+// interface eventState {
+//   eventList: object;
+//   exEventList: object;
+//   sExEventList: object;
+//   default: object;
+// }
+
 export const eventStore = create(
   subscribeWithSelector((set, get) => ({
     eventR: (type) => {
       let checkA = [];
       let typeList = {};
       if (type === "e") {
-        typeList = get().eventList;
+        typeList = get()["eventList"];
       } else if (type === "ex") {
-        typeList = get().exEventList;
+        typeList = get()["exEventList"];
       } else if (type === "sEx") {
-        typeList = get().sExEventList;
+        typeList = get()["sExEventList"];
       }
       for (let i in typeList) {
         if (typeList[i].check === true || typeList[i].key === false) {
@@ -27,7 +34,7 @@ export const eventStore = create(
         const random = Math.floor(Math.random() * (max - 0));
         return [typeList[num[random]], num[random]];
       } else {
-        return [get().default, null];
+        return [get()["default"], null];
       }
     },
     preEvent: [],
@@ -85,13 +92,13 @@ export const eventStore = create(
         assentText: "연구한다.",
         assent: () => {
           screenStore.setState({ exCheck: false });
-          planetStore.setState((state) => (state.allResources.science += 10));
-          planetStore.setState((state) => (state.allResources.happiness += 5));
+          planetStore.setState((state) => (state["allResources"]["science"] += 10));
+          planetStore.setState((state) => (state["allResources"]["happiness"] += 5));
         },
         dissentText: "제거한다.",
         dissent: () => {
           screenStore.setState({ exCheck: false });
-          planetStore.setState((state) => (state.allResources.food += 255));
+          planetStore.setState((state) => (state["allResources"]["food"] += 255));
         },
         img: "/images/events/coral.jpg",
         check: false,
@@ -105,10 +112,10 @@ export const eventStore = create(
         assent: () => {
           screenStore.setState({ exCheck: false });
           planetStore.setState(
-            (state) => (state.planetResources[Object.keys(state.planetResources)[0]].food += 0.5)
+            (state) => (state.planetResources[Object.keys(state.planetResources)[0]]["food"] += 0.5)
           );
-          planetStore.setState((state) => (state.allResources.gear += 4));
-          planetStore.setState((state) => (state.allResources.happiness += 7));
+          planetStore.setState((state) => (state["allResources"]["gear"] += 4));
+          planetStore.setState((state) => (state["allResources"]["happiness"] += 7));
         },
         dissentText: "남겨진 기계를 조사한다.",
         dissent: () => {
@@ -125,18 +132,18 @@ export const eventStore = create(
         assentText: "거대한 뿌리를 건설 재료로 사용한다.",
         assent: () => {
           screenStore.setState({ exCheck: false });
-          planetStore.setState((state) => (state.allResources.gear += 11));
+          planetStore.setState((state) => (state["allResources"]["gear"] += 11));
         },
         dissentText: "사용하지 않고 모두 제거한다.",
         dissent: () => {
           screenStore.setState({ exCheck: false });
           planetStore.setState(
-            (state) => (state.planetResources[Object.keys(state.planetResources)[0]].food += 3)
+            (state) => (state.planetResources[Object.keys(state.planetResources)[0]]["food"] += 3)
           );
           setTimeout(() => {
-            planetStore.setState(
-              (state) => (state.planetResources[Object.keys(state.planetResources)[0]].food -= 3)
-            );
+            planetStore.setState(function (state) {
+              state.planetResources[Object.keys(state.planetResources)[0]]["food"] -= 3;
+            });
           }, 20000);
         },
         img: "/images/events/jungle.jpg",
@@ -166,12 +173,16 @@ export const eventStore = create(
         description: "우리의 행성계에서 새로운 행성을 발견했습니다.",
         assentText: "행성에 조사대를 먼저 보낸다.",
         assent: () => {
-          planetStore.setState((state) => (state.typeResearchCheck.ice = true));
+          planetStore.setState(function (state) {
+            state["typeResearchCheck"].ice = true;
+          });
           screenStore.setState({ sExCheck: false });
         },
         dissentText: "행성 환경을 먼저 확인한다.",
         dissent: () => {
-          planetStore.setState((state) => (state.typeResearchCheck.ice = true));
+          planetStore.setState(function (state) {
+            state["typeResearchCheck"].ice = true;
+          });
           screenStore.setState({ sExCheck: false });
         },
         img: "/images/events/newPlanet.jpg",

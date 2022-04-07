@@ -2,6 +2,7 @@ import { useSphere } from "@react-three/cannon";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useState } from "react";
+import { boundingStore } from "../../hooks/stores/boundingStore";
 import { screenStore } from "../../hooks/stores/screenStore";
 
 export const SatelliteField = () => {
@@ -9,6 +10,7 @@ export const SatelliteField = () => {
   const satelliteMapCheck = screenStore((state) => state.satelliteMapOnOff);
   const satelliteNum = screenStore((state) => state.satellite);
   const satellitePos = screenStore((state) => state.satellitePos);
+  const satelliteData = boundingStore((state) => state.satelliteData);
   const { nodes } = useGLTF("/space/multipurposeSatellite/scene.gltf");
   const [pos, setPos] = useState([0, -5000000, 0]);
 
@@ -46,7 +48,10 @@ export const SatelliteField = () => {
                         ? console.log("이미 설치된 자리입니다.")
                         : (screenStore.setState({ satellite: satelliteNum - 1 }),
                           screenStore.setState({
-                            satellitePos: [...satellitePos, { position: [...e.object.position], D: 200 }],
+                            satellitePos: [
+                              ...satellitePos,
+                              { position: [...e.object.position], data: satelliteData.defense },
+                            ],
                           }))
                       : console.log("설치 가능한 위성이 없습니다.")
                   }

@@ -117,9 +117,9 @@ export const screenStore = create(
         repetition: false,
         name: "행성 차폐막",
         img: "/images/production/planetCurtain.jpg",
-        add: { happiness: 10, shield: 300 },
-        cost: { food: 10, titanium: 0, orichalcon: 0 },
-        event: () => set((state) => (state.planetCurtainCheck = true)),
+        add: { happiness: 10, barrier: 300 },
+        cost: { food: 400, titanium: 0, orichalcon: 0 },
+        event: () => set((state) => (state["planetCurtainCheck"] = true)),
         max: 50,
         description:
           "거주 가능한 행성을 중심으로 에너지 차폐막을 만듭니다. 에너지 무기를 효과적으로 막을 수 있으며 행성의 거주민들의 불안감을 줄일 수 있습니다.",
@@ -143,7 +143,7 @@ export const screenStore = create(
         repetition: false,
         name: "행성 연구소",
         img: "/images/production/planetResearchInstitute.jpg",
-        add: { food: 0.5, gear: 20, science: 10 },
+        add: { food: 0.5, gear: 10, science: 10 },
         cost: { food: 70, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 360,
@@ -158,11 +158,11 @@ export const screenStore = create(
         add: "행성급 이벤트 발생",
         cost: { food: 25, titanium: 0, orichalcon: 0 },
         event: () => {
-          set((state) => (state.dataList.exploration.count += 1));
-          set((state) => (state.exCheck = true));
-          set((state) => (state.dataList.exploration.cost.food *= 1.3));
-          if (get().dataList.exploration.count === 3) {
-            set((state) => (state.dataList.exploration.completion = true));
+          set((state) => (state["dataList"].exploration.count += 1));
+          set((state) => (state["exCheck"] = true));
+          set((state) => (state["dataList"].exploration.cost.food *= 1.4));
+          if (get()["dataList"].exploration.count === 3) {
+            set((state) => (state["dataList"].exploration.completion = true));
           }
         },
         count: 0,
@@ -175,7 +175,7 @@ export const screenStore = create(
         repetition: false,
         name: "자기장 생성기",
         img: "/images/production/magneticFieldGenerator.jpg",
-        add: { food: -0.2, science: 3, happiness: 5 },
+        add: { food: -0.2, science: 7, happiness: 5 },
         cost: { food: 130, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 550,
@@ -187,7 +187,7 @@ export const screenStore = create(
         repetition: false,
         name: "생체 감지기",
         img: "/images/production/biologicalDetector.jpg",
-        add: { science: 2, happiness: 13 },
+        add: { food: 0.5, science: 2, happiness: 13 },
         cost: { food: 330, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 850,
@@ -212,7 +212,7 @@ export const screenStore = create(
         repetition: false,
         name: "우호적 유전자 조작",
         img: "/images/production/friendlyGeneticManipulation.jpg",
-        add: { happiness: 20, science: 5 },
+        add: { happiness: 20, science: 7 },
         cost: { food: 780, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 560,
@@ -225,7 +225,7 @@ export const screenStore = create(
         repetition: false,
         name: "대기 조정",
         img: "/images/production/adjustingTheAtmosphere.jpg",
-        add: { happiness: 7, science: 2 },
+        add: { gear: 3, science: 5, happiness: 7 },
         cost: { food: 550, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 650,
@@ -242,12 +242,12 @@ export const screenStore = create(
         cost: { food: 680, titanium: 0, orichalcon: 0 },
         event: () => {
           //get()
-          set((state) => (state.dataList.multipurposeSatellite.count += 1));
-          set((state) => ({ satellite: state.satellite + 1 }));
-          set((state) => (state.dataList.multipurposeSatellite.cost.food *= 1.6));
+          set((state) => (state["dataList"].multipurposeSatellite.count += 1));
+          set((state) => ({ satellite: state["satellite"] + 1 }));
+          set((state) => (state["dataList"].multipurposeSatellite.cost.food *= 1.6));
 
-          if (get().dataList.multipurposeSatellite.count === 5) {
-            set((state) => (state.dataList.multipurposeSatellite.completion = true));
+          if (get()["dataList"].multipurposeSatellite.count === 5) {
+            set((state) => (state["dataList"].multipurposeSatellite.completion = true));
           }
         },
         count: 0,
@@ -261,7 +261,7 @@ export const screenStore = create(
         repetition: false,
         name: "행성 관광 시설",
         img: "/images/production/planetTourismFacilities.jpg",
-        add: { food: 5, happiness: 15 },
+        add: { food: 3, happiness: 15 },
         cost: { food: 650, titanium: 0, orichalcon: 0 },
         event: () => console.log("완료"),
         max: 720,
@@ -277,11 +277,11 @@ export const screenStore = create(
         add: "우주급 이벤트 발생",
         cost: { food: 520, titanium: 0, orichalcon: 0 },
         event: () => {
-          set((state) => (state.dataList.explorationOfSpace.count += 1));
-          set((state) => (state.exCheck = true));
-          set((state) => (state.dataList.explorationOfSpace.cost.food *= 1.3));
-          if (get().dataList.explorationOfSpace.count === 3) {
-            set((state) => (state.dataList.explorationOfSpace.completion = true));
+          set((state) => (state["dataList"].explorationOfSpace.count += 1));
+          set((state) => (state["sExCheck"] = true));
+          set((state) => (state["dataList"].explorationOfSpace.cost.food *= 1.3));
+          if (get()["dataList"].explorationOfSpace.count === 3) {
+            set((state) => (state["dataList"].explorationOfSpace.completion = true));
           }
         },
         count: 0,
@@ -296,7 +296,7 @@ export const screenStore = create(
         img: "/images/production/defenseSatellite.jpg",
         add: "다목적 위성을 방어위성으로 변환 가능",
         cost: { food: 500, titanium: 20, orichalcon: 0 },
-        event: () => set((state) => (state.defenseSCheck = true)),
+        event: () => set((state) => (state["defenseSCheck"] = true)),
         max: 600,
         description:
           "다목적 위성을 방어 위성으로 사용합니다. 주변에 감지된 적대적인 물체를 공격해 파괴합니다.",
@@ -309,7 +309,7 @@ export const screenStore = create(
         img: "/images/production/dustExtractor.jpg",
         add: "다목적 위성을 먼지추출기로 변환 가능",
         cost: { food: 400, titanium: 5, orichalcon: 0 },
-        event: () => set((state) => (state.dustSCheck = true)),
+        event: () => set((state) => (state["dustSCheck"] = true)),
         max: 500,
         description:
           "다목적 위성을 먼지 추출기로 사용합니다. 우주에 떠도는 먼지를 채집해 사용가능한 자원을 추출합니다.",
@@ -402,15 +402,15 @@ export const screenStore = create(
         event: () => {
           let live = boundingStore.getState().friendlyLive;
           let data = boundingStore.getState().friendlyData;
-          let num = data.findIndex((i) => i === false);
+          let num = live.findIndex((i) => i === false);
           live[num] = data.basic;
           boundingStore.setState({ friendlyLive: [...live] });
-          set((state) => (state.dataList.fighterPlane.cost.food *= 1.2));
-          let check = data.findIndex((i) => i === false);
+          set((state) => (state["dataList"].fighterPlane.cost.food *= 1.2));
+          let check = live.findIndex((i) => i === false);
           if (check === -1) {
             set((state) => {
-              state.dataList.fighterPlane.repetition = false;
-              state.dataList.fighterPlane.completion = true;
+              state["dataList"].fighterPlane.repetition = false;
+              state["dataList"].fighterPlane.completion = true;
             });
           }
         },

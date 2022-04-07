@@ -26,5 +26,13 @@ export const boundingStore = create(
       battleship: { type: "전함", durability: 1200, adjust: 1.8 },
     },
     friendlyLive: [false, false, false],
+
+    satelliteData: {
+      defense: {
+        type: "방어위성",
+        durability: 200,
+        adjust: 1,
+      },
+    },
   }))
 );
