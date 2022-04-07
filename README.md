@@ -7,6 +7,8 @@
 ### :arrow_down: 만들면서 느낀점과 중요시 했던점 노션 정리 :arrow_down:
   <a href="https://green-consonant-515.notion.site/React-Three-js-22-1-2a26a01604924461ac0ff54566daa711">
 <img src="https://img.shields.io/badge/React+Three정리-000000?style=flat-square&logo=Notion&logoColor=white" width="180" height="35"/></a>
+  <a href="https://green-consonant-515.notion.site/9a88fdbad2394fb0b5a30df3221458f5?v=bc4ae03b7b554c1face6d482003c8f66">
+<img src="https://img.shields.io/badge/공부달력-000000?style=flat-square&logo=Notion&logoColor=white" width="180" height="35"/></a>
 <br/><br/>
   
 ####  <a href="https://mjkm9163.github.io/index.html">게임 플레이!</a>
