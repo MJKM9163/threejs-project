@@ -1,5 +1,5 @@
 import { useFrame, useThree } from "@react-three/fiber";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { boundingStore } from "../hooks/stores/boundingStore";
 import { EnemyFighter } from "./fighters/EnemyFighter";
 
