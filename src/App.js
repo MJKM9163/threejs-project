@@ -45,12 +45,10 @@ const RightClick = (e) => {
   if (zoom === true) {
     screenStore.setState({ zoom: false });
     screenStore.setState({ orbit: false });
-  } else if (productionControl === true) {
-    screenStore.setState((state) => (state.productionControl = false));
   } else if (researchMapOnOff === true) {
     screenStore.setState({ researchMapOnOff: false });
-  } else {
-    console.log("확대 / 건설 상태가 아닙니다");
+  } else if (productionControl === true) {
+    screenStore.setState((state) => (state.productionControl = false));
   }
 };
 
