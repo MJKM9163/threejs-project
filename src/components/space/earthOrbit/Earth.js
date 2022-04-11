@@ -121,7 +121,7 @@ export const Earth = ({ position, control }) => {
           onPointerUp={(e) => {
             clearTimeout(onTimer);
           }}>
-          <sphereGeometry args={[300]} />
+          <sphereGeometry args={[240]} />
           <meshBasicMaterial transparent opacity={0} />
         </mesh>
         <EarthModel eartheffects={eartheffects} />
