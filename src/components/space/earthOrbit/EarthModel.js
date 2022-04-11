@@ -24,7 +24,7 @@ export const EarthModel = ({ eartheffects }) => {
     <group>
       {check[1].durability <= 0 ? null : (
         <group>
-          <group rotation={[-Math.PI / 2, 0, 0]} scale={1.9}>
+          <group rotation={[-Math.PI / 2, 0, 0]} scale={2.5}>
             <mesh castShadow geometry={nodes.mesh_0.geometry} material={materials.Material__25} />
             <mesh geometry={nodes.mesh_1.geometry} material={materials.Material__65} />
             <group ref={effectRef}>
