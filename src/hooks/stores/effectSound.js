@@ -20,7 +20,7 @@ export const effectSound = create(
     conCompletion: {
       action: () => {
         const completion = new Audio("soundEffects/conCompletion.mp3");
-        completion.volume = 0.5;
+        completion.volume = 0.7;
         completion.play();
       },
     },
