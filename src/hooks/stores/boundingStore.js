@@ -1,4 +1,3 @@
-import { Vector3 } from "three";
 import create from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 
@@ -25,7 +24,7 @@ export const boundingStore = create(
       basic: { type: "공격함", durability: 200, adjust: 1.1 },
       battleship: { type: "전함", durability: 1200, adjust: 1.8 },
     },
-    friendlyLive: [false, false, false],
+    friendlyLive: [{ type: "공격함", durability: 200, adjust: 1.1 }, false, false],
 
     satelliteData: {
       defense: {
