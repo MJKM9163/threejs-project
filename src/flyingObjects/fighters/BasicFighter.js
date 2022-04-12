@@ -91,7 +91,7 @@ export const BasicFighter = ({ position, rotation, num, adjust }) => {
     for (let key in boundingArray) {
       const check = BS.current.geometry.boundingSphere?.intersectsSphere(boundingArray[key]);
       if (check === true) {
-        look.current.children[1].rotation.set(0, -Math.PI / 2, 0);
+        look.current.children[1].rotation.set(-Math.PI / 2, 0, -Math.PI / 1);
         look.current.lookAt(boundingArray[key].center);
         mlook.current.lookAt(boundingArray[key].center);
         return check;
@@ -251,7 +251,6 @@ export const BasicFighter = ({ position, rotation, num, adjust }) => {
           <meshStandardMaterial opacity={0} transparent color={"white"} />
         </mesh>
         <group ref={look} rotation={[0, 0, 0]} scale={10}>
-          <axesHelper scale={50} />
           <mesh ref={mPosRef} position={[0, 0, 8]}>
             <sphereGeometry args={[0]} />
             <meshStandardMaterial opacity={0} transparent />
