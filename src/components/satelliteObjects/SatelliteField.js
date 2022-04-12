@@ -17,7 +17,6 @@ export const SatelliteField = () => {
   const [ref, api] = useSphere(() => ({
     mass: 1,
     type: "Static",
-    //args: [100],
   }));
 
   useFrame(() => {

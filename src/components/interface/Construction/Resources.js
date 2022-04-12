@@ -15,11 +15,9 @@ const ResourcesContainer = styled.div`
   transform: translate(-50%);
   cursor: default;
   z-index: 50;
-  //background-color: red;
 
   div {
     display: flex;
-    //justify-content: space-between;
     align-items: center;
     width: 20%;
     height: 100%;
@@ -90,7 +88,7 @@ export const Resources = () => {
       <div
         onMouseEnter={() => screenStore.setState({ hoverCheck: "happiness" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
-        <img src="images/resources/icons/happiness.png" width={25} height={25} alt="오리하르콘 자원"></img>
+        <img src="images/resources/icons/happiness.png" width={25} height={25} alt="행복도 자원"></img>
         <span>{allResources.happiness}</span>
       </div>
     </ResourcesContainer>

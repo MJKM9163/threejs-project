@@ -31,7 +31,7 @@ export const Anemys = () => {
   const { clock } = useThree();
 
   useFrame(() => {
-    if (clock.elapsedTime > 430 && levelCheck[1] === false) {
+    if (clock.elapsedTime > 400 && levelCheck[1] === false) {
       levelCheck[1] = true;
       enemyLive[0] = enemyData.basic;
       boundingStore.setState({ enemyLive: [...enemyLive] });
