@@ -47,7 +47,7 @@ export const LeftInfo = (props) => {
           {resources[props.planet]?.resources.food ? resources[props.planet]?.resources.food : 0}
         </span>
       </div>
-      {/* <div
+      <div
         className="productivity"
         onMouseEnter={() => screenStore.setState({ hoverCheck: "gear" })}
         onMouseLeave={() => screenStore.setState({ hoverCheck: false })}>
@@ -64,7 +64,7 @@ export const LeftInfo = (props) => {
         <span className="scienceNum">
           {resources[props.planet]?.resources.science ? resources[props.planet]?.resources.science : 0}
         </span>
-      </div> */}
+      </div>
     </LeftInfoContainer>
   );
 };
