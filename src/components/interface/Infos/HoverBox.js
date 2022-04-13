@@ -5,7 +5,6 @@ import { screenStore } from "../../../hooks/stores/screenStore";
 const HoverInfoContainer = styled.div`
   font-family: "Noto Sans KR", sans-serif;
   position: absolute;
-  //z-index: 100;
   opacity: ${(props) => (props.hoverCheck ? 1 : 0)};
   z-index: ${(props) => (props.hoverCheck ? 100 : -2000000)};
 
@@ -81,20 +80,6 @@ const HoverInfoContainer = styled.div`
           margin-right: 5px;
           vertical-align: bottom;
         }
-      }
-      .aF {
-      }
-      .aG {
-      }
-      .aS {
-      }
-      .aH {
-      }
-      .aB {
-      }
-      .aT {
-      }
-      .aO {
       }
       .aTT {
         color: #43ffc0;
