@@ -5,7 +5,7 @@ import { EffectModelSelect } from "../../../hooks/EffectModelSelect";
 import { planetStore } from "../../../hooks/stores/planetStore";
 import { screenStore } from "../../../hooks/stores/screenStore";
 
-let unknownRY = 0;
+//let unknownRY = 0;
 let unknownRZ = 0;
 
 export const UnknownModel = ({ unknownEffects }) => {

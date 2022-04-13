@@ -5,7 +5,7 @@ import { EffectModelSelect } from "../../../hooks/EffectModelSelect";
 import { planetStore } from "../../../hooks/stores/planetStore";
 import { screenStore } from "../../../hooks/stores/screenStore";
 
-let earthRY = 0;
+//let earthRY = 0;
 let earthRZ = 0;
 
 export const EarthModel = ({ eartheffects }) => {
