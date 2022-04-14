@@ -1,7 +1,13 @@
 <div align=center>
   
 ### :airplane::airplane: React, Three.js를 사용해 만들고 있는 간단한 게임입니다. :airplane::airplane:
-  취업 후 시간이 있다면 계속 개발예정
+  
+#####  :zap:  사용한 기술 스택 :zap:
+  
+<img src="https://img.shields.io/badge/javaScript-F7DF1E?style=flat-square&logo=JavaScript&logoColor=white"/>
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=CSS3&logoColor=white"/>
+<img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/>
+<img src="https://img.shields.io/badge/Three-000000?style=flat-square&logo=three.js&logoColor=white"/>
   
 <br/><br/>
 ### :arrow_down: 만들면서 느낀점과 중요시 했던점 노션 정리 :arrow_down:
