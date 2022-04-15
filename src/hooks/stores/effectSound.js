@@ -16,6 +16,17 @@ export const effectSound = create(
           explosion[n].play();
         },
       },
+      flightSelcts: {
+        action: () => {
+          const selcts = [
+            new Audio("soundEffects/flightSelct1.mp3"),
+            new Audio("soundEffects/flightSelct2.mp3"),
+          ];
+          const n = Math.floor(Math.random() * (selcts.length + 1));
+          selcts[n].volume = 0.7;
+          selcts[n].play();
+        },
+      },
     },
     conCompletion: {
       action: () => {
