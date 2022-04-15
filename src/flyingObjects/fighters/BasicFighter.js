@@ -240,6 +240,7 @@ export const BasicFighter = ({ position, rotation, num, adjust }) => {
         dispose={null}
         onClick={(e) => {
           selectCheck = true;
+          effectSound.getState().fighter.flightSelcts.action();
           screenStore.setState({ flyingMoveMapCheck: num });
           e.eventObject.children[1].material.opacity = 0.3;
         }}>
