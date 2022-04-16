@@ -11,7 +11,7 @@ export const effectSound = create(
             new Audio("soundEffects/explosion2.mp3"),
             new Audio("soundEffects/explosion3.mp3"),
           ];
-          const n = Math.floor(Math.random() * (explosion.length + 1));
+          const n = Math.floor(Math.random() * explosion.length);
           explosion[n].volume = 0.5;
           explosion[n].play();
         },
@@ -22,8 +22,8 @@ export const effectSound = create(
             new Audio("soundEffects/flightSelct1.mp3"),
             new Audio("soundEffects/flightSelct2.mp3"),
           ];
-          const n = Math.floor(Math.random() * (selcts.length + 1));
-          selcts[n].volume = 0.7;
+          const n = Math.floor(Math.random() * selcts.length);
+          selcts[n].volume = 0.5;
           selcts[n].play();
         },
       },
