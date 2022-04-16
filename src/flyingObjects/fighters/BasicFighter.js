@@ -56,7 +56,7 @@ export const BasicFighter = ({ position, rotation, num, adjust }) => {
     mass: 100,
     position,
     rotation,
-    args: [50],
+    args: [60],
     onCollide: (e) => {
       friendlyDamageCalculation(num, e.body.name);
       const data = boundingStore.getState().friendlyLive;
@@ -141,6 +141,7 @@ export const BasicFighter = ({ position, rotation, num, adjust }) => {
 
       if (flyingMovePos.current[num] !== null) {
         look.current.lookAt(flyingMovePos.current[num]);
+        //missileRef.current.lookAt(flyingMovePos.current[num]);
         missilesApi.position.set(...Object.values(mPosRef.current.getWorldPosition(new Vector3())));
         let [mX, mY, mZ] = moveFun();
         if (friendlyFighterOption[num].SOOM === false) {
@@ -235,19 +236,19 @@ export const BasicFighter = ({ position, rotation, num, adjust }) => {
   document.addEventListener("contextmenu", RightClick);
   return (
     <group>
-      <group
-        ref={collideRef}
-        dispose={null}
-        onClick={(e) => {
-          selectCheck = true;
-          effectSound.getState().fighter.flightSelcts.action();
-          screenStore.setState({ flyingMoveMapCheck: num });
-          e.eventObject.children[1].material.opacity = 0.3;
-        }}>
+      <group ref={collideRef} dispose={null}>
         <Html>
           <FighterDurabilityBar num={num} name={"fighter"} d={durabilityDefault} />
         </Html>
-        <mesh ref={selectUnit}>
+        <mesh
+          ref={selectUnit}
+          onClick={(e) => {
+            selectCheck = true;
+            effectSound.getState().fighter.flightSelcts.action();
+            screenStore.setState({ flyingMoveMapCheck: num });
+            console.log(e.eventObject);
+            e.eventObject.material.opacity = 0.3;
+          }}>
           <sphereGeometry args={[150]} />
           <meshStandardMaterial opacity={0} transparent color={"white"} />
         </mesh>
