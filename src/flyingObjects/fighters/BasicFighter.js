@@ -246,7 +246,6 @@ export const BasicFighter = ({ position, rotation, num, adjust }) => {
             selectCheck = true;
             effectSound.getState().fighter.flightSelcts.action();
             screenStore.setState({ flyingMoveMapCheck: num });
-            console.log(e.eventObject);
             e.eventObject.material.opacity = 0.3;
           }}>
           <sphereGeometry args={[150]} />

@@ -14,7 +14,6 @@ export const FlyingMoveField = () => {
           position={[0, -10, 0]}
           rotation={[Math.PI / 0.66666, 0, 0]}
           onClick={(e) => {
-            console.log("클릭");
             const data = screenStore.getState().flyingMovePos;
             data[flyingMoveMapCheck] = e.point;
             screenStore.setState({ flyingMovePos: data });
