@@ -52,4 +52,4 @@ export const EarthModel = ({ eartheffects }) => {
   );
 };
 
-useGLTF.preload("/sphereForce/scene.gltf");
+useGLTF.preload("/space/sphereForce/scene.gltf");

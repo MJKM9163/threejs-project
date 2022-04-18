@@ -61,4 +61,4 @@ export const UnknownModel = ({ unknownEffects }) => {
   );
 };
 
-useGLTF.preload("/sphereForce/scene.gltf");
+useGLTF.preload("/space/sphereForce/scene.gltf");
