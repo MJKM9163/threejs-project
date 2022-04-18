@@ -20,7 +20,16 @@
 <img src="https://img.shields.io/badge/공부기록-000000?style=flat-square&logo=Notion&logoColor=white" width="120" height="35"/></a>
 <br/><br/>
   
-####  <a href="https://mjkm9163.github.io/index.html">게임 플레이!</a>
+### :rotating_light:현재 문제점:rotating_light:
+  비행체의 감지 구체가 원래는 보이지 않아야 하지만 눈에 보이는 현상이 발견되었습니다.
+  
+  노출된 감지 구체로 인해 배경과 일부 모델을 가리는 현상이 있습니다.
+  
+<br/><br/>
+  
+###  <a href="https://mjkm9163.github.io/index.html">게임 플레이!</a>
+  
+<br/><br/>
   
 ## 시작 방법
   #### 행성을 클릭하고 개척하기를 누르세요!
