@@ -20,7 +20,18 @@
 <img src="https://img.shields.io/badge/공부기록-000000?style=flat-square&logo=Notion&logoColor=white" width="120" height="35"/></a>
 <br/><br/>
   
-####  <a href="https://mjkm9163.github.io/index.html">게임 플레이!</a>
+### :rotating_light:현재 문제점:rotating_light:
+  비행체의 감지 구체가 원래는 보이지 않아야 하지만 눈에 보이는 현상이 발견되었습니다.
+  
+  노출된 감지 구체로 인해 배경과 일부 모델을 가리는 현상이 있습니다.
+  
+  아군 전투기 이동 시 자연스럽게 움직이지 않을 때가 있습니다.
+  
+<br/><br/>
+  
+###  <a href="https://mjkm9163.github.io/index.html">게임 플레이!</a>
+  
+<br/><br/>
   
 ## 시작 방법
   #### 행성을 클릭하고 개척하기를 누르세요!
@@ -50,6 +61,7 @@
   중심 행성이 파괴되면 패배!<br/><br/>
   
 ### 기타 기능, 하고싶은 말
+  1번은 연구창, 2번은 건설창 단축키에요.<br/><br/>
   오른쪽 마우스 클릭을 하면 연구창, 건설창이 닫혀요.<br/><br/>
   건설을 취소할 수 있어요. (자원은 안 돌려줘요)<br/><br/>
   아군 전투기는 직접 움직일 수 있어요.<br/><br/>
