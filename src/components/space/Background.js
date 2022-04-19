@@ -47,9 +47,9 @@ export const Background = () => {
         <planeGeometry attach="geometry" args={[1000000, 1000000]} />
         <meshBasicMaterial map={textureStarField1} opacity={0.3} attach="material" transparent />
       </mesh>
-      <mesh ref={back1} rotation={[-Math.PI / 2, 0, 0]} position={[-2000, -7000, -3000]}>
-        <planeGeometry attach="geometry" args={[1000000, 1000000]} />
-        <meshBasicMaterial map={textureStarField2} opacity={0.3} attach="material" transparent />
+      <mesh ref={back1} rotation={[-Math.PI / 2, 0, 0]} position={[-2000, -1000, -5000]}>
+        <planeGeometry attach="geometry" args={[500000, 500000]} />
+        <meshBasicMaterial map={textureStarField2} opacity={0.1} attach="material" transparent />
       </mesh>
       <mesh ref={back2} rotation={[-Math.PI / 2, 0, 0]} position={[0, -25000, -50000]}>
         <planeGeometry attach="geometry" args={[1000000, 1000000]} />
