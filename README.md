@@ -1,6 +1,6 @@
 <div align=center>
   
-### :airplane::airplane: React, Three.js를 사용해 만들고 있는 간단한 게임입니다. :airplane::airplane:
+### :airplane::airplane: React, Three.js를 사용해 만들었던 간단한 게임입니다. :airplane::airplane:
   
 #####  :zap:  사용한 기술 스택 :zap:
   
