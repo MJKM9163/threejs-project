@@ -29,7 +29,7 @@
   
 <br/><br/>
   
-###  <a href="https://mjkm9163.github.io/index.html">게임 플레이!</a>
+### 현재 플레이하실 수 없습니다!  <!-- <a href="https://mjkm9163.github.io/index.html">게임 플레이!</a> -->
   
 <br/><br/>
   
